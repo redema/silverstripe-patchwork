@@ -1,0 +1,21 @@
+
+AutoversionedTest_Page:
+    page1:
+        Title: Parent
+
+AutoversionedTest_Widget:
+    widget1:
+        PageID: =>AutoversionedTest_Page.page1
+    widget2:
+        PageID: =>AutoversionedTest_Page.page1
+
+AutoversionedTest_SuperWidget:
+    widget3:
+        PageID: =>AutoversionedTest_Page.page1
+
+AutoversionedTest_Gadget:
+    gadget1:
+        WidgetID: =>AutoversionedTest_Widget.widget1
+    gadget2:
+        WidgetID: =>AutoversionedTest_Widget.widget1
+

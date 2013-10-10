@@ -1,0 +1,19 @@
+<?php
+
+define('SS_ENVIRONMENT_TYPE', 'dev');
+
+define('SS_DATABASE_CLASS', 'PatchedMySQLDatabase');
+define('SS_DATABASE_SERVER', 'localhost');
+define('SS_DATABASE_USERNAME', 'root');
+define('SS_DATABASE_PASSWORD', 'root');
+
+define('PATCHWORK_SSL', false);
+define('PATCHWORK_COOKIE_SECURE', false);
+define('PATCHWORK_COOKIE_PATH', '/');
+define('PATCHWORK_I18N_LOCALE', 'sv_SE');
+define('PATCHWORK_LOGIN_LIMIT', 3);
+define('PATCHWORK_DOMAIN', 'silverstripe.localhost');
+
+global $database;
+$database = 'silverstripe_localhost';
+
