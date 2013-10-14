@@ -25,7 +25,7 @@ Redema AB <http://redema.se/>
  * Visit http://www.yoursite.example.com/dev/build?flush=all to rebuild the
    manifest and database.
 
- * Work.
+ * Get back to work.
 
 ## Usage Overview
 
