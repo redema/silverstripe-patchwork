@@ -1,4 +1,6 @@
-/*!
+<?php
+
+/**
  * Copyright (c) 2013, Redema AB - http://redema.se/
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,8 +29,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-function Patchwork($) {
+/**
+ * Foreign keys must allow NULL values in order to support
+ * constraints.
+ */
+class PatchworkForeignKey extends ForeignKey {
+	
+	public function requireField() {
+		$parts = array(
+			'datatype' => 'int',
+			'precision' => 11,
+			'null' => 'null',
+			'default' => 'null',
+			'arrayValue' => $this->arrayValue
+		);
+		DB::requireField($this->tableName, $this->name, array(
+			'type' => 'int',
+			'parts' => $parts
+		));
+	}
+	
 }
-
-var patchwork = new Patchwork(jQuery);
 

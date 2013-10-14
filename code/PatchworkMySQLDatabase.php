@@ -32,10 +32,10 @@
 /**
  * Add support for InnoDB constraints.
  * 
- * @see PatchedForeignKey
+ * @see PatchworkForeignKey
  * @see Constraint
  */
-class PatchedMySQLDatabase extends MySQLDatabase {
+class PatchworkMySQLDatabase extends MySQLDatabase {
 	
 	public function supportConstraints() {
 		return true;
@@ -146,7 +146,7 @@ INLINE_SQL;
 		// Foreign keys must allow NULL values.
 		array_walk($fieldSchema, function (&$type, $name) {
 			if ($type == 'ForeignKey')
-				$type = 'PatchedForeignKey';
+				$type = 'PatchworkForeignKey';
 		});
 		parent::requireTable($table, $fieldSchema, $indexSchema, $hasAutoIncPK,
 			$options, $extensions);
