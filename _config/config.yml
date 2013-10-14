@@ -1,4 +1,4 @@
 ---
 Name: patchwork
 After: 'framework/*','cms/*'
-
+Before: 'mysite/*'

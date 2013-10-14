@@ -54,6 +54,7 @@ call_user_func(function () {
 	}
 	
 	Controller::add_extension('TemplateHelpers');
+	Controller::add_extension('PatchworkRequirements');
 	
 	// Make it easy to run tests with different locales.
 	if (in_array(SS_ENVIRONMENT_TYPE, array('dev', 'test')) && preg_match(

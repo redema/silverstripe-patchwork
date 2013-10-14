@@ -17,9 +17,6 @@
 	$MetaTags(false)
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 	<link rel="shortcut icon" href="/$MtimeCacheBuster('favicon.ico')" />
-	
-	<% include PatchworkCSS %>
-	<% include MysiteCSS %>
 </head>
 <body>
 
@@ -27,9 +24,9 @@
 $Layout
 <% include Footer %>
 
-<% include PatchworkJavascript %>
-<% include MysiteJavascript %>
-<% include AnalyticsTracking %>
+<script>/*<![CDATA[*/ var __patchwork_requirements_fix = 1; /*]]>*/</script>
+
+<% include Analytics %>
 
 </body>
 </html>
