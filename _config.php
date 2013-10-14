@@ -38,7 +38,7 @@ call_user_func(function () {
 	i18n::set_default_locale(PATCHWORK_I18N_LOCALE);
 	
 	$database = SS_DATABASE_CLASS;
-	if ($database == 'PatchedMySQLDatabase') {
+	if ($database == 'PatchworkMySQLDatabase') {
 		$database::set_connection_charset('utf8');
 		DataObject::add_extension('Constraint');
 	} else {
