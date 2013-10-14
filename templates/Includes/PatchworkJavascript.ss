@@ -9,6 +9,7 @@
 <% require javascript('patchwork/javascript/thirdparty/bootstrap-3.0.0.js') %>
 
 <% require javascript('patchwork/javascript/FrontEndForm.js') %>
+<% require javascript('patchwork/javascript/Patchwork.js') %>
 
 <script>/*<![CDATA[*/ var __patchwork_requirements_fix = 1; /*]]>*/</script>
 
