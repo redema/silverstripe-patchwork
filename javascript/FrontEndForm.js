@@ -27,17 +27,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-function FrontEndForm($) {
-	$('input[type=submit], button')
-		.addClass('btn')
-		.addClass('btn-default');
-	
-	$([
-		'input[type=text]',
-		'input[type=email]',
-		'input[type=password]',
-		'select',
-		'textarea'
-	].join(', ')).addClass('form-control');
-}
+(function ($) {
+	$.fn.bootstrapFrontEndForm = function () {
+		return this.each(function () {
+			var $this = $(this);
+			
+			$this.addClass('bootstrap-form');
+			
+			$this.find([
+				'button',
+				'input[type=submit]',
+				'input[type=reset]',
+				'input[type=image]'
+			].join(', '))
+				.addClass('btn')
+				.addClass('btn-default');
+			
+			$this.find([
+				'input[type=text]',
+				'input[type=email]',
+				'input[type=password]',
+				'input[type=checkbox]',
+				'select',
+				'textarea'
+			].join(', '))
+				.addClass('form-control')
+				.each(function () {
+					$(this).parents('.field').addClass('form-group');
+				});
+			
+		});
+	};
+})(jQuery);
 

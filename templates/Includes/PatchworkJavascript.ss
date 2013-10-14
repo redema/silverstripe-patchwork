@@ -8,8 +8,7 @@
 <% require javascript('patchwork/javascript/thirdparty/jquery-refineslide-0.4.1.js') %>
 <% require javascript('patchwork/javascript/thirdparty/bootstrap-3.0.0.js') %>
 
-<% require javascript('patchwork/javascript/Patchwork.js') %>
-<% require javascript('patchwork/javascript/Ready.js') %>
+<% require javascript('patchwork/javascript/FrontEndForm.js') %>
 
 <script>/*<![CDATA[*/ var __patchwork_requirements_fix = 1; /*]]>*/</script>
 

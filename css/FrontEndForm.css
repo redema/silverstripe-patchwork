@@ -1,0 +1,12 @@
+
+.bootstrap-form .btn {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.bootstrap-form #ForgotPassword a {
+	display: inline-block;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
