@@ -44,8 +44,8 @@ class Autoversioned extends DataExtension {
 			$childObject = Injector::inst()->create($childClass);
 			$childComponents = $childObject->has_one();
 			foreach ($childComponents as $childComponentName => $parentClass) {
-				if ($parentClass == $this->owner->class) {
-					$specs = $childObject->config()->get('autoversioned', Config::UNINHERITED);
+				if (in_array($parentClass, ClassInfo::ancestry($this->owner->class))) {
+					$specs = Config::inst()->get($childClass, 'autoversioned', Config::INHERITED);
 					if (isset($specs[$childComponentName]) && $specs[$childComponentName]) {
 						$autoRelations[$parentManyName] = array(
 							$childClass,
@@ -65,7 +65,7 @@ class Autoversioned extends DataExtension {
 		foreach ($this->autoRelations() as $relationName => $relationData) {
 			list($class, $field) = $relationData;
 			$liveDataObjects = Versioned::get_by_stage($class, 'Live',
-				"\"{$class}\".\"{$field}ID\" = {$this->owner->ID}");
+				"\"{$field}ID\" = {$this->owner->ID}");
 			if ($liveDataObjects) {
 				foreach ($liveDataObjects as $object) {
 					$object->deleteFromStage('Live');
@@ -95,7 +95,7 @@ class Autoversioned extends DataExtension {
 			list($class, $field) = $relationData;
 			$ID = $this->owner->ID? $this->owner->ID: $this->owner->OldID;
 			$dataObjects = Versioned::get_by_stage($class, 'Live',
-				"\"{$class}\".\"{$field}ID\" = {$ID}");
+				"\"{$field}ID\" = {$ID}");
 			if ($dataObjects) {
 				foreach ($dataObjects as $object) {
 					if ($object->hasMethod('doUnpublish')) {

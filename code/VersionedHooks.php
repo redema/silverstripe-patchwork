@@ -40,8 +40,9 @@ class VersionedHooks extends DataExtension {
 				!$this->owner->canPublish())
 			return false;
 		
-		$original = Versioned::get_one_by_stage($this->owner->ClassName, 'Live',
-			"\"{$this->owner->ClassName}\".\"ID\" = {$this->owner->ID}");
+		$class = ClassInfo::baseDataClass($this->owner->ClassName);
+		$original = Versioned::get_one_by_stage($class, 'Live',
+			"\"{$class}\".\"ID\" = {$this->owner->ID}");
 		$original = $original? $original: new $this->owner->ClassName;
 		$this->owner->invokeWithExtensions('onBeforePublish', $original);
 		$this->owner->publish('Stage', 'Live');
