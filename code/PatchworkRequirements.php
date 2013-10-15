@@ -46,7 +46,7 @@ class PatchworkRequirements extends Extension {
 		
 		Requirements::javascript('patchwork/javascript/thirdparty/modernizr-2.6.2.js');
 		Requirements::javascript('patchwork/javascript/thirdparty/respond-72cd8e1437769cbbf1fda171c334e71141785563.js');
-		Requirements::javascript('patchwork/javascript/thirdparty/picturefill-431555909a4dce9faee6e3364fbade7dd0e92128.js');
+		Requirements::javascript('patchwork/javascript/thirdparty/picturefill-6250f7f6f604c5e016f59ceb121929f87e3ad4d5.js');
 		Requirements::javascript('patchwork/javascript/thirdparty/jquery-1.10.2.js');
 		Requirements::javascript('patchwork/javascript/thirdparty/jquery-migrate-1.1.1.js');
 		Requirements::javascript('patchwork/javascript/thirdparty/jquery-mobile-1.3.1.custom.js');
