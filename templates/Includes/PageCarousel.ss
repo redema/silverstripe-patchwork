@@ -1,7 +1,7 @@
 <%-- Args: $ID, $Items --%>
 
 <% if $Items %>
-<div id="carousel-$ID" class="carousel slide" data-ride="carousel">
+<div id="carousel-$ID" class="carousel slide items-$Items.Count" data-ride="carousel">
 	<ol class="carousel-indicators">
 		<% loop $Items %>
 		<li data-target="#carousel-$Top.ID" data-slide-to="$ActualPos($Pos)"
@@ -23,5 +23,3 @@
 	</a>
 </div>
 <% end_if %>
-
-$Foo
