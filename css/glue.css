@@ -1,5 +1,6 @@
 
-.picturefill img {
+.picturefill img,
+.typography img {
 	max-width: 100%;
 	height: auto;
 }
