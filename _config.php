@@ -25,7 +25,6 @@ call_user_func(function () {
 	if (Director::isLive()) {
 		Director::forceWWW();
 	}
-	
 	if (PATCHWORK_SSL) {
 		Director::forceSSL();
 	}
@@ -33,9 +32,6 @@ call_user_func(function () {
 	Session::set_cookie_path(PATCHWORK_COOKIE_PATH);
 	
 	Member::lock_out_after_incorrect_logins(PATCHWORK_LOGIN_LIMIT);
-	
-	i18n::set_locale(PATCHWORK_I18N_LOCALE);
-	i18n::set_default_locale(PATCHWORK_I18N_LOCALE);
 	
 	$database = SS_DATABASE_CLASS;
 	if ($database == 'PatchworkMySQLDatabase') {
@@ -45,16 +41,22 @@ call_user_func(function () {
 		trigger_error("constraints not available", E_USER_WARNING);
 	}
 	
+	Object::add_extension('ObjectHelpers');
 	DataObject::add_extension('EnforceFieldValues');
+	Controller::add_extension('TemplateHelpers');
 	LeftAndMain::add_extension('ResponsiveLeftAndMain');
 	
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
 	}
+	if (class_exists('ContentController')) {
+		ContentController::add_extension('PatchworkRequirements');
+	}
 	
-	Controller::add_extension('TemplateHelpers');
-	Controller::add_extension('PatchworkRequirements');
+	
+	i18n::set_locale(PATCHWORK_I18N_LOCALE);
+	i18n::set_default_locale(PATCHWORK_I18N_LOCALE);
 	
 	// Make it easy to run tests with different locales.
 	if (in_array(SS_ENVIRONMENT_TYPE, array('dev', 'test')) && preg_match(

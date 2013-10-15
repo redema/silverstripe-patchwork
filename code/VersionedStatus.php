@@ -29,9 +29,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Dummy class.
- */
-class Patchwork {
+class VersionedStatus extends DataExtension {
+	
+	public function PublishedToLive() {
+		$table = ClassInfo::baseDataClass($this->owner);
+		$item = Versioned::get_one_by_stage($table, 'Live',
+			"\"{$table}\".\"ID\" = {$this->owner->ID}");
+		if ($item) {
+			return $item->stagesDiffer('Stage', 'Live')?
+				_t('VersionedStatus.CHANGED', 'Yes, with unpublished changes'):
+				_t('VersionedStatus.YES', 'Yes');
+		}
+		return _t('VersionedStatus.NO', 'No');
+	}
+	
 }
-

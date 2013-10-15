@@ -30,8 +30,12 @@
  */
 
 /**
- * Dummy class.
  */
-class Patchwork {
+class ObjectHelpers extends Extension {
+	
+	public function ActualPos($pos) {
+		return (int)$pos - 1;
+	}
 }
+
 

@@ -102,6 +102,27 @@ class Constraint extends DataExtension {
 		}
 	}
 	
+	/**
+	 * Augment writes to make sure that constraints with the zero
+	 * values are replaced with NULLs.
+	 */
+	public function augmentWrite(&$manipulation) {
+		if ($manipulation) {
+			foreach ($manipulation as $table => $write) {
+				$fields = $write['fields'];
+				$constraints = Config::inst()->get($table,
+					'constraints', Config::UNINHERITED);
+				if ($constraints) {
+					foreach ($constraints as $field => $action) {
+						$field = "{$field}ID";
+						if (isset($fields[$field]) && $fields[$field] < 1)
+							$manipulation[$table]['fields'][$field] = 'NULL';
+					}
+				}
+			}
+		}
+	}
+	
 	public function augmentDatabase() {
 		$connection = DB::getConn();
 		
@@ -117,8 +138,7 @@ class Constraint extends DataExtension {
 			$baseTable = ClassInfo::baseDataClass($this->owner->class);
 			if ($this->owner->class !== $baseTable) {
 				$connection->transCreateConstraint($this->owner->class, 'ID',
-					$baseTable, 'ID', 'on delete cascade'
-						. ' on update restrict');
+					$baseTable, 'ID', 'on delete cascade');
 			}
 		}
 		

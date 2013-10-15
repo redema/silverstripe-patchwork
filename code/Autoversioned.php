@@ -111,6 +111,19 @@ class Autoversioned extends DataExtension {
 		}
 	}
 	
+	public function updateFields(FieldList $fields) {
+		$fields->removeByName('Version');
+		$fields->removeByName('Versions');
+	}
+	
+	public function updateCMSFields(FieldList $fields) {
+		$this->updateFields($fields);
+	}
+	
+	public function updateFrontEndFields(FieldList $fields) {
+		$this->updateFields($fields);
+	}
+	
 }
 
 
