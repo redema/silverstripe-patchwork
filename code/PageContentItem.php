@@ -109,6 +109,10 @@ class PageContentItem extends DataObject {
 		return $image;
 	}
 	
+	/**
+	 * @FIXME: It would be great to have a way to unpublish items
+	 * (without deleting the appropriate table rows manually).
+	 */
 	public static function addCMSFieldsTo(Page $page, FieldList $fields,
 			DataList $items) {
 		$itemClass = get_called_class();
