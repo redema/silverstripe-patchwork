@@ -1,6 +1,6 @@
 <%-- Args: $ID, $Items --%>
 
-<% if $Items %>
+<% if $Items && $Items.Count %>
 <div id="carousel-$ID" class="carousel slide items-$Items.Count" data-ride="carousel">
 	<ol class="carousel-indicators">
 		<% loop $Items %>
