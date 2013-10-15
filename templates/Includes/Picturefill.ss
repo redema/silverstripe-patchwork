@@ -1,7 +1,7 @@
 
 <%-- Args: $Title, $Link, $DesktopImage [, $MobileImage [, $TabletImage ]] --%>
 
-<span class="item" data-picture="" data-alt="$Title.ATT" data-link="$Link">
+<span class="picturefill" data-picture="" data-alt="$Title.ATT" data-link="$Link">
 	<% if $DesktopImage.exists %>
 	<noscript>
 		<img src="$DesktopImage.getURL" alt="$Title.ATT" />
