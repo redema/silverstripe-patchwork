@@ -2,3 +2,6 @@
 Name: patchwork
 After: 'framework/*','cms/*'
 Before: 'mysite/*'
+---
+SSViewer:
+  rewrite_hash_links: false
