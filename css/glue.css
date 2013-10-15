@@ -1,0 +1,7 @@
+
+/* Hide the controls for a carousel if it only has one item.
+ */
+.carousel.items-1 .carousel-control,
+.carousel.items-1 .carousel-indicators {
+	display: none;
+}

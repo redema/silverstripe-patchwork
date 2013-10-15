@@ -40,6 +40,8 @@ class PatchworkRequirements extends Extension {
 		Requirements::css('patchwork/css/thirdparty/bootstrap-theme-3.0.0.css');
 		Requirements::css('patchwork/css/FrontEndForm.css');
 		
+		Requirements::css('patchwork/css/glue.css');
+		
 		Requirements::css('mysite/css/layout.css');
 		Requirements::css('mysite/css/typography.css');
 		Requirements::css('mysite/css/form.css');
