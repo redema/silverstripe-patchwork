@@ -4,7 +4,7 @@
 <div id="carousel-$ID" class="carousel slide" data-ride="carousel">
 	<ol class="carousel-indicators">
 		<% loop $Items %>
-		<li data-target="#carousel-$ID" data-slide-to="$RealPos($Pos)"
+		<li data-target="#carousel-$Top.ID" data-slide-to="$ActualPos($Pos)"
 		 class="<% if $First %>active<% end_if %>"></li>
 		<% end_loop %>
 	</ol>
@@ -23,3 +23,5 @@
 	</a>
 </div>
 <% end_if %>
+
+$Foo

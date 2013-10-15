@@ -30,9 +30,15 @@
  */
 
 /**
+ * Mixed utilities and helpers which are too small to be given
+ * a new extension.
  */
-class ObjectHelpers extends Extension {
+class DataObjectHelpers extends DataExtension {
 	
+	/**
+	 * $Pos in a template will give "1" as the first position.
+	 * Feed that value to this method to get the proper position.
+	 */
 	public function ActualPos($pos) {
 		return (int)$pos - 1;
 	}

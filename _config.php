@@ -41,7 +41,7 @@ call_user_func(function () {
 		trigger_error("constraints not available", E_USER_WARNING);
 	}
 	
-	Object::add_extension('ObjectHelpers');
+	DataObject::add_extension('DataObjectHelpers');
 	DataObject::add_extension('EnforceFieldValues');
 	Controller::add_extension('TemplateHelpers');
 	LeftAndMain::add_extension('ResponsiveLeftAndMain');

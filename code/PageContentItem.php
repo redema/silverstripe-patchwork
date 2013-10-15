@@ -77,14 +77,14 @@ class PageContentItem extends DataObject {
 		"VersionedStatus"
 	);
 	
-	public function Inner($captionClass) {
+	public function Inner($contentClass = '') {
 		$templates = array(
 			$this->SpecialTemplate,
 			$this->ClassName,
 			'PageContentItem'
 		);
 		return $this->renderWith($templates, array(
-			'CaptionClass' => $captionClass
+			'ContentClass' => $contentClass
 		));
 	}
 	
