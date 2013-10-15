@@ -99,7 +99,7 @@ class PageContentItem extends DataObject {
 		foreach ($images as $name) {
 			$image = $this->$name();
 			if ($image->exists())
-				return $image->CroppedImage(24, 24);
+				return $image->CroppedImage(32, 32);
 		}
 		
 		// Fallback in case there are no linked images.
