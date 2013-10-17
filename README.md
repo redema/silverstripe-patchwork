@@ -7,6 +7,9 @@ speaking it would be better to split patchwork into smaller and more
 logically related modules, practically speaking it saves time to only
 worry about one module (maintenance, dependencies, and so on).
 
+Disclaimer: This module is a work in progress, anything and everything may
+change at any time right now.
+
 ## Maintainer Contact
 
 Redema AB <http://redema.se/>
@@ -26,6 +29,8 @@ Redema AB <http://redema.se/>
    manifest and database.
 
  * Get back to work.
+
+## Getting started
 
 ## Usage Overview
 
