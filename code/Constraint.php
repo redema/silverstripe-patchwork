@@ -109,6 +109,8 @@ class Constraint extends DataExtension {
 	public function augmentWrite(&$manipulation) {
 		if ($manipulation) {
 			foreach ($manipulation as $table => $write) {
+				if (!isset($write['fields']))
+					continue;
 				$fields = $write['fields'];
 				$constraints = Config::inst()->get($table,
 					'constraints', Config::UNINHERITED);
