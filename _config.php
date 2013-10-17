@@ -44,19 +44,18 @@ call_user_func(function () {
 	DataObject::add_extension('DataObjectHelpers');
 	DataObject::add_extension('EnforceFieldValues');
 	Controller::add_extension('TemplateHelpers');
+	Controller::add_extension('PatchworkRequirements');
 	LeftAndMain::add_extension('ResponsiveLeftAndMain');
 	
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
 	}
-	if (class_exists('ContentController')) {
-		ContentController::add_extension('PatchworkRequirements');
-	}
-	
 	
 	i18n::set_locale(PATCHWORK_I18N_LOCALE);
 	i18n::set_default_locale(PATCHWORK_I18N_LOCALE);
+	
+	Requirements::set_backend(new PatchworkRequirements_Backend());
 	
 	// Make it easy to run tests with different locales.
 	if (in_array(SS_ENVIRONMENT_TYPE, array('dev', 'test')) && preg_match(
