@@ -49,5 +49,13 @@ class TemplateHelpers extends Extension {
 		return 0;
 	}
 	
+	public function Year() {
+		return date('Y');
+	}
+	
+	public function Copyright($entity) {
+		return sprintf('Copyright &copy; %s %s', $this->Year(), $entity);
+	}
+	
 }
 
