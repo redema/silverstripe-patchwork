@@ -23,7 +23,7 @@ Redema AB <http://redema.se/>
 ## Installation Instructions
 
  * Place this directory in the root of your SilverStripe installation. Make sure
-   that the folder is named "patchwork" if you are planning to run the unit tests.
+   that the folder is named "patchwork".
 
  * Visit http://www.yoursite.example.com/dev/build?flush=all to rebuild the
    manifest and database.
