@@ -1,0 +1,21 @@
+{
+	"name": "silverstripe/sqlite3",
+	"description": "Adds SQLite3 support to SilverStripe",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "sqlite3", "database"],
+	"authors": [
+	{
+		"name": "Ingo Schommer",
+		"email": "ingo@silverstripe.com"
+	},
+	{
+		"name": "Sean Harvey",
+		"email": "sean@silverstripe.com"
+	}
+	],
+
+	"require":
+	{
+		"silverstripe/framework": "3.*"
+	}
+}
