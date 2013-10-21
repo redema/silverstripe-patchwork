@@ -52,7 +52,8 @@ class PageContentItem extends DataObject {
 		'Link' => 'Text',
 		'Content' => 'HTMLText',
 		'ExtraClasses' => 'Text',
-		'SpecialTemplate' => 'Text'
+		'SpecialTemplate' => 'Text',
+		'Sort' => 'Int'
 	);
 	
 	private static $has_one = array(
@@ -76,6 +77,8 @@ class PageContentItem extends DataObject {
 		"VersionedHooks",
 		"VersionedStatus"
 	);
+	
+	public static $default_sort = 'Sort, ID';
 	
 	public function Inner($contentClass = '') {
 		$templates = array(
@@ -118,8 +121,11 @@ class PageContentItem extends DataObject {
 		$itemClass = get_called_class();
 		$itemClasses = "{$itemClass}s";
 		
-		$itemsFieldConfig = GridFieldConfig_RelationEditor::create();
+		$itemsFieldConfig = GridFieldConfig_RelationEditor::create(count($items));
 		$itemsFieldColumns = $itemsFieldConfig->getComponentByType('GridFieldDataColumns');
+		
+		if (class_exists('GridFieldSortableRows'))
+			$itemsFieldConfig->addComponent(new PatchworkGridFieldSortableRows('Sort'));
 		
 		$itemsFieldColumns->setDisplayFields(array(
 			'Thumbnail' => 'Thumbnail',
