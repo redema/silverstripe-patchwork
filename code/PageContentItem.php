@@ -29,7 +29,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+if (class_exists('SiteTree')) {
+
 /**
+ * Handle multiple images or blocks of content on a single
+ * page. To just get a single image per page, see PageMainImage.
+ * 
  * <code>
  * class Page extends SiteTree {
  *     private static $has_many = array(
@@ -45,6 +50,9 @@
  * class PageCarouselItem extends PageContentItem {
  * }
  * </code>
+ * 
+ * @see PageMainImage
+ * @see PatchworkGridFieldSortableRows
  */
 class PageContentItem extends DataObject {
 	private static $db = array(
@@ -181,3 +189,4 @@ class PageContentItem extends DataObject {
 	
 }
 
+}
