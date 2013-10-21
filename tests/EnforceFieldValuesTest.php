@@ -31,7 +31,7 @@
 
 class EnforceFieldValuesTest extends SapphireTest {
 	
-	public static $fixture_file = 'patchwork/tests/EnforceFieldValuesTest.yml';
+	public static $fixture_file = 'EnforceFieldValuesTest.yml';
 	
 	public function testEnforcedValues() {
 		$gadget = new EnforceFieldValuesTest_Gadget();

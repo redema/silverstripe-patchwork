@@ -31,7 +31,7 @@
 
 class AutoversionedTest extends SapphireTest {
 	
-	public static $fixture_file = 'patchwork/tests/AutoversionedTest.yml';
+	public static $fixture_file = 'AutoversionedTest.yml';
 	
 	protected function checkStagedDataObjects($class, $count, $stage) {
 		$objects = Versioned::get_by_stage($class, $stage);

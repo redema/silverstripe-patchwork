@@ -31,7 +31,7 @@
 
 class ConstraintTest extends SapphireTest {
 	
-	public static $fixture_file = 'patchwork/tests/ConstraintTest.yml';
+	public static $fixture_file = 'ConstraintTest.yml';
 	
 	protected function checkStagePresence($class, $stage, $ID, $assert) {
 		$object = Versioned::get_one_by_stage($class, $stage, $ID, false);
