@@ -31,6 +31,12 @@
 
 if (class_exists('GridFieldSortableRows')) {
 
+/**
+ * Add support for sortable Versioned DataObjects to the
+ * SortableGridField module. Each DataObject must be written
+ * on change in order to get a version saved for it and to
+ * allow changes to be detected.
+ */
 class PatchworkGridFieldSortableRows extends GridFieldSortableRows {
 	
 	protected function saveGridRowSort(GridField $gridField, $data) {
