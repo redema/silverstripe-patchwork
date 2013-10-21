@@ -57,24 +57,25 @@ class PatchworkRequirements extends Extension {
 			),
 		);
 		
-		$cmsUrl = 'admin/';
-		$requestUrl = $this->owner->getRequest()->getURL();
-		$cmsPageload = (
-			strlen($requestUrl) >= strlen($cmsUrl) &&
-			substr($requestUrl, 0, strlen($cmsUrl)) == $cmsUrl
+		$cmsUrls = array(
+			'admin/',
+			'Security/ping'
 		);
-		
-		if (!$cmsPageload) {
-			foreach ($requirements as $combined => $files) {
-				Requirements::combine_files($combined, $files);
-			}
+		$requestUrl = $this->owner->getRequest()->getURL();
+		$cmsPageload = false;
+		foreach ($cmsUrls as $cmsUrl) {
+			$cmsPageload = $cmsPageload|| (
+				strlen($requestUrl) >= strlen($cmsUrl) &&
+				substr($requestUrl, 0, strlen($cmsUrl)) == $cmsUrl
+			);
 		}
-	}
-	
-	protected function minifyCSS($file) {
-		$css = file_get_contents($file);
-		$css = 
-		file_put_contents($file, $css);
+		
+		foreach ($requirements as $combined => $files) {
+			if ($cmsPageload)
+				Requirements::block($combined);
+			else
+				Requirements::combine_files($combined, $files);
+		}
 	}
 	
 	public function onAfterInit() {
