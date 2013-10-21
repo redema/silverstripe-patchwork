@@ -71,3 +71,7 @@ body.mceContentBody img {
 .col-lg-12 * {
 	background: #f1f1f1;
 }
+
+.row .row {
+	background: #d0d0d0;
+}

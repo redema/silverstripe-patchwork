@@ -5,3 +5,6 @@ Before: 'mysite/*'
 ---
 SSViewer:
   rewrite_hash_links: false
+Director:
+  rules:
+    'admin/htmleditortemplate': 'HtmlEditorTemplateController'

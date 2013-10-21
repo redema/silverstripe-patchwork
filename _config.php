@@ -50,6 +50,11 @@ call_user_func(function () {
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
+		
+		HtmlEditorConfig::get('cms')->enablePlugins('template');
+		HtmlEditorConfig::get('cms')->addButtonsToLine(2, 'template');
+		HtmlEditorConfig::get('cms')->setOption('template_external_list_url',
+			'/admin/htmleditortemplate/tinymce');
 	}
 	
 	i18n::set_locale(PATCHWORK_I18N_LOCALE);
