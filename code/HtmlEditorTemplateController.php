@@ -49,7 +49,7 @@ class HtmlEditorTemplateController extends Controller {
 		$dotDirs = array('.', '..');
 		foreach ($templateDirs as $templateDir) {
 			echo "// src: $templateDir\n";
-			if (($absDir = dir(BASE_PATH . "/$templateDir"))) {
+			if (($absDir = @dir(BASE_PATH . "/$templateDir"))) {
 				while (false !== ($entry = $absDir->read())) {
 					if (in_array($entry, $dotDirs))
 						continue;
