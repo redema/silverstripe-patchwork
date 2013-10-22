@@ -88,25 +88,7 @@ class PatchworkRequirements_Backend extends Requirements_Backend {
 	
 	public $write_header_comment = false;
 	
-	protected $trim_combined_css = true;
-	
-	public function set_trim_combined_css($v) {
-		$this->trim_combined_css = (bool)$v;
-	}
-	
-	public function get_trim_combined_css() {
-		return $this->trim_combined_css;
-	}
-	
-	protected $trim_combined_js = true;
-	
-	public function set_trim_combined_js($v) {
-		$this->trim_combined_js = (bool)$v;
-	}
-	
-	public function get_trim_combined_js() {
-		return $this->trim_combined_js;
-	}
+	public $combine_css_with_cssmin = true;
 	
 	/**
 	 * @see Requirements::process_combined_files()
@@ -124,63 +106,15 @@ class PatchworkRequirements_Backend extends Requirements_Backend {
 		return $mtime < filemtime($file);
 	}
 	
-	public static function trimCombinedCSS($css) {
-		// This is usually surprisingly adequate, but since it is very
-		// simplistic it will probably break something at some point.
-		return trim(preg_replace('/\s+/', ' ', $css));
-	}
-	
-	public static function trimCombinedJS($js) {
-		// This is mostly micro-optimization, but it saves a few bytes
-		// when there are a huge number of combined JS files.
-		return trim(preg_replace("/\\n+/", "\n", $js));
-	}
-	
-	/**
-	 * Some code duplication is necessary since Requirements_Backend
-	 * was never really designed to be a base class. Monkey
-	 * patching at its finest.
-	 * 
-	 * @see Requirements_Backend::process_combined_files()
-	 */
-	public function process_combined_files() {
-		$runningTest = class_exists('SapphireTest', false)?
-			SapphireTest::is_running_test(): false;
-		if ((Director::isDev() && !$runningTest && !isset($_REQUEST['combine'])) ||
-				!$this->combined_files_enabled)
-			return;
-		
-		$combinedFolder = $this->getCombinedFilesFolder();
-		$combinedPath = Controller::join_links(BASE_PATH, "/$combinedFolder");
-		
-		$updatableFiles = array(
-			'css' => array(),
-			'js' => array()
-		);
-		
-		foreach ($this->get_combine_files() as $combined => $files) {
-			$path = Controller::join_links("$combinedPath/", "/$combined");
-			$ext = pathinfo($path, PATHINFO_EXTENSION);
-			$check = (
-				($this->trim_combined_css && $ext == 'css') ||
-				($this->trim_combined_js && $ext == 'js')
-			);
-			if ($check) {
-				if (!$this->combinedUpToDate($path, $files))
-					$updatableFiles[$ext][] = $path;
-			}
+	public function minifyFile($filename, $content) {
+		$content = parent::minifyFile($filename, $content);
+		$isCSS = pathinfo($filename, PATHINFO_EXTENSION) == 'css';
+		if ($isCSS && $this->combine_css_with_cssmin) {
+			require_once PATCHWORK_THIRDPARTY_PATH . '/cssmin/cssmin.php';
+			$cssMin = new CSSmin($raise_php_limits = false);
+			$content = $cssMin->run($content, false) . "\n";
 		}
-		
-		parent::process_combined_files();
-		
-		foreach ($updatableFiles as $type => $paths) {
-			$trim = 'trimCombined' . strtoupper($type);
-			foreach ($paths as $path) {
-				$data = file_get_contents($path);
-				$data = $this->$trim($data);
-				file_put_contents($path, $data);
-			}
-		}
+		return $content;
 	}
 	
 	public function includeInHTML($templateFile, $content) {
