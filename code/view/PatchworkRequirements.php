@@ -182,4 +182,20 @@ class PatchworkRequirements_Backend extends Requirements_Backend {
 			}
 		}
 	}
+	
+	public function includeInHTML($templateFile, $content) {
+		$content = parent::includeInHTML($templateFile, $content);
+		if (strpos($content, '</head>') !== false) {
+			$headtpl = "<!--[if lt IE 9]><script src=\"%s\"></script><![endif]-->\n</head>";
+			$html5shiv = Controller::join_links(
+				BASE_URL,
+				PATCHWORK_DIR,
+				'javascript/thirdparty/html5shiv-printshiv-3.7.0.js'
+			);
+			$head = sprintf($headtpl, $html5shiv);
+			$content = str_replace('</head>', $head, $content);
+		}
+		return $content;
+	}
+	
 }
