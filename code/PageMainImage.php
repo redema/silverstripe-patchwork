@@ -51,27 +51,13 @@ class PageMainImage extends SiteTreeExtension {
 	);
 	
 	public function updateCMSFields(FieldList $fields) {
-		$fields->findOrMakeTab('Root.PageMainImage',
-			$this->owner->fieldLabel('PageMainImage'));
-		
-		$textFields = array(
-			'MainImageAlt',
-			'MainImageLink'
-		);
-		foreach ($textFields as $name) {
-			$fields->addFieldToTab('Root.PageMainImage', new TextField(
-				$name, $this->owner->fieldLabel($name)));
-		}
-		
-		$imageFields = array(
-			'DesktopMainImage',
-			'TabletMainImage',
-			'MobileMainImage'
-		);
-		foreach ($imageFields as $name) {
-			$fields->addFieldToTab('Root.PageMainImage', new UploadField(
-				$name, $this->owner->fieldLabel($name)));
-		}
+		$fieldTransformation = new FormTransformation_SpecificFields(array(
+			'MainImageAlt' => 'TextField',
+			'MainImageLink' => 'TextField'
+		));
+		$this->owner->autoScaffoldExtensionFormFields($fields,
+			'Root.PageMainImage', get_class($this), $this->owner,
+			$fieldTransformation);
 	}
 	
 }
