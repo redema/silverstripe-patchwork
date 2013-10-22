@@ -30,49 +30,41 @@
  */
 
 /**
- * Mixed utilities and helpers which are too small to be given
- * a new extension.
+ * Transform fields by name. Very useful in combination with
+ * DataObjectHelpers::autoScaffoldExtensionFormFields().
  */
-class DataObjectHelpers extends DataExtension {
+class FormTransformation_SpecificFields extends FormTransformation {
 	
-	/**
-	 * $Pos in a template will give "1" as the first position.
-	 * Feed that value to this method to get the proper position.
-	 */
-	public function ActualPos($pos) {
-		return (int)$pos - 1;
+	protected $fields = array();
+	
+	public function __construct(array $fields) {
+		$this->fields = $fields;
 	}
 	
-	/**
-	 * Quickly scaffold Extension form fields into a tab for the
-	 * given field list.
-	 * 
-	 * @param FieldList $fields
-	 * @param string $tab
-	 * @param string $class
-	 * @param DataObject $object
-	 * @param null|FormTransformation $formTransformation
-	 */
-	public function autoScaffoldExtensionFormFields(FieldList $fields,
-			$tab, $class, DataObject $object, $formTransformation) {
-		$fields->findOrMakeTab($tab, $object->fieldLabel(
-			str_replace('.', '_', $tab)));
-		
-		$config = Config::inst();
-		$db = array_keys($config->get($class, 'db'));
-		$has = array_keys($config->get($class, 'has_one'));
-		array_walk($has, function (&$item) {
-			$item = "{$item}ID";
-		});
-		
-		foreach (array_merge($db, $has) as $name) {
-			$dbField = $object->dbObject($name);
-			$formField = $dbField->scaffoldFormField($object->fieldLabel($name));
-			if ($formTransformation)
-				$formField = $formTransformation->transform($formField);
-			$fields->addFieldToTab($tab, $formField);
+	protected function interceptable($method) {
+		return preg_match('/^transform[_a-z0-9]+/i', $method);
+	}
+	
+	protected function intercept($method, $arguments) {
+		$field = array_shift($arguments);
+		$name = $field->getName();
+		if (isset($this->fields[$name])) {
+			$transformer = $this->fields[$name];
+			$field = is_callable($transformer)?
+				$transformer($field): $field->castedCopy($transformer);
 		}
+		return $field;
 	}
+	
+	public function hasMethod($method) {
+		return $this->interceptable($method)?
+			true: parent::hasMethod($method);
+	}
+	
+	public function __call($method, $arguments) {
+		return $this->interceptable($method)?
+			$this->intercept($method, $arguments):
+			parent::__call($method, $arguments);
+	}
+	
 }
-
-
