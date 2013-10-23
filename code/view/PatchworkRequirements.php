@@ -52,6 +52,7 @@ class PatchworkRequirements extends Extension {
 				'patchwork/javascript/thirdparty/jquery-refineslide-0.4.1.js',
 				'patchwork/javascript/thirdparty/bootstrap-3.0.0.js',
 				'patchwork/javascript/FrontEndForm.js',
+				'patchwork/javascript/FrontEndQuirks.js',
 				'patchwork/javascript/Patchwork.js',
 				'mysite/javascript/mysite.js'
 			),

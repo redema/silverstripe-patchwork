@@ -6,6 +6,13 @@
 jQuery.noConflict();
 
 function PatchworkDocumentReady($) {
+	$.walkExternalAnchors(function (i, el) {
+		$(el).click(function (event) {
+			event.preventDefault();
+			event.stopPropagation();
+			window.open($(this).attr('href'), '_blank');
+		});
+	});
 	$('form').bootstrapFrontEndForm();
 }
 jQuery(document).ready(PatchworkDocumentReady);
