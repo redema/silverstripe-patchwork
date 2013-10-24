@@ -129,6 +129,8 @@ class PageContentItem extends DataObject {
 		$itemClass = get_called_class();
 		$itemClasses = "{$itemClass}s";
 		
+		$itemObject = $itemClass::create();
+		
 		$itemsFieldConfig = GridFieldConfig_RelationEditor::create(count($items));
 		$itemsFieldColumns = $itemsFieldConfig->getComponentByType('GridFieldDataColumns');
 		
@@ -136,10 +138,10 @@ class PageContentItem extends DataObject {
 			$itemsFieldConfig->addComponent(new PatchworkGridFieldSortableRows('Sort'));
 		
 		$itemsFieldColumns->setDisplayFields(array(
-			'Thumbnail' => 'Thumbnail',
-			'Title' => 'Title',
-			'Link' => 'Link',
-			'ExtraClasses' => 'ExtraClasses',
+			'Thumbnail' => $itemObject->fieldLabel('Thumbnail'),
+			'Title' => $itemObject->fieldLabel('Title'),
+			'Link' => $itemObject->fieldLabel('Link'),
+			'ExtraClasses' => $itemObject->fieldLabel('ExtraClasses'),
 			'PublishedToLive' => 'PublishedToLive'
 		));
 		
@@ -186,6 +188,29 @@ class PageContentItem extends DataObject {
 		
 		return $fields;
 	}
+	
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		
+		$labels['Thumbnail'] = _t('PageContentItem.Thumbnail', 'Thumbnail');
+		
+		$labels['Title'] = _t('PageContentItem.Title', 'Title');
+		$labels['Link'] = _t('PageContentItem.Link', 'Link');
+		$labels['Content'] = _t('PageContentItem.Content', 'Content');
+		$labels['ExtraClasses'] = _t('PageContentItem.ExtraClasses', 'Extra classes');
+		$labels['SpecialTemplate'] = _t('PageContentItem.SpecialTemplate', 'Special template');
+		$labels['Sort'] = _t('PageContentItem.Sort', 'Sort');
+		
+		if ($includerelations) {
+			$labels['Page'] = _t('PageContentItem.Page', 'Page');
+			$labels['DesktopImage'] = _t('PageContentItem.DesktopImage', 'Desktop image');
+			$labels['TabletImage'] = _t('PageContentItem.TabletImage', 'Tablet image');
+			$labels['MobileImage'] = _t('PageContentItem.MobileImage', 'Mobile image');
+		}
+		
+		return $labels;
+	}
+
 	
 }
 

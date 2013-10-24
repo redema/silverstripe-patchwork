@@ -57,6 +57,16 @@ class SiteFooter extends DataExtension {
 			$fieldTransformation);
 	}
 	
+	public function updateFieldLabels(&$labels) {
+		$labels['Root_SiteFooter'] = _t('SiteFooter.Root_SiteFooter', 'Footer');
+		
+		$labels['FooterContact'] = _t('SiteFooter.FooterContact', 'Contact');
+		$labels['FooterWildcard'] = _t('SiteFooter.FooterWildcard', 'Wildcard');
+		
+		$labels['FooterMenuParent'] = $labels['FooterMenuParentID']
+			=_t('SiteFooter.FooterMenuParent', 'Menu parent');
+	}
+	
 }
 
 }

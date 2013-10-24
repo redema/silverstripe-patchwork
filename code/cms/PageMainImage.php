@@ -60,6 +60,20 @@ class PageMainImage extends SiteTreeExtension {
 			$fieldTransformation);
 	}
 	
+	public function updateFieldLabels(&$labels) {
+		$labels['Root_PageMainImage'] = _t('PageMainImage.Root_PageMainImage', 'Main image');
+		
+		$labels['MainImageAlt'] = _t('PageMainImage.MainImageAlt', 'Image alt');
+		$labels['MainImageLink'] = _t('PageMainImage.MainImageLink', 'Image link');
+		
+		$labels['DesktopMainImage'] = $labels['DesktopMainImageID']
+			=_t('PageMainImage.DesktopMainImage', 'Desktop image');
+		$labels['TabletMainImage'] = $labels['TabletMainImageID']
+			= _t('PageMainImage.TabletMainImage', 'Tablet image');
+		$labels['MobileMainImage'] = $labels['MobileMainImageID']
+			= _t('PageMainImage.MobileMainImage', 'Mobile image');
+	}
+	
 }
 
 }

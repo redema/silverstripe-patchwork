@@ -1,0 +1,25 @@
+en:
+  PageContentItem:
+    Thumbnail: 'Thumbnail'
+    Title: 'Title'
+    Link: 'Link'
+    Content: 'Content'
+    ExtraClasses: 'Extra CSS classes'
+    SpecialTemplate: 'Special SilverStripe template'
+    Sort: 'Sort'
+    Page: 'Page'
+    DesktopImage: 'Desktop image'
+    TabletImage: 'Tablet image'
+    MobileImage: 'Mobile image'
+  PageMainImage:
+    Root_PageMainImage: 'Main image'
+    MainImageAlt: 'Image alt'
+    MainImageLink: 'Image link'
+    DesktopMainImage: 'Desktop image'
+    TabletMainImage: 'Tablet image'
+    MobileMainImage: 'Mobile image'
+  SiteFooter:
+    Root_SiteFooter: 'Footer'
+    FooterContact: 'Contact'
+    FooterWildcard: 'Wildcard'
+    FooterMenuParent: 'Menu parent'

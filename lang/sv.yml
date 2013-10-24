@@ -1,0 +1,25 @@
+sv:
+  PageContentItem:
+    Thumbnail: 'Tumnagel'
+    Title: 'Titel'
+    Link: 'Länk'
+    Content: 'Innehåll'
+    ExtraClasses: 'Extra CSS klasser'
+    SpecialTemplate: 'Speciell SilverStripemall'
+    Sort: 'Sortering'
+    Page: 'Sida'
+    DesktopImage: 'Desktopbild'
+    TabletImage: 'Läsplattebild'
+    MobileImage: 'Mobilbild'
+  PageMainImage:
+    Root_PageMainImage: 'Huvudbild'
+    MainImageAlt: 'Bild-alt'
+    MainImageLink: 'Bildtext'
+    DesktopMainImage: 'Desktopbild'
+    TabletMainImage: 'Läsplattebild'
+    MobileMainImage: 'Mobilbild'
+  SiteFooter:
+    Root_SiteFooter: 'Footer'
+    FooterContact: 'Kontakt'
+    FooterWildcard: 'Wildcard'
+    FooterMenuParent: 'Menyförälder'
