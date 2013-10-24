@@ -11,3 +11,19 @@
 .carousel.items-1 .carousel-indicators {
 	display: none;
 }
+
+form .optionset ul li,
+form .checkboxset ul li {
+	list-style: none;
+}
+form .optionset input[type="radio"],
+form .checkboxset input[type="checkbox"] {
+    float: left;
+    margin-left: -20px;
+}
+form input[type="radio"],
+form input[type="checkbox"] {
+	display: inline-block;
+	width: auto;
+	height: auto;
+}
