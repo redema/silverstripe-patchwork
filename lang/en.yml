@@ -23,3 +23,12 @@ en:
     FooterContact: 'Contact'
     FooterWildcard: 'Wildcard'
     FooterMenuParent: 'Menu parent'
+  HtmlEditorTemplateController:
+    Desktop2col_Mobile1col_Name: 'Desktop: 2 col, Mobile: 1 col'
+    Desktop2col_Mobile1col_Desc: '2 columns on the desktop, 1 on mobile devices'
+    Desktop3col_Mobile1col_Name: 'Desktop: 3 col, Mobile: 1 col'
+    Desktop3col_Mobile1col_Desc: '3 columns on the desktop, 1 on mobile devices'
+    Desktop4col_Mobile1col_Name: 'Desktop: 4 col, Mobile: 1 col'
+    Desktop4col_Mobile1col_Desc: '4 columns on the desktop, 1 on mobile devices'
+    Desktop4col_Mobile2col_Name: 'Desktop: 4 col, Mobile: 2 col'
+    Desktop4col_Mobile2col_Desc: '4 columns on the desktop, 2 on mobile devices'

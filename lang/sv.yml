@@ -23,3 +23,12 @@ sv:
     FooterContact: 'Kontakt'
     FooterWildcard: 'Wildcard'
     FooterMenuParent: 'Menyförälder'
+  HtmlEditorTemplateController:
+    Desktop2col_Mobile1col_Name: 'Desktop: 2 kol, Mobil: 1 kol'
+    Desktop2col_Mobile1col_Desc: '2 kolumner på dekstop, 1 på mobila enheter'
+    Desktop3col_Mobile1col_Name: 'Desktop: 3 kol, Mobil: 1 kol'
+    Desktop3col_Mobile1col_Desc: '3 kolumner på dekstop, 1 på mobila enheter'
+    Desktop4col_Mobile1col_Name: 'Desktop: 4 kol, Mobil: 1 kol'
+    Desktop4col_Mobile1col_Desc: '4 kolumner på dekstop, 1 på mobila enheter'
+    Desktop4col_Mobile2col_Name: 'Desktop: 4 kol, Mobil: 2 kol'
+    Desktop4col_Mobile2col_Desc: '4 kolumner på dekstop, 2 på mobila enheter'

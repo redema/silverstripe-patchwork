@@ -62,11 +62,13 @@ class HtmlEditorTemplateController extends Controller {
 						"/$templateDir",
 						"/$entry"
 					);
-					// FIXME: Handle %name and %desc.
+					$templateName = strtr(basename($templateUrl, '.html'), ".;:", "___");
 					$templateFiles[] = array(
 						'link' => $templateUrl,
-						'name' => $templateUrl,
-						'desc' => $templateUrl
+						'name' => _t('HtmlEditorTemplateController.'
+							. "{$templateName}_Name", $templateName),
+						'desc' => _t('HtmlEditorTemplateController.'
+							. "{$templateName}_Desc", $templateName)
 					);
 				}
 				$absDir->close();
@@ -87,8 +89,8 @@ class HtmlEditorTemplateController extends Controller {
 		$templates = array();
 		foreach ($this->findTemplates() as $template) {
 			list(
-				$name,
 				$link,
+				$name,
 				$desc
 			) = array_values($template);
 			$templates[] = "\t['$name', '$link', '$desc']";
