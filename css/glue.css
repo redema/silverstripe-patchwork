@@ -5,6 +5,20 @@
 	height: auto;
 }
 
+.typography iframe,
+.constrained iframe {
+	max-width: 100%;
+	height: auto;
+}
+.typography iframe[src^="http://www.youtube.com/embed/"],
+.constrained iframe[src^="http://www.youtube.com/embed/"] {
+	min-height: 315px;
+}
+.typography iframe[src^="http://player.vimeo.com/video/"],
+.constrained iframe[src^="http://player.vimeo.com/video/"] {
+	min-height: 280px;
+}
+
 /* Hide the controls for a carousel if it only has one item.
  */
 .carousel.items-1 .carousel-control,
