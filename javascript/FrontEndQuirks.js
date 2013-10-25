@@ -9,6 +9,7 @@
 			$([
 				'a[href^=http]:not(.not-external)',
 				'a[rel=external]',
+				'area[href^=http]:not(.not-external)',
 				'area[rel=external]'
 			].join(', ')).each(callback);
 		}
