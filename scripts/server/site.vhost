@@ -1,0 +1,34 @@
+@listen
+<VirtualHost *:@port>
+	ServerAdmin webmaster@localhost
+
+	DocumentRoot @root/@name/www
+	ServerName www.@name
+	ServerAlias @name
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride All
+	</Directory>
+	<Directory @root/@name/www>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+	<Directory "/usr/lib/cgi-bin">
+		AllowOverride None
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog @root/@name/log/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog @root/@name/log/access.log combined
+</VirtualHost>
