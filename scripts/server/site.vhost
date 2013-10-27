@@ -1,15 +1,15 @@
-@listen
-<VirtualHost *:@port>
+%listen
+<VirtualHost *:%port>
 	ServerAdmin webmaster@localhost
 
-	DocumentRoot @root/@name/www
-	ServerName www.@name
-	ServerAlias @name
+	DocumentRoot %root/%name/www
+	ServerName www.%name
+	ServerAlias %name
 	<Directory />
 		Options FollowSymLinks
 		AllowOverride All
 	</Directory>
-	<Directory @root/@name/www>
+	<Directory %root/%name/www>
 		Options Indexes FollowSymLinks MultiViews
 		AllowOverride All
 		Order allow,deny
@@ -24,11 +24,11 @@
 		Allow from all
 	</Directory>
 
-	ErrorLog @root/@name/log/error.log
+	ErrorLog %root/%name/log/error.log
 
 	# Possible values include: debug, info, notice, warn, error, crit,
 	# alert, emerg.
 	LogLevel warn
 
-	CustomLog @root/@name/log/access.log combined
+	CustomLog %root/%name/log/access.log combined
 </VirtualHost>

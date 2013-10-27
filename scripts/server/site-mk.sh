@@ -49,7 +49,7 @@ else
 fi
 
 replace_var() {
-	sudo sed -i "s|@${2}|${3}|g" "${1}"
+	sudo sed -i "s|%${2}|${3}|g" "${1}"
 }
 
 sudo cp "${script_dir}/site.vhost" "${vhost_file}"
