@@ -27,18 +27,20 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Example usage: ubuntu-lamp ubuntu-12.04-packages.txt
+# Example usage: ubuntu-lamp.sh ubuntu-12.04-packages.txt
 
 set -e
 
 script_path=`readlink -f "$0"`
 script_dir=`dirname "${script_path}"`
 
+cwd="`pwd`"
+
 opt_pkglist="$1"
 opt_webroot="/var/www"
 
 if [[ ! -f "${opt_pkglist}" ]] ; then
-	# Create a raw package list for the current host.
+	# Create a raw package list from the current host.
 	# More info: http://superuser.com/a/191714
 	echo "$0: generating \"${opt_pkglist}\" from `uname -n`"
 	dpkg -l | grep '^ii' | awk '{ print $2 }' > "${opt_pkglist}"
@@ -62,12 +64,27 @@ sudo cp "${script_dir}/default.vhost" "/etc/apache2/sites-available/default"
 
 mkdir -p "${opt_webroot}/localhost/www"
 
+# FIXME: Better and/or Sane PEAR and PHPUnit handling.
+sudo pear upgrade PEAR
+sudo pear config-set auto_discover 1
+if [[ ! -d "/usr/share/php/PHPUnit" ]] ; then
+	sudo pear install pear.phpunit.de/PHPUnit
+else
+	sudo pear upgrade phpunit/PHPUnit
+fi
+
 sudo service apache2 restart
 
 "${script_dir}/site-mk.sh" "${opt_webroot}" "phpinfo.localhost" "64000"
 "${script_dir}/site-mk.sh" "${opt_webroot}" "phpmyadmin.localhost" "64010"
 
 echo "<?php phpinfo();" > "${opt_webroot}/phpinfo.localhost/www/index.php"
+cd "${opt_webroot}/phpmyadmin.localhost/"
+rmdir www
+git clone https://github.com/phpmyadmin/phpmyadmin.git www
+cd www
+git checkout -b STABLE origin/STABLE
+cd "${cwd}"
 
 "${script_dir}/site-mk.sh" "${opt_webroot}" "silverstripe.localhost" "80"
 "${script_dir}/site-mk.sh" "${opt_webroot}" "tmp.localhost" "80"
