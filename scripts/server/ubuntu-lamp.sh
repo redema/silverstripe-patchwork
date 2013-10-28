@@ -79,12 +79,14 @@ sudo service apache2 restart
 "${script_dir}/site-mk.sh" "${opt_webroot}" "phpmyadmin.localhost" "64010"
 
 echo "<?php phpinfo();" > "${opt_webroot}/phpinfo.localhost/www/index.php"
-cd "${opt_webroot}/phpmyadmin.localhost/"
-rmdir www
-git clone https://github.com/phpmyadmin/phpmyadmin.git www
-cd www
-git checkout -b STABLE origin/STABLE
-cd "${cwd}"
+if [[ ! -d "${opt_webroot}/phpmyadmin.localhost/www/.git" ]] ; then
+	cd "${opt_webroot}/phpmyadmin.localhost/"
+	rmdir www
+	git clone https://github.com/phpmyadmin/phpmyadmin.git www
+	cd www
+	git checkout -b STABLE origin/STABLE
+	cd "${cwd}"
+fi
 
 "${script_dir}/site-mk.sh" "${opt_webroot}" "silverstripe.localhost" "80"
 "${script_dir}/site-mk.sh" "${opt_webroot}" "tmp.localhost" "80"
