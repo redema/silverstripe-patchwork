@@ -1,7 +1,7 @@
 <%-- Args: $ID, $Items --%>
 
 <% if $Items && $Items.Count %>
-<div id="carousel-$ID" class="carousel slide items-$Items.Count" data-ride="carousel">
+<div id="carousel-$ID" class="carousel slide items-$Items.Count" data-ride="carousel" aria-live="off">
 	<ol class="carousel-indicators">
 		<% loop $Items %>
 		<li data-target="#carousel-$Top.ID" data-slide-to="$ActualPos($Pos)"
