@@ -29,33 +29,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+if (class_exists('SiteTree')) {
+
 /**
- * Useful template related things for Controller.
+ * Useful template related things for ContentController.
  */
-class TemplateHelpers extends Extension {
+class ContentControllerTemplateHelpers extends Extension {
 	
-	public function EnvironmentType() {
-		return Director::get_environment_type();
-	}
-	
-	public function DateCacheBuster($format) {
-		return Convert::raw2url(date($format));
-	}
-	
-	public function MtimeCacheBuster($url, $everything = true) {
-		$path = BASE_PATH . "/$url";
-		if (file_exists($path))
-			return ($everything? "$url?m=": '') . filemtime($path);
-		return 0;
-	}
-	
-	public function Year() {
-		return date('Y');
-	}
-	
-	public function Copyright($entity) {
-		return sprintf('Copyright &copy; %s %s', $this->Year(), $entity);
+	/**
+	 * SilverStripeNavigator is a nice feature, but it should only
+	 * be visible when an admin user is logged in - even for dev
+	 * environments.
+	 */
+	public function PatchworkNavigator() {
+		$member = Member::currentUser();
+		$navigator = $member && $member->inGroup(GROUP_ADMINISTRATORS)?
+			$this->owner->SilverStripeNavigator(): null;
+		
+		if ($navigator)
+			Requirements::css(PATCHWORK_DIR . '/css/SilverStripeNavigator.css');
+		
+		return $navigator;
 	}
 	
 }
 
+}

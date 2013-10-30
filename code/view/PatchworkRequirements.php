@@ -32,6 +32,19 @@
 class PatchworkRequirements extends Extension {
 	
 	public function onBeforeInit() {
+		$cmsUrls = array(
+			'admin/',
+			'Security/ping'
+		);
+		$requestUrl = $this->owner->getRequest()->getURL();
+		$cmsPageload = false;
+		foreach ($cmsUrls as $cmsUrl) {
+			$cmsPageload = $cmsPageload || (
+				strlen($requestUrl) >= strlen($cmsUrl) &&
+				substr($requestUrl, 0, strlen($cmsUrl)) == $cmsUrl
+			);
+		}
+		
 		$requirements = array(
 			'mysite-default.css' => array(
 				'patchwork/css/thirdparty/bootstrap-3.0.0.css',
@@ -57,25 +70,22 @@ class PatchworkRequirements extends Extension {
 				'mysite/javascript/mysite.js'
 			),
 		);
-		
-		$cmsUrls = array(
-			'admin/',
-			'Security/ping'
-		);
-		$requestUrl = $this->owner->getRequest()->getURL();
-		$cmsPageload = false;
-		foreach ($cmsUrls as $cmsUrl) {
-			$cmsPageload = $cmsPageload|| (
-				strlen($requestUrl) >= strlen($cmsUrl) &&
-				substr($requestUrl, 0, strlen($cmsUrl)) == $cmsUrl
-			);
-		}
-		
 		foreach ($requirements as $combined => $files) {
 			if ($cmsPageload)
 				Requirements::block($combined);
 			else
 				Requirements::combine_files($combined, $files);
+		}
+		
+		// Only use the jQuery version that is bundled with patchwork.
+		// This might break some SilverStripe functionality, so maybe
+		// it should be possible to disable it?
+		$blocked = array(
+			FRAMEWORK_DIR . '/thirdparty/jquery/jquery.js'
+		);
+		foreach ($blocked as $file) {
+			if (!$cmsPageload)
+				Requirements::block($file);
 		}
 	}
 	

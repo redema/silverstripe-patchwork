@@ -1,0 +1,9 @@
+
+#SilverStripeNavigator {
+	padding-bottom: 4px;
+	height: auto;
+}
+
+#SilverStripeNavigator .holder {
+	padding: 4px 4px 0 4px;
+}

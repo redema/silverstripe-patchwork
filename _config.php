@@ -43,13 +43,14 @@ call_user_func(function () {
 	
 	DataObject::add_extension('DataObjectHelpers');
 	DataObject::add_extension('EnforceFieldValues');
-	Controller::add_extension('TemplateHelpers');
+	Controller::add_extension('ControllerTemplateHelpers');
 	Controller::add_extension('PatchworkRequirements');
 	LeftAndMain::add_extension('ResponsiveLeftAndMain');
 	
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
+		ContentController::add_extension('ContentControllerTemplateHelpers');
 		
 		HtmlEditorConfig::get('cms')->enablePlugins('template');
 		HtmlEditorConfig::get('cms')->addButtonsToLine(2, 'template');

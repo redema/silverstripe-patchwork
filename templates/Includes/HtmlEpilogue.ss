@@ -3,5 +3,7 @@
 
 <% include Analytics %>
 
+$PatchworkNavigator
+
 </body>
 </html>
