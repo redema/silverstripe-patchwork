@@ -66,6 +66,24 @@
 						$this.attr('placeholder', $label.html());
 				});
 			
+			// DOMNodeInserted is used to support IE9, but obviously MutationObserver
+			// would be a better choice otherwise.
+			// 
+			// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+			$('body').on('DOMNodeInserted', '#' + $this.attr('id'), function (event) {
+				var $target = $(event.target);
+				var classes = {
+					'required': ['alert', 'alert-info'],
+					'warning': ['alert', 'alert-warning'],
+					'good': ['alert', 'alert-success'],
+					'bad': ['alert', 'alert-danger']
+				};
+				
+				for (var key in classes) {
+					if ($target.hasClass(key))
+						$target.addClass(classes[key].join(' '));
+				}
+			});
 		});
 	};
 })(jQuery);

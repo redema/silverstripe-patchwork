@@ -41,3 +41,7 @@ form input[type="checkbox"] {
 	width: auto;
 	height: auto;
 }
+form .alert {
+	display: block;
+	margin: 5px 0;
+}
