@@ -1,5 +1,6 @@
 
 #SilverStripeNavigator {
+	z-index: 32768;
 	padding-bottom: 4px;
 	height: auto;
 }
