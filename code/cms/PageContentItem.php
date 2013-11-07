@@ -185,6 +185,11 @@ class PageContentItem extends DataObject {
 			'ExtraClasses' => 'TextField',
 			'SpecialTemplate' => 'TextField'
 		));
+		if (class_exists('GridFieldSortableRows')) {
+			$fieldTransformation->addField('Sort', function (FormField $field) {
+				return $field->performDisabledTransformation();
+			});
+		}
 		$replaceField = function (FieldList $fields, $tab, FormField $field) {
 			$fields->replaceField($field->getName(), $field);
 		};

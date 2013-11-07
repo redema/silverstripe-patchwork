@@ -67,4 +67,12 @@ class FormTransformation_SpecificFields extends FormTransformation {
 			parent::__call($method, $arguments);
 	}
 	
+	public function addField($name, $transformer) {
+		$this->fields[$name] = $transformer;
+	}
+	
+	public function removeField($name) {
+		unset($this->fields[$name]);
+	}
+	
 }
