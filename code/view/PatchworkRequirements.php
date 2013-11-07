@@ -47,8 +47,8 @@ class PatchworkRequirements extends Extension {
 		
 		$requirements = array(
 			'mysite-default.css' => array(
-				'patchwork/css/thirdparty/bootstrap-3.0.0.css',
-				'patchwork/css/thirdparty/bootstrap-theme-3.0.0.css',
+				'patchwork/css/thirdparty/bootstrap-3.0.2.css',
+				'patchwork/css/thirdparty/bootstrap-theme-3.0.2.css',
 				'patchwork/css/FrontEndForm.css',
 				'patchwork/css/glue.css',
 				'mysite/css/layout.css',
@@ -63,7 +63,7 @@ class PatchworkRequirements extends Extension {
 				'patchwork/javascript/thirdparty/jquery-migrate-1.1.1.js',
 				'patchwork/javascript/thirdparty/jquery-mobile-1.3.1.custom.js',
 				'patchwork/javascript/thirdparty/jquery-refineslide-0.4.1.js',
-				'patchwork/javascript/thirdparty/bootstrap-3.0.0.js',
+				'patchwork/javascript/thirdparty/bootstrap-3.0.2.js',
 				'patchwork/javascript/FrontEndForm.js',
 				'patchwork/javascript/FrontEndQuirks.js',
 				'patchwork/javascript/Patchwork.js',
