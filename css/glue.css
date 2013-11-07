@@ -11,7 +11,11 @@
 	height: auto;
 }
 .typography iframe[src^="http://www.youtube.com/embed/"],
-.constrained iframe[src^="http://www.youtube.com/embed/"] {
+.constrained iframe[src^="http://www.youtube.com/embed/"],
+.typography iframe[src^="https://www.youtube.com/embed/"],
+.constrained iframe[src^="https://www.youtube.com/embed/"],
+.typography iframe[src^="//www.youtube.com/embed/"],
+.constrained iframe[src^="//www.youtube.com/embed/"] {
 	min-height: 315px;
 }
 .typography iframe[src^="http://player.vimeo.com/video/"],
