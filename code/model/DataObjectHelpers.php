@@ -44,6 +44,34 @@ class DataObjectHelpers extends DataExtension {
 	}
 	
 	/**
+	 * Quickly scaffold form fields.
+	 * 
+	 * @param FieldList $fields
+	 * @param null|string $tab
+	 * @param string $class
+	 * @param DataObject $object
+	 * @param null|FormTransformation $formTransformation
+	 * @param callable(FieldList, string, FormField) $callback
+	 */
+	public function autoScaffoldFormFields(FieldList $fields,
+			$tab, $class, DataObject $object, $formTransformation, $callback) {
+		$config = Config::inst();
+		$db = array_keys((array)$config->get($class, 'db'));
+		$has = array_keys((array)$config->get($class, 'has_one'));
+		array_walk($has, function (&$item) {
+			$item = "{$item}ID";
+		});
+		
+		foreach (array_merge($db, $has) as $name) {
+			$dbField = $object->dbObject($name);
+			$formField = $dbField->scaffoldFormField($object->fieldLabel($name));
+			if ($formTransformation)
+				$formField = $formTransformation->transform($formField);
+			call_user_func($callback, $fields, $tab, $formField);
+		}
+	}
+	
+	/**
 	 * Quickly scaffold Extension form fields into a tab for the
 	 * given field list.
 	 * 
@@ -55,23 +83,13 @@ class DataObjectHelpers extends DataExtension {
 	 */
 	public function autoScaffoldExtensionFormFields(FieldList $fields,
 			$tab, $class, DataObject $object, $formTransformation) {
+		$addFieldToTab = function (FieldList $fields, $tab, FormField $field) {
+			$fields->addFieldToTab($tab, $field);
+		};
 		$fields->findOrMakeTab($tab, $object->fieldLabel(
 			str_replace('.', '_', $tab)));
-		
-		$config = Config::inst();
-		$db = array_keys($config->get($class, 'db'));
-		$has = array_keys($config->get($class, 'has_one'));
-		array_walk($has, function (&$item) {
-			$item = "{$item}ID";
-		});
-		
-		foreach (array_merge($db, $has) as $name) {
-			$dbField = $object->dbObject($name);
-			$formField = $dbField->scaffoldFormField($object->fieldLabel($name));
-			if ($formTransformation)
-				$formField = $formTransformation->transform($formField);
-			$fields->addFieldToTab($tab, $formField);
-		}
+		$this->autoScaffoldFormFields($fields, $tab, $class, $object,
+			$formTransformation, $addFieldToTab);
 	}
 }
 

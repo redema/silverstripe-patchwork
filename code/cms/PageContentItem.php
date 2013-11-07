@@ -179,12 +179,17 @@ class PageContentItem extends DataObject {
 			}
 		}
 		
-		foreach ($this->db() as $name => $type) {
-			if ($type == 'Text' && !($fields->fieldByName($name)
-					instanceof TextField))
-				$fields->replaceField($name, new TextField($name,
-					$this->fieldLabel($name)));
-		}
+		$fieldTransformation = new FormTransformation_SpecificFields(array(
+			'Title' => 'TextField',
+			'Link' => 'TextField',
+			'ExtraClasses' => 'TextField',
+			'SpecialTemplate' => 'TextField'
+		));
+		$replaceField = function (FieldList $fields, $tab, FormField $field) {
+			$fields->replaceField($field->getName(), $field);
+		};
+		$this->autoScaffoldFormFields($fields, null, get_class($this),
+			$this, $fieldTransformation, $replaceField);
 		
 		return $fields;
 	}
@@ -202,10 +207,14 @@ class PageContentItem extends DataObject {
 		$labels['Sort'] = _t('PageContentItem.Sort', 'Sort');
 		
 		if ($includerelations) {
-			$labels['Page'] = _t('PageContentItem.Page', 'Page');
-			$labels['DesktopImage'] = _t('PageContentItem.DesktopImage', 'Desktop image');
-			$labels['TabletImage'] = _t('PageContentItem.TabletImage', 'Tablet image');
-			$labels['MobileImage'] = _t('PageContentItem.MobileImage', 'Mobile image');
+			$labels['Page'] = $labels['PageID']
+				= _t('PageContentItem.Page', 'Page');
+			$labels['DesktopImage'] = $labels['DesktopImageID']
+				= _t('PageContentItem.DesktopImage', 'Desktop image');
+			$labels['TabletImage'] = $labels['TabletImageID']
+				= _t('PageContentItem.TabletImage', 'Tablet image');
+			$labels['MobileImage'] = $labels['MobileImageID']
+				= _t('PageContentItem.MobileImage', 'Mobile image');
 		}
 		
 		return $labels;
