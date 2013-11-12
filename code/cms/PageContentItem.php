@@ -152,7 +152,7 @@ class PageContentItem extends DataObject {
 			$itemsFieldConfig
 		);
 		
-		$tabName = _t("{$itemClass}.TABNAME", $itemClasses);
+		$tabName = _t("{$itemClass}.TabName", $itemClasses);
 		$fields->findOrMakeTab("Root.{$itemClasses}", $tabName);
 		$fields->addFieldToTab("Root.{$itemClasses}", $itemsField);
 	}
@@ -224,7 +224,6 @@ class PageContentItem extends DataObject {
 		
 		return $labels;
 	}
-
 	
 }
 
