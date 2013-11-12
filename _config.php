@@ -41,12 +41,6 @@ call_user_func(function () {
 		trigger_error('constraints not available', E_USER_WARNING);
 	}
 	
-	DataObject::add_extension('DataObjectHelpers');
-	DataObject::add_extension('EnforceFieldValues');
-	Controller::add_extension('ControllerTemplateHelpers');
-	Controller::add_extension('PatchworkRequirements');
-	LeftAndMain::add_extension('ResponsiveLeftAndMain');
-	
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');

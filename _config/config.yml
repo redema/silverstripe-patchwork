@@ -8,3 +8,14 @@ SSViewer:
 Director:
   rules:
     'admin/htmleditortemplate': 'HtmlEditorTemplateController'
+DataObject:
+  extensions:
+    - 'DataObjectHelpers'
+    - 'EnforceFieldValues'
+Controller:
+  extensions:
+    - 'ControllerTemplateHelpers'
+    - 'PatchworkRequirements'
+LeftAndMain:
+  extensions:
+    - 'ResponsiveLeftAndMain'
