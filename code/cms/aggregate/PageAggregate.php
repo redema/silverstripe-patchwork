@@ -66,6 +66,8 @@ class PageAggregate extends Page {
 		'SearchExcludeErrorPages' => '1'
 	);
 	
+	private static $weight_per_label = 10.0;
+	
 	protected $searchParams = array(
 		'Needle' => array(
 			'field' => 'SearchNeedle',
@@ -186,20 +188,20 @@ INLINE_SQL;
 				$haystackFilters[] = "\"$haystackAlias\" > 0";
 			}
 			$pageQuery->addHaving(implode(' OR ', $haystackFilters));
-			
-			// Check if any page types should be excluded from the search.
-			// The given page type and all its subclasses will be excluded.
-			$excludes = array(
-				'SearchExcludePageAggregates' => 'PageAggregate',
-				'SearchExcludeErrorPages' => 'ErrorPage'
-			);
-			$this->extend('updateFindPageIDsExcludes', $excludes);
-			foreach ($excludes as $option => $superclass) {
-				if ($this->$option) {
-					$classes = array_values(ClassInfo::subclassesFor($superclass));
-					$classes = implode("', '", $classes);
-					$pageQuery->addWhere("\"ClassName\" NOT IN ('$classes')");
-				}
+		}
+		
+		// Check if any page types should be excluded from the search.
+		// The given page type and all its subclasses will be excluded.
+		$excludes = array(
+			'SearchExcludePageAggregates' => 'PageAggregate',
+			'SearchExcludeErrorPages' => 'ErrorPage'
+		);
+		$this->extend('updateFindPageIDsExcludes', $excludes);
+		foreach ($excludes as $option => $superclass) {
+			if ($this->$option) {
+				$classes = array_values(ClassInfo::subclassesFor($superclass));
+				$classes = implode("', '", $classes);
+				$pageQuery->addWhere("\"ClassName\" NOT IN ('$classes')");
 			}
 		}
 		
@@ -238,7 +240,7 @@ INLINE_SQL;
 	AND "$table"."$relationCol" IN ('$IDs'))
 INLINE_SQL;
 				$pageQuery->addInnerJoin($table, $joinOn);
-				$pageQuery->selectField("COUNT({$table}.ID) * 10.0", "{$name}Weight");
+				$pageQuery->selectField("\"$table\".\"ID\"", 'ManyManyID');
 			}
 		}
 		
@@ -247,14 +249,24 @@ INLINE_SQL;
 		// be the bottle neck.
 		$cacheID = sha1($pageQuery->sql());
 		if (!isset($this->findPageIDsCache[$cacheID])) {
+			$labelWeight = $this->config()->weight_per_label;
 			$pageIDs = array();
 			$pageRows = $pageQuery->execute();
 			foreach ($pageRows as $pageRow) {
+				// There can be multiple rows for each Page ID, one for each
+				// matching PageLabel (i.e., tag or category). When a Page ID
+				// is added to the result set, any weight from the text
+				// search is also added, thereafter a constant weight for
+				// each additional PageLabel is added.
 				$ID = $pageRow['ID'];
 				unset($pageRow['ID']);
-				$pageIDs[$ID] = 0.0;
-				foreach ($pageRow as $name => $weight)
-					$pageIDs[$ID] += (double)$weight;
+				unset($pageRow['ManyManyID']);
+				if (!isset($pageIDs[$ID])) {
+					$pageIDs[$ID] = $labelWeight;
+					foreach ($pageRow as $name => $weight)
+						$pageIDs[$ID] += (double)$weight;
+				} else
+					$pageIDs[$ID] += $labelWeight;
 			}
 			$this->findPageIDsCache[$cacheID] = $pageIDs;
 			unset($pageIDs);
