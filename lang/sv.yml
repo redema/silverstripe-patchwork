@@ -22,6 +22,7 @@ sv:
     Root_PageSummary: 'Sammanfattning'
     SummaryTitle: 'Titel'
     SummaryContent: 'Innehåll'
+    SummaryThumbnail: 'Tumnagel'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Kontakt'

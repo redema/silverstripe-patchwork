@@ -22,6 +22,7 @@ en:
     Root_PageSummary: 'Summary'
     SummaryTitle: 'Title'
     SummaryContent: 'Content'
+    SummaryThumbnail: 'Thumbnail'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Contact'

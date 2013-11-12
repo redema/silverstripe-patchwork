@@ -38,6 +38,10 @@ class PageSummary extends SiteTreeExtension {
 		'SummaryContent' => 'HTMLText'
 	);
 	
+	private static $has_one = array(
+		'SummaryThumbnail' => 'Image'
+	);
+	
 	public function updateCMSFields(FieldList $fields) {
 		$fieldTransformation = new FormTransformation_SpecificFields(array(
 			'SummaryTitle' => 'TextField'
@@ -52,6 +56,8 @@ class PageSummary extends SiteTreeExtension {
 		
 		$labels['SummaryTitle'] = _t('PageSummary.SummaryTitle', 'Title');
 		$labels['SummaryContent'] = _t('PageSummary.SummaryContent', 'Content');
+		$labels['SummaryThumbnail'] = $labels['SummaryThumbnailID']
+			= _t('PageSummary.SummaryThumbnail', 'Thumbnail');
 	}
 	
 }
