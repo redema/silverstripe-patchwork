@@ -18,6 +18,10 @@ sv:
     DesktopMainImage: 'Desktopbild'
     TabletMainImage: 'Läsplattebild'
     MobileMainImage: 'Mobilbild'
+  PageSummary:
+    Root_PageSummary: 'Sammanfattning'
+    SummaryTitle: 'Titel'
+    SummaryContent: 'Innehåll'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Kontakt'
@@ -32,3 +36,11 @@ sv:
     Desktop4col_Mobile1col_Desc: '4 kolumner på dekstop, 1 på mobila enheter'
     Desktop4col_Mobile2col_Name: 'Desktop: 4 kol, Mobil: 2 kol'
     Desktop4col_Mobile2col_Desc: '4 kolumner på dekstop, 2 på mobila enheter'
+  PageAggregate:
+    Root_Search: 'Sök'
+    SearchNeedle: 'Nål'
+    SearchResultLimit: 'Sökresultatsgräns'
+    SearchResultPerPage: 'Sökresultat per sida'
+    SearchResultSort: 'Sökresultatsortering'
+    SearchExcludePageAggregates: 'Exkludera sidaggregat'
+    SearchExcludeErrorPages: 'Exkludera felsidor'

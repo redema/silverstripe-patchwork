@@ -18,6 +18,10 @@ en:
     DesktopMainImage: 'Desktop image'
     TabletMainImage: 'Tablet image'
     MobileMainImage: 'Mobile image'
+  PageSummary:
+    Root_PageSummary: 'Summary'
+    SummaryTitle: 'Title'
+    SummaryContent: 'Content'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Contact'
@@ -32,3 +36,11 @@ en:
     Desktop4col_Mobile1col_Desc: '4 columns on the desktop, 1 on mobile devices'
     Desktop4col_Mobile2col_Name: 'Desktop: 4 col, Mobile: 2 col'
     Desktop4col_Mobile2col_Desc: '4 columns on the desktop, 2 on mobile devices'
+  PageAggregate:
+    Root_Search: 'Search'
+    SearchNeedle: 'Needle'
+    SearchResultLimit: 'Search result limit'
+    SearchResultPerPage: 'Search result per page'
+    SearchResultSort: 'Search result sort'
+    SearchExcludePageAggregates: 'Exclude page aggregates'
+    SearchExcludeErrorPages: 'Exclude error pages'

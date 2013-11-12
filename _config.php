@@ -38,7 +38,7 @@ call_user_func(function () {
 		$database::set_connection_charset('utf8');
 		DataObject::add_extension('Constraint');
 	} else {
-		trigger_error("constraints not available", E_USER_WARNING);
+		trigger_error('constraints not available', E_USER_WARNING);
 	}
 	
 	DataObject::add_extension('DataObjectHelpers');
@@ -50,6 +50,9 @@ call_user_func(function () {
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
+		Page::add_extension('PageSummary');
+		Page::add_extension('PageCategorized');
+		Page::add_extension('PageTagged');
 		ContentController::add_extension('ContentControllerTemplateHelpers');
 		
 		HtmlEditorConfig::get('cms')->enablePlugins('template');
