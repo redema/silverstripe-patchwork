@@ -424,6 +424,16 @@ class PageAggregate_Controller extends Page_Controller {
 		parent::init();
 	}
 	
+	public function PaginatedAggregatePages($cache = true, $originalSearchParams = false) {
+		$pagination = new PaginatedList($this->data()->AggregatePages($cache,
+			$originalSearchParams), $this->request);
+		
+		$pageLength = $this->data()->SearchResultPerPage;
+		$pagination->setPageLength($pageLength? $pageLength: 10);
+		
+		return $pagination;
+	}
+	
 	public function SearchForm() {
 		$fields = new FieldList(
 			$needleField = new TextField('Needle', _t(
