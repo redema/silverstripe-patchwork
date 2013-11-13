@@ -23,6 +23,8 @@ sv:
     SummaryTitle: 'Titel'
     SummaryContent: 'Innehåll'
     SummaryThumbnail: 'Tumnagel'
+  PageSummary_ss:
+    ReadMore: 'Läs mer'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Kontakt'
@@ -45,3 +47,9 @@ sv:
     SearchResultSort: 'Sökresultatsortering'
     SearchExcludePageAggregates: 'Exkludera sidaggregat'
     SearchExcludeErrorPages: 'Exkludera felsidor'
+  PageAggregate_Controller:
+    SearchFormNeedleField: 'Sökord'
+    SearchFormCategoriesField: 'Kategorier'
+    SearchFormTagsField: 'Taggar'
+    SearchFormSearchAction: 'Sök'
+    SearchFormResetAction: 'Återställ'

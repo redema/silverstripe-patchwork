@@ -23,6 +23,8 @@ en:
     SummaryTitle: 'Title'
     SummaryContent: 'Content'
     SummaryThumbnail: 'Thumbnail'
+  PageSummary_ss:
+    ReadMore: 'Read more'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Contact'
@@ -45,3 +47,9 @@ en:
     SearchResultSort: 'Search result sort'
     SearchExcludePageAggregates: 'Exclude page aggregates'
     SearchExcludeErrorPages: 'Exclude error pages'
+  PageAggregate_Controller:
+    SearchFormNeedleField: 'Search term'
+    SearchFormCategoriesField: 'Categories'
+    SearchFormTagsField: 'Tags'
+    SearchFormSearchAction: 'Search'
+    SearchFormResetAction: 'Reset'
