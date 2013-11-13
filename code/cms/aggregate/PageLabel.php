@@ -65,12 +65,16 @@ class PageLabel extends DataObject {
 	 */
 	public static function labels_from(string $class, string $manyManyTable, DataList $pages) {
 		$pageIDs = $pages->column('ID');
-		$pageIDs = implode(', ', $pageIDs);
-		$joinOn = <<<INLINE_SQL
+		if (count($pageIDs)) {
+			$pageIDs = implode(', ', $pageIDs);
+			$joinOn = <<<INLINE_SQL
 "PageLabel"."ID" = "$manyManyTable"."{$class}ID"
 	AND ("$manyManyTable"."PageID" IN ($pageIDs))
 INLINE_SQL;
-		$labels = $class::get()->innerJoin($manyManyTable, $joinOn);
+			$labels = $class::get()->innerJoin($manyManyTable, $joinOn);
+		} else {
+			$labels = $class::get()->where('"PageLabel"."ID" < 1');
+		}
 		return $labels;
 	}
 	

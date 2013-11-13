@@ -42,6 +42,7 @@ class PageAggregate extends Page {
 	const SEARCH_RESULT_SORT_RANDOM = 'Random';
 	const SEARCH_RESULT_SORT_TIMESTAMP = 'Timestamp';
 	const SEARCH_RESULT_SORT_ALPHABETICAL = 'Alphabetical';
+	const SEARCH_RESULT_SORT_SITETREE = 'SiteTree';
 	
 	private static $db = array(
 		'SearchNeedle' => 'Text',
@@ -51,7 +52,8 @@ class PageAggregate extends Page {
 			'Relevance',
 			'Random',
 			'Timestamp',
-			'Alphabetical'
+			'Alphabetical',
+			'SiteTree'
 		), 'Relevance')",
 		'SearchExcludePageAggregates' => 'Boolean',
 		'SearchExcludeErrorPages' => 'Boolean'
@@ -303,7 +305,7 @@ INLINE_SQL;
 		$pageIDs = implode(', ', array_keys($pageIDs));
 		$cacheID = sha1($pageIDs);
 		if (empty($pageIDs)) {
-			$this->findPagesCache[$cacheID] = DataList::create('Page');
+			$this->findPagesCache[$cacheID] = Page::get()->where('"SiteTree"."ID" < 1');
 		} else if (!isset($this->findPagesCache[$cacheID])) {
 			$pages = Page::get()->where(sprintf('"SiteTree"."ID" IN (%s)', $pageIDs));
 			
@@ -326,7 +328,8 @@ INLINE_SQL;
 				self::SEARCH_RESULT_SORT_RELEVANCE => $relevanceSort[$databaseClass],
 				self::SEARCH_RESULT_SORT_RANDOM => 'RAND()',
 				self::SEARCH_RESULT_SORT_TIMESTAMP => '"Created" DESC',
-				self::SEARCH_RESULT_SORT_ALPHABETICAL => '"Title" ASC, "MenuTitle" ASC'
+				self::SEARCH_RESULT_SORT_ALPHABETICAL => '"Title" ASC, "MenuTitle" ASC',
+				self::SEARCH_RESULT_SORT_SITETREE => '"Sort" ASC'
 			);
 			$pages = $pages->sort($resultSort[$this->SearchResultSort]);
 			$this->extend('findPagesResult', $pages);
