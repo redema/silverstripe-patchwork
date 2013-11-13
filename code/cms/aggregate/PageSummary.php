@@ -42,6 +42,20 @@ class PageSummary extends SiteTreeExtension {
 		'SummaryThumbnail' => 'Image'
 	);
 	
+	private static $summary_template_fields = array(
+		'PageSummaryTitle' => array(
+			'SummaryTitle',
+			'Title'
+		),
+		'PageSummaryContent' => array(
+			'SummaryContent',
+			'Content'
+		),
+		'PageSummaryThumbnail' => array(
+			'SummaryThumbnailID'
+		)
+	);
+	
 	public function updateCMSFields(FieldList $fields) {
 		$fieldTransformation = new FormTransformation_SpecificFields(array(
 			'SummaryTitle' => 'TextField'
@@ -58,6 +72,36 @@ class PageSummary extends SiteTreeExtension {
 		$labels['SummaryContent'] = _t('PageSummary.SummaryContent', 'Content');
 		$labels['SummaryThumbnail'] = $labels['SummaryThumbnailID']
 			= _t('PageSummary.SummaryThumbnail', 'Thumbnail');
+	}
+	
+	public function Summary() {
+		$templateFields = $this->owner->config()->summary_template_fields;
+		$templateValues = array();
+		
+		foreach ($templateFields as $key => $fields) {
+			foreach ($fields as $name) {
+				$field = $this->owner->dbObject($name);
+				
+				if ($field instanceof StringField) {
+					if (strip_tags($field->RAW()) != '')
+						$templateValues[$key] = $field;
+				} else if ($field instanceof ForeignKey) {
+					$relation = preg_replace('/ID$/', '', $name);
+					$relation = $this->owner->$relation();
+					if ($relation instanceof Image && $relation->exists())
+						$templateValues[$key] = $relation;
+				} else {
+					throw new Exception(sprintf("%s of type %s is not a supported summary field"
+							. " - only Image and StringField subclasses are supported",
+						$name, get_class($field)));
+				}
+				
+				if (isset($templateValues[$key]))
+					break;
+			}
+		}
+		
+		return $this->owner->renderWith('PageSummary', $templateValues);
 	}
 	
 }
