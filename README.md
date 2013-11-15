@@ -41,9 +41,9 @@ Redema AB, http://redema.se/
  * Copy the standard editor css to mysite and create the default
    project css files:
    * `www$ cp patchwork/css/editor.css mysite/css/`
-   * `www$ echo ""> mysite/css/layout.css`
-   * `www$ echo ""> mysite/css/form.css`
-   * `www$ echo ""> mysite/css/typography.css`
+   * `www$ echo "" > mysite/css/layout.css`
+   * `www$ echo "" > mysite/css/form.css`
+   * `www$ echo "" > mysite/css/typography.css`
 
  * Visit http://www.yoursite.example.com/dev/build?flush=all to rebuild the
    manifest and database (or import `patchwork/scripts/sql/DevEnv.sql` to
