@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container typography">
 	<% if $Content.NoHTML != '' %>
 	<div class="pageaggregate-content">$Content</div>
 	<% end_if %>

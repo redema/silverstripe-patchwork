@@ -40,18 +40,19 @@ class PageAggregate extends Page {
 	
 	const SEARCH_RESULT_SORT_RELEVANCE = 'Relevance';
 	const SEARCH_RESULT_SORT_RANDOM = 'Random';
-	const SEARCH_RESULT_SORT_TIMESTAMP = 'Timestamp';
+	const SEARCH_RESULT_SORT_CREATED = 'Created';
+	const SEARCH_RESULT_SORT_LASTEDITED = 'LastEdited';
 	const SEARCH_RESULT_SORT_ALPHABETICAL = 'Alphabetical';
 	const SEARCH_RESULT_SORT_SITETREE = 'SiteTree';
 	
 	private static $db = array(
 		'SearchNeedle' => 'Text',
-		'SearchResultLimit' => 'Int',
-		'SearchResultPerPage' => 'Int',
+		'SearchResultPageLength' => 'Int',
 		'SearchResultSort' => "Enum(Array(
 			'Relevance',
 			'Random',
-			'Timestamp',
+			'Created',
+			'LastEdited',
 			'Alphabetical',
 			'SiteTree'
 		), 'Relevance')",
@@ -63,7 +64,7 @@ class PageAggregate extends Page {
 	);
 	
 	private static $defaults = array(
-		'SearchResultPerPage' => '20',
+		'SearchResultPageLength' => '10',
 		'SearchExcludePageAggregates' => '1',
 		'SearchExcludeErrorPages' => '1'
 	);
@@ -294,7 +295,10 @@ INLINE_SQL;
 	public function findPages($needle, array $categories, array $tags, $cache = true) {
 		$pageIDs = $this->findPageIDs($needle, $categories, $tags, $cache);
 		
-		if (empty($this->SearchResultSort))
+		// Fall back to relevance sorting if SearchResultSort has a
+		// weird values.
+		if (empty($this->SearchResultSort) || !in_array($this->SearchResultSort,
+				$this->dbObject('SearchResultSort')->enumValues()))
 			$this->SearchResultSort = self::SEARCH_RESULT_SORT_RELEVANCE;
 		
 		// If the pages are to be sorted by relevance, then it is
@@ -327,7 +331,8 @@ INLINE_SQL;
 			$resultSort = array(
 				self::SEARCH_RESULT_SORT_RELEVANCE => $relevanceSort[$databaseClass],
 				self::SEARCH_RESULT_SORT_RANDOM => 'RAND()',
-				self::SEARCH_RESULT_SORT_TIMESTAMP => '"Created" DESC',
+				self::SEARCH_RESULT_SORT_CREATED => '"Created" DESC',
+				self::SEARCH_RESULT_SORT_LASTEDITED => '"LastEdited" DESC',
 				self::SEARCH_RESULT_SORT_ALPHABETICAL => '"Title" ASC, "MenuTitle" ASC',
 				self::SEARCH_RESULT_SORT_SITETREE => '"Sort" ASC'
 			);
@@ -371,11 +376,8 @@ INLINE_SQL;
 		$fields->addFieldToTab('Root.Search', new TextField('SearchNeedle',
 			$this->fieldLabel('SearchNeedle')));
 		
-		$fields->addFieldToTab('Root.Search', new NumericField('SearchResultLimit',
-			$this->fieldLabel('SearchResultLimit')));
-		$fields->addFieldToTab('Root.Search', new NumericField('SearchResultPerPage',
-			$this->fieldLabel('SearchResultPerPage')));
-		
+		$fields->addFieldToTab('Root.Search', new NumericField('SearchResultPageLength',
+			$this->fieldLabel('SearchResultPageLength')));
 		$fields->addFieldToTab('Root.Search', $this->dbObject('SearchResultSort')
 			->scaffoldFormField($this->fieldLabel('SearchResultSort')));
 		
@@ -428,7 +430,7 @@ class PageAggregate_Controller extends Page_Controller {
 		$pagination = new PaginatedList($this->data()->AggregatePages($cache,
 			$originalSearchParams), $this->request);
 		
-		$pageLength = $this->data()->SearchResultPerPage;
+		$pageLength = $this->data()->SearchResultPageLength;
 		$pagination->setPageLength($pageLength? $pageLength: 10);
 		
 		return $pagination;
