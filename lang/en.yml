@@ -25,6 +25,7 @@ en:
     SummaryThumbnail: 'Thumbnail'
   PageSummary_ss:
     ReadMore: 'Read more'
+    Comment: 'Comment'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Contact'

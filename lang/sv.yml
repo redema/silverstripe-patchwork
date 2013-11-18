@@ -25,6 +25,7 @@ sv:
     SummaryThumbnail: 'Tumnagel'
   PageSummary_ss:
     ReadMore: 'Läs mer'
+    Comment: 'Kommentera'
   SiteFooter:
     Root_SiteFooter: 'Footer'
     FooterContact: 'Kontakt'
