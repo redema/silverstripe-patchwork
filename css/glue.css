@@ -1,4 +1,8 @@
 
+/* Hacks and minor fixes required to get Bootstrap and
+ * SilverStripe framework to be nice to each other.
+ */
+
 .picturefill img,
 .typography img {
 	max-width: 100%;
