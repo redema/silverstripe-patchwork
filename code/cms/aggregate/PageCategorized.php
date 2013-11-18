@@ -39,7 +39,7 @@ class PageCategorized extends SiteTreeExtension {
 	
 	public function updateCMSFields(FieldList $fields) {
 		if ($this->owner->ID) {
-			$categories = PageCategory::get()->map('ID', 'Name');
+			$categories = PageCategory::get()->map('ID', 'Title');
 			$categoriesField = new CheckboxsetField(
 				'Categories',
 				$this->owner->fieldLabel('Categories'),
