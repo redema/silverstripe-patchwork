@@ -37,6 +37,20 @@ class PageTagged extends SiteTreeExtension {
 		'Tags' => 'PageTag'
 	);
 	
+	public function updateCMSFields(FieldList $fields) {
+		if ($this->owner->ID) {
+			$tagsField = new SimpleTagField(
+				'Tags',
+				$this->owner->fieldLabel('Tags'),
+				$this->owner->Tags(),
+				$this->owner->ClassName,
+				'Title'
+			);
+			
+			$fields->addFieldToTab('Root.Main', $tagsField, 'Content');
+		}
+	}
+	
 }
 
 }

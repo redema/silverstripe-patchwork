@@ -446,7 +446,7 @@ class PageAggregate_Controller extends Page_Controller {
 			$method = "Aggregate{$name}";
 			$field = new CheckboxsetField($name,
 				_t("PageAggregate_Controller.SearchForm{$name}Field", $name),
-				$aggregate->$method()->map('ID', 'Name')
+				$aggregate->$method()->map('ID', 'Title')
 			);
 			if (count($field->getSource()))
 				$fields->push($field);

@@ -34,28 +34,24 @@ if (class_exists('SiteTree')) {
 class PageLabel extends DataObject {
 	
 	private static $db = array(
-		'Name' => 'Text',
+		'Title' => 'Text',
 		'TemplateName' => 'Text',
 		'URLName' => 'Text'
 	);
 	
 	public static $searchable_fields = array(
 		'ID' => array('filter' => 'ExactMatchFilter'),
-		'Name',
+		'Title',
 		'TemplateName',
 		'URLName'
 	);
 	
 	public static $summary_fields = array(
 		'ID',
-		'Name',
+		'Title',
 		'TemplateName',
 		'URLName'
 	);
-	
-	public function Title() {
-		return $this->Name;
-	}
 	
 	/**
 	 * Get all labels of the given type for the given pages.
@@ -82,7 +78,7 @@ INLINE_SQL;
 		$fields = parent::getCMSFields();
 		
 		$fieldTransformation = new FormTransformation_SpecificFields(array(
-			'Name' => 'TextField',
+			'Title' => 'TextField',
 			'TemplateName' => 'TextField',
 			'URLName' => function (FormField $field) {
 				return $field->performDisabledTransformation();
@@ -103,7 +99,7 @@ INLINE_SQL;
 	public function onBeforeWrite() {
 		parent::onBeforeWrite();
 		
-		$this->URLName = Convert::raw2url($this->Name);
+		$this->URLName = Convert::raw2url($this->Title);
 	}
 	
 }

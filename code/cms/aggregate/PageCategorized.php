@@ -38,14 +38,16 @@ class PageCategorized extends SiteTreeExtension {
 	);
 	
 	public function updateCMSFields(FieldList $fields) {
-		$categories = PageCategory::get()->map('ID', 'Name');
-		$categoriesField = new CheckboxsetField(
-			'Categories',
-			$this->owner->fieldLabel('Categories'),
-			$categories
-		);
-		
-		$fields->addFieldToTab('Root.Main', $categoriesField, 'Content');
+		if ($this->owner->ID) {
+			$categories = PageCategory::get()->map('ID', 'Name');
+			$categoriesField = new CheckboxsetField(
+				'Categories',
+				$this->owner->fieldLabel('Categories'),
+				$categories
+			);
+			
+			$fields->addFieldToTab('Root.Main', $categoriesField, 'Content');
+		}
 	}
 	
 }
