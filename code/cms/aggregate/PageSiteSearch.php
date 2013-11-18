@@ -33,6 +33,10 @@ if (class_exists('SiteTree')) {
 
 class PageSiteSearch extends Controller {
 	
+	private static $allowed_actions = array(
+		'SearchForm'
+	);
+	
 	private static $result_page_length = 10;
 	
 	public static function build_link(string $needle,
@@ -68,6 +72,18 @@ class PageSiteSearch extends Controller {
 			return $response;
 		
 		return $controller->search(array(), null);
+	}
+	
+	public function SearchForm() {
+		if ($this->request->getVar('action_reset')) {
+			return $this->redirect($this->Link());
+		}
+		return $this->redirect(self::build_link(
+			$this->request->getVar('Needle'),
+			(array)$this->request->getVar('Categories'),
+			(array)$this->request->getVar('Tags'),
+			false
+		));
 	}
 	
 }
