@@ -101,6 +101,21 @@ class PatchworkRequirements_Backend extends Requirements_Backend {
 	
 	public $combine_css_with_cssmin = true;
 	
+	protected $bundledModules = array(
+	);
+	
+	public function addBundledModule($name) {
+		$this->bundledModules[$name] = "patchwork/bundle/$name";
+	}
+	
+	public function removeBundledModule($name) {
+		unset($this->bundledModules[$name]);
+	}
+	
+	public function getBundledModules() {
+		return $this->bundledModules;
+	}
+	
 	/**
 	 * @see Requirements::process_combined_files()
 	 */
@@ -143,4 +158,39 @@ class PatchworkRequirements_Backend extends Requirements_Backend {
 		return $content;
 	}
 	
+	protected function updateBundledPath($file) {
+		if ($this->bundledModules) {
+			foreach ($this->bundledModules as $name => $path) {
+				if (strpos($file, $name) === 0) {
+					return Controller::join_links($path, $file);
+				}
+			}
+		}
+		return $file;
+	}
+	
+	public function javascript($file) {
+		parent::javascript($this->updateBundledPath($file));
+	}
+	
+	public function css($file, $media = null) {
+		parent::css($this->updateBundledPath($file), $media);
+	}
+	
+	public function themedCSS($name, $module = null, $media = null) {
+		parent::themedCSS($name, $module, $media);
+		
+		// The default module css could be bundled. It is an
+		// unlikely scenario, but handle it anyway.
+		if ($this->bundledModules && $module) {
+			$css = $this->get_css();
+			$default = "$module/css/$name.css";
+			$bundled = $this->updateBundledPath($default);
+			if (isset($css[$default]) && $default != $bundled) {
+				$this->clear($default);
+				$this->css($bundled, $media);
+			}
+		}
+	}
+
 }
