@@ -49,6 +49,7 @@ class PatchworkRequirements extends Extension {
 			'mysite-default.css' => array(
 				'patchwork/css/thirdparty/bootstrap-3.0.2.css',
 				'patchwork/css/thirdparty/bootstrap-theme-3.0.2.css',
+				'patchwork/fonts/font-awesome/font-awesome.css',
 				'patchwork/css/FrontEndForm.css',
 				'patchwork/css/glue.css',
 				'mysite/css/layout.css',
