@@ -1,0 +1,29 @@
+
+.container.pageaggregate {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.pageaggregate-searchform .separator {
+	height: 15px;
+}
+
+.container.pageaggregate .media-goto,
+.container.pageaggregate .page-labels p {
+	margin-bottom: 5px;
+}
+
+.container.pageaggregate .media-goto .btn {
+	margin: 0.4em 0;
+}
+
+.container.pageaggregate .page-labels .label {
+	display: inline-block;
+	margin: 0.4em 0;
+	padding: 0.3em 0.6em;
+}
+
+.container.pageaggregate .media-separator {
+	padding-top: 15px;
+	border-bottom: 1px solid #e0e0e0;
+}

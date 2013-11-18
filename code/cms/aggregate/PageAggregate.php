@@ -467,11 +467,16 @@ class PageAggregate_Controller extends Page_Controller {
 		}
 		
 		$actions = new FieldList(
-			$searchAction = new FormAction('search', _t(
-				'PageAggregate_Controller.SearchFormSearchAction', 'Search')),
-			$clearAction = new FormAction('reset', _t(
-				'PageAggregate_Controller.SearchFormResetAction', 'Reset'))
+			$searchAction = new FormAction('search', 'search'),
+			$clearAction = new FormAction('reset', 'reset')
 		);
+		
+		$searchAction->setUseButtonTag(true);
+		$searchAction->setButtonContent('<span class="fa fa-search"></span> '
+			. _t('PageAggregate_Controller.SearchFormSearchAction', 'Search'));
+		$clearAction->setUseButtonTag(true);
+		$clearAction->setButtonContent('<span class="fa fa-undo"></span> '
+				. _t('PageAggregate_Controller.SearchFormResetAction', 'Reset'));
 		
 		$form = new Form($this, 'SearchForm', $fields, $actions);
 		$form->disableSecurityToken();

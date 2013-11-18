@@ -51,6 +51,7 @@ class PatchworkRequirements extends Extension {
 				'patchwork/css/thirdparty/bootstrap-theme-3.0.2.css',
 				'patchwork/fonts/font-awesome/font-awesome.css',
 				'patchwork/css/FrontEndForm.css',
+				'patchwork/css/PageAggregate.css',
 				'patchwork/css/glue.css',
 				'mysite/css/layout.css',
 				'mysite/css/typography.css',
