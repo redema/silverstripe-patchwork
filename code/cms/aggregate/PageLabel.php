@@ -102,6 +102,23 @@ INLINE_SQL;
 		$this->URLName = Convert::raw2url($this->Title);
 	}
 	
+	/**
+	 * @param int $ID
+	 * 
+	 * @return string
+	 */
+	public function SearchLink($forTemplate = true) {
+		$args = array(
+			'PageCategory' => array(),
+			'PageTag' => array()
+		);
+		if (isset($args[$this->ClassName])) {
+			$args[$this->ClassName][$this->ID] = $this->ID;
+		}
+		return PageSiteSearch::build_link('', $args['PageCategory'], $args['PageTag'],
+			$forTemplate);
+	}
+	
 }
 
 }

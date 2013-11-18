@@ -481,7 +481,11 @@ class PageAggregate_Controller extends Page_Controller {
 		return $form;
 	}
 	
-	public function search(array $data, Form $form) {
+	/**
+	 * @param array $data
+	 * @param null|Form $form
+	 */
+	public function search($data, $form) {
 		$params = $this->data()->getSearchParamNames();
 		$model = $this->data();
 		$request = $this->getRequest();

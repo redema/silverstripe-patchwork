@@ -11,7 +11,12 @@
 	</a>
 	<div class="media-body">
 		<h4 class="media-heading">$PageSummaryTitle</h4>
-		<p>$PageSummaryContent</p>
-		<p><a href="$Link"><% _t('PageSummary_ss.ReadMore', 'Read more') %></a></p>
+		<div class="media-content">
+			$PageSummaryContent
+		</div>
+		<p class="media-goto">
+			<a href="$Link"><% _t('PageSummary_ss.ReadMore', 'Read more') %></a>
+		</p>
+		<% include PageLabels %>
 	</div>
 </div>
