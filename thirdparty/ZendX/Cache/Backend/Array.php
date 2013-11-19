@@ -36,10 +36,10 @@ require_once 'Zend/Cache/Backend.php';
  * A simplistic non-persistant cache backend for Zend_Cache
  * for Zend Framework 1.*.
  * 
- * @package	Zend_Cache
- * @subpackage Zend_Cache_Backend
+ * @package	ZendX_Cache
+ * @subpackage ZendX_Cache_Backend
  */
-class Zend_Cache_Backend_Array extends Zend_Cache_Backend
+class ZendX_Cache_Backend_Array extends Zend_Cache_Backend
 		implements Zend_Cache_Backend_Interface {
 	
 	/**

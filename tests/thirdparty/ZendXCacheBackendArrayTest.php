@@ -30,9 +30,9 @@
  */
 
 require_once 'Zend/Cache.php';
-require_once 'Zend/Cache/Backend/Array.php';
+require_once 'ZendX/Cache/Backend/Array.php';
 
-class ZendCacheBackendArrayTest extends SapphireTest {
+class ZendXCacheBackendArrayTest extends SapphireTest {
 	
 	protected function assertKeys(Zend_Cache_Core $cache, array $keys) {
 		foreach ($keys as $key)
@@ -42,13 +42,16 @@ class ZendCacheBackendArrayTest extends SapphireTest {
 	public function testBackend() {
 		$cache = Zend_Cache::factory(
 			'Core',
-			'Array',
+			'ZendX_Cache_Backend_Array',
 			$frontendOptions = array(
 				'lifetime' => 2,
 				'automatic_serialization' => true
 			),
 			$backendOptions = array(
-			)
+			),
+			$customFrontendNaming = true,
+			$customBackendNaming = true,
+			$autoload = false
 		);
 		
 		$this->assertInstanceOf('Zend_Cache_Core', $cache);
