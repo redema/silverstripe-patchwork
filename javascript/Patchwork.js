@@ -7,13 +7,17 @@ jQuery.noConflict();
 
 function PatchworkDocumentReady($) {
 	$.walkExternalAnchors(function (i, el) {
-		$(el).click(function (event) {
-			event.preventDefault();
-			event.stopPropagation();
-			window.open($(this).attr('href'), '_blank');
-		});
+		if (!$(el).hasClass('colorbox')) {
+			$(el).click(function (event) {
+				event.preventDefault();
+				event.stopPropagation();
+				window.open($(this).attr('href'), '_blank');
+			});
+		}
 	});
+	
 	$('form').bootstrapFrontEndForm();
+	$('.colorbox').colorboxify();
 }
 jQuery(document).ready(PatchworkDocumentReady);
 
