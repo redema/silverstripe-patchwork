@@ -31,7 +31,7 @@
 
 if (class_exists('SiteTree')) {
 
-class PageURLSegmentAutoUpdate extends SiteTreeExtension {
+class PageAutomagicalURLSegment extends SiteTreeExtension {
 	
 	/**
 	 * It is easy to forget to update the URLSegment for a new

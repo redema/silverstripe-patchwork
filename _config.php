@@ -44,7 +44,7 @@ call_user_func(function () {
 	if (class_exists('SiteTree')) {
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
-		Page::add_extension('PageURLSegmentAutoUpdate');
+		Page::add_extension('PageAutomagicalURLSegment');
 		Page::add_extension('PageSummary');
 		Page::add_extension('PageCategorized');
 		Page::add_extension('PageTagged');
