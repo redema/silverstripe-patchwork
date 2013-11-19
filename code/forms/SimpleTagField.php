@@ -53,10 +53,11 @@ class SimpleTagField extends TextField {
 	protected $sourceLimit = 32;
 	
 	function __construct($name, $title = null, $value = null,
-			$ownerClass = null, $sourceField = 'Title') {
+			$ownerClass = null, $sourceField = 'Title',
+			$maxLength = null, $form = null) {
 		$this->ownerClass = $ownerClass;
 		$this->sourceField = $sourceField;
-		parent::__construct($name, $title, $value);
+		parent::__construct($name, $title, $value, $maxLength, $form);
 	}
 	
 	public function setSuggestURL(string $URL) {
