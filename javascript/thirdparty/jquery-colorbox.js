@@ -1,6 +1,6 @@
 /*!
-	Commit: 60b51d598e5cdbede32d6e3ce98e9d1b637e9772
-*/
+ * Commit: 60b51d598e5cdbede32d6e3ce98e9d1b637e9772
+ */
 /*!
 	Colorbox v1.4.33 - 2013-10-31
 	jQuery lightbox and modal window plugin

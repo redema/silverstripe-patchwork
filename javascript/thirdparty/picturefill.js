@@ -1,3 +1,6 @@
+/*!
+ * Commit: 6250f7f6f604c5e016f59ceb121929f87e3ad4d5
+ */
 /*! Picturefill - Responsive Images that work today. (and mimic the proposed Picture element with span elements). Author: Scott Jehl, Filament Group, 2012 | License: MIT/GPLv2 */
 
 (function( w ){

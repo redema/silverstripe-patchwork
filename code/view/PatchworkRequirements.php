@@ -60,8 +60,8 @@ class PatchworkRequirements extends Extension {
 			),
 			'mysite-default.js' => array(
 				'patchwork/javascript/thirdparty/modernizr-2.6.2.js',
-				'patchwork/javascript/thirdparty/respond-ad87635f83f8b811e1da53c082325a4b35960771.js',
-				'patchwork/javascript/thirdparty/picturefill-6250f7f6f604c5e016f59ceb121929f87e3ad4d5.js',
+				'patchwork/javascript/thirdparty/respond.js',
+				'patchwork/javascript/thirdparty/picturefill.js',
 				'patchwork/javascript/thirdparty/jquery-1.10.2.js',
 				'patchwork/javascript/thirdparty/jquery-migrate-1.1.1.js',
 				'patchwork/javascript/thirdparty/jquery-mobile-1.3.1.custom.js',
