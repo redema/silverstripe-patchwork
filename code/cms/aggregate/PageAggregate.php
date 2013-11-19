@@ -419,11 +419,15 @@ class PageAggregate_Controller extends Page_Controller {
 	private static $allowed_actions = array(
 		'SearchForm',
 		'search',
-		'reset'
+		'reset',
+		'rss'
 	);
 	
 	public function init() {
 		parent::init();
+		if ($this->data()->ID > 0) {
+			RSSFeed::linkToFeed($this->data()->Link('rss'));
+		}
 	}
 	
 	public function PaginatedAggregatePages($cache = true, $originalSearchParams = false) {
@@ -505,6 +509,16 @@ class PageAggregate_Controller extends Page_Controller {
 	
 	public function reset(array $data, Form $form) {
 		return $this->redirect($this->data()->Link());
+	}
+	
+	public function rss() {
+		$rss = new RSSFeed(
+			$this->PaginatedAggregatePages(),
+			$this->Link(),
+			$this->SiteConfig()->Title,
+			$this->data()->MetaDescription
+		);
+		return $rss->outputToBrowser();
 	}
 	
 }
