@@ -42,19 +42,14 @@ class MinifyTemplateCacheTask extends BuildTask {
 	protected $description = 'Save a few bytes each page load.';
 	
 	public function run($request) {
-		if (($temp = @dir(TEMP_FOLDER))) {
-			while (false !== ($entry = $temp->read())) {
-				if (in_array($entry, array('.', '..')))
-					continue;
-				
-				$path = TEMP_FOLDER . "/$entry";
-				$ext = pathinfo($path, PATHINFO_EXTENSION);
-				
-				if ($ext == 'ss') {
-					$template = file_get_contents($path);
-					$template = trim(preg_replace('/\s+/', ' ', $template));
-					file_put_contents($path, $template);
-				}
+		foreach (new DirectoryIterator(TEMP_FOLDER) as $file) {
+			if ($file->isDot())
+				continue;
+			
+			if ($file->getExtension() == 'ss') {
+				$template = file_get_contents($file->getPathname());
+				$template = trim(preg_replace('/\s+/', ' ', $template));
+				file_put_contents($file->getPathname(), $template);
 			}
 		}
 	}
