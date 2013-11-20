@@ -188,9 +188,6 @@ class CaptchaImage extends CaptchaWord {
 	 *
 	 * Override this function if you want different image generator.
 	 * Wave transform from http://www.captcha.ru/captchas/multiwave/
-	 *
-	 * @param string $id Captcha ID
-	 * @param string $word Captcha word
 	 */
 	protected function generateImage($id, $word) {
 		if (!file_exists($this->getImageDir()))
@@ -344,13 +341,6 @@ class CaptchaImage extends CaptchaWord {
 		imagedestroy($img2);
 	}
 	
-	/**
-	 * Display the captcha
-	 *
-	 * @param Zend_View_Interface $view
-	 * @param mixed $element
-	 * @return string
-	 */
 	public function render($class = '') {
 		$id = $this->generate();
 		$tpl = '<img width="%d" height="%d" alt="%s" src="%s" class="%s" />';
