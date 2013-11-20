@@ -66,23 +66,37 @@
 						$this.attr('placeholder', $label.html());
 				});
 			
+			function messageAlert($message) {
+				var classes = {
+					'required': ['alert', 'alert-info'],
+					'warning': ['alert', 'alert-warning'],
+					'good': ['alert', 'alert-success'],
+					'bad': ['alert', 'alert-danger'],
+					'validation': ['alert', 'alert-danger']
+				};
+				
+				for (var key in classes) {
+					if ($message.hasClass(key))
+						$message.addClass(classes[key].join(' '));
+				}
+			}
+			
+			$this.find([
+				'span.required',
+				'span.warning',
+				'span.good',
+				'span.bad',
+				'span.validation'
+			].join(', ')).each(function () {
+				messageAlert($(this));
+			});
+			
 			// DOMNodeInserted is used to support IE9, but obviously MutationObserver
 			// would be a better choice otherwise.
 			// 
 			// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 			$('body').on('DOMNodeInserted', '#' + $this.attr('id'), function (event) {
-				var $target = $(event.target);
-				var classes = {
-					'required': ['alert', 'alert-info'],
-					'warning': ['alert', 'alert-warning'],
-					'good': ['alert', 'alert-success'],
-					'bad': ['alert', 'alert-danger']
-				};
-				
-				for (var key in classes) {
-					if ($target.hasClass(key))
-						$target.addClass(classes[key].join(' '));
-				}
+				messageAlert($(event.target));
 			});
 		});
 	};
