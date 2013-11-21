@@ -49,8 +49,8 @@ class CaptchaField extends TextField {
 	
 	public function validate($validator) {
 		if (!$this->backend->validate($this->value)) {
-			$validator->validationError($this->name, _t('CaptchaField.validate',
-				'Please try again.'), 'validation');
+			$validator->validationError($this->name, _t('CaptchaField.ValidationError',
+				'Please try again'), 'validation');
 			return false;
 		}
 		$this->backend->reset();

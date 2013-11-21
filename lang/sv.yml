@@ -54,3 +54,5 @@ sv:
     SearchFormTagsField: 'Taggar'
     SearchFormSearchAction: 'Sök'
     SearchFormResetAction: 'Återställ'
+  CaptchaField:
+    ValidationError: 'Vänligen försök igen'

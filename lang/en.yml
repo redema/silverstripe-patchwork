@@ -54,3 +54,5 @@ en:
     SearchFormTagsField: 'Tags'
     SearchFormSearchAction: 'Search'
     SearchFormResetAction: 'Reset'
+  CaptchaField:
+    ValidationError: 'Please try again'

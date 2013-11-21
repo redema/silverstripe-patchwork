@@ -72,7 +72,7 @@
 					'warning': ['alert', 'alert-warning'],
 					'good': ['alert', 'alert-success'],
 					'bad': ['alert', 'alert-danger'],
-					'validation': ['alert', 'alert-danger']
+					'validation': ['alert', 'alert-info']
 				};
 				
 				for (var key in classes) {
