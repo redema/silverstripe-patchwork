@@ -155,7 +155,7 @@ class CaptchaImage extends CaptchaWord {
 		// Random phase from 0 to pi.
 		return mt_rand(0, 3141592) / 1000000;
 	}
-
+	
 	/**
 	 * Generate random character size.
 	 *
@@ -164,12 +164,7 @@ class CaptchaImage extends CaptchaWord {
 	protected function randomSize() {
 		return mt_rand(300, 700) / 100;
 	}
-
-	/**
-	 * Generate the captcha image.
-	 *
-	 * @return string captcha ID
-	 */
+	
 	public function generate() {
 		$id = $this->getId();
 		$regenerate = $this->config()->regenerate;
@@ -182,10 +177,8 @@ class CaptchaImage extends CaptchaWord {
 		
 		return $id;
 	}
-
+	
 	/**
-	 * Generate image captcha.
-	 *
 	 * Override this function if you want different image generator.
 	 * Wave transform from http://www.captcha.ru/captchas/multiwave/
 	 */
@@ -193,17 +186,8 @@ class CaptchaImage extends CaptchaWord {
 		if (!file_exists($this->getImageDir()))
 			Filesystem::makeFolder($this->getImageDir());
 		
-		$font = $this->config()->font_file;
-		$valid_font = (
-			!empty($font) &&
-			mb_strlen($font) > 2
-		);
-		if ($valid_font && $font[0] != '/')
-			$font = Controller::join_links(BASE_PATH, "/$font");
-		
-		if (!$valid_font || !file_exists($font))
-			throw new Exception('given font file is not usable');
-		
+		$font = $this->getFontPath($this->config()->font_file);
+
 		$w = $this->config()->image_width;
 		$h = $this->config()->image_height;
 		$fsize = $this->config()->font_size;

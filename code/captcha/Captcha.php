@@ -29,47 +29,42 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-class CaptchaField extends TextField {
+abstract class Captcha extends Object {
 	
-	protected $backend = null;
+	protected function getSessionKey($postfix) {
+		return 'patchwork_' . get_class($this) . "_$postfix";
+	}
 	
-	public function __construct($name, $title = null, $value = '',
-			$backend = 'CaptchaImage', $maxLength = 8, $timeout = 300,
-			$form = null) {
-		parent::__construct($name, $title, $value, $maxLength, $form);
-		
-		if (!in_array($backend, $backends = Captcha::get_implementations())) {
-			throw new Exception("invalid captcha backend $backend"
-				. " - supported backends are: "
-				. implode(', ', $backends));
+	protected function idUsed($id) {
+		return false;
+	}
+	
+	public static function get_implementations() {
+		$classes = ClassInfo::subclassesFor('Captcha');
+		array_shift($classes);
+		foreach ($classes as $class) {
+			$reflection = new ReflectionClass($class);
+			if ($reflection->isAbstract())
+				unset($classes[$class]);
 		}
-		
-		$this->backend = new $backend();
+		return $classes;
 	}
 	
-	public function validate($validator) {
-		if (!$this->backend->validate($this->value)) {
-			$validator->validationError($this->name, _t('CaptchaField.validate',
-				'Please try again.'), 'validation');
-			return false;
+	abstract public function reset();
+	abstract public function render();
+	abstract public function validate($value);
+	
+	public function getId($new = false) {
+		$key = $this->getSessionKey('Id');
+		$id = Session::get($key);
+		if (!$id || $new) {
+			do {
+				$id = sha1(uniqid(microtime(true), true));
+			} while ($this->idUsed($id));
+			Session::set($key, $id);
 		}
-		$this->backend->reset();
-		
-		return true;
-	}
-	
-	public function setValue($value, $data = array()) {
-		parent::setValue($value, $data);
-	}
-	
-	public function FieldHolder($properties = array()) {
-		$fieldHolder = parent::FieldHolder($properties);
-		return <<<INLINE_HTML
-<div class="captcha">
-	<div class="captcha-challenge">{$this->backend->render('img-thumbnail')}</div>
-	<div class="captcha-field">{$fieldHolder}</div>
-</div>
-INLINE_HTML;
+		return $id;
 	}
 	
 }
+

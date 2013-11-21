@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-abstract class CaptchaWord extends Object {
+abstract class CaptchaWord extends Captcha {
 	
 	private static $length = 8;
 	
@@ -38,6 +38,20 @@ abstract class CaptchaWord extends Object {
 	private static $generator = 'getRandomWord';
 	
 	private static $dictionary = '/usr/share/dict/words';
+	
+	public function getFontPath($font) {
+		$valid = (
+			!empty($font) &&
+			mb_strlen($font) > 2
+		);
+		if ($valid && $font[0] != '/')
+			$font = Controller::join_links(BASE_PATH, "/$font");
+		
+		if (!$valid || !file_exists($font))
+			throw new Exception('given font file is not usable');
+		
+		return $font;
+	}
 	
 	protected function getRandomWord() {
 		$length = $this->config()->length;
@@ -53,26 +67,6 @@ abstract class CaptchaWord extends Object {
 		return mb_strtolower($words[mt_rand(0, count($words) - 1)]);
 	}
 	
-	protected function getSessionKey($postfix) {
-		return 'patchwork_' . get_class($this) . "_$postfix";
-	}
-	
-	protected function idUsed($id) {
-		return false;
-	}
-	
-	public function getId($new = false) {
-		$key = $this->getSessionKey('Id');
-		$id = Session::get($key);
-		if (!$id || $new) {
-			do {
-				$id = sha1(uniqid(microtime(true), true));
-			} while ($this->idUsed($id));
-			Session::set($key, $id);
-		}
-		return $id;
-	}
-	
 	public function getWord($new = false) {
 		$key = $this->getSessionKey('Word');
 		$word = Session::get($key);
@@ -84,8 +78,14 @@ abstract class CaptchaWord extends Object {
 		return $word;
 	}
 	
-	abstract public function generate();
-	abstract public function render();
+	public function reset() {
+		$this->getId(true);
+		$this->getWord(true);
+	}
+	
+	public function validate($value) {
+		return $this->getWord() === $value;
+	}
 	
 }
 

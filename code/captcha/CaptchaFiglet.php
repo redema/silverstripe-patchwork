@@ -1,6 +1,28 @@
 <?php
 
 /**
+ * Zend Framework
+ * 
+ * LICENSE
+ * 
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   Zend
+ * @package    Zend_Captcha
+ * @subpackage Adapter
+ * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    1.12.3
+ * 
+ * Based on Zend_Captcha_Figlet - https://github.com/zendframework/zf1/
+ * Commit: 395b0873c7c348ea082be0a77c572c8604551056
+ * 
  * Copyright (c) 2013, Redema AB - http://redema.se/
  * 
  * Redistribution and use in source and binary forms, with or without modification,
@@ -29,47 +51,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-class CaptchaField extends TextField {
+class CaptchaFiglet extends CaptchaWord {
 	
-	protected $backend = null;
+	private static $font_file = 'patchwork/fonts/figlet/ogre.flf';
 	
-	public function __construct($name, $title = null, $value = '',
-			$backend = 'CaptchaImage', $maxLength = 8, $timeout = 300,
-			$form = null) {
-		parent::__construct($name, $title, $value, $maxLength, $form);
+	public function render($class = '') {
+		require_once 'Zend/Text/Figlet.php';
 		
-		if (!in_array($backend, $backends = Captcha::get_implementations())) {
-			throw new Exception("invalid captcha backend $backend"
-				. " - supported backends are: "
-				. implode(', ', $backends));
+		$font = $this->getFontPath($this->config()->font_file);
+		$figlet = new Zend_Text_Figlet();
+		if ($font) {
+			$figlet->setFont($font);
 		}
+		$word = $figlet->render($this->getWord());
+		$tpl = '<pre class="figlet %s">%s</pre>';
 		
-		$this->backend = new $backend();
-	}
-	
-	public function validate($validator) {
-		if (!$this->backend->validate($this->value)) {
-			$validator->validationError($this->name, _t('CaptchaField.validate',
-				'Please try again.'), 'validation');
-			return false;
-		}
-		$this->backend->reset();
-		
-		return true;
-	}
-	
-	public function setValue($value, $data = array()) {
-		parent::setValue($value, $data);
-	}
-	
-	public function FieldHolder($properties = array()) {
-		$fieldHolder = parent::FieldHolder($properties);
-		return <<<INLINE_HTML
-<div class="captcha">
-	<div class="captcha-challenge">{$this->backend->render('img-thumbnail')}</div>
-	<div class="captcha-field">{$fieldHolder}</div>
-</div>
-INLINE_HTML;
+		return sprintf($tpl, $class, $word);
 	}
 	
 }
+
+
