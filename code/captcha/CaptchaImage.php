@@ -212,7 +212,7 @@ class CaptchaImage extends CaptchaWord {
 		$y = ($h - ($textbox[7] - $textbox[1])) / 2;
 		imagefttext($img, $fsize, 0, $x, $y, $text_color, $font, $word);
 		
-	   // Generate noise.
+		// Generate noise.
 		for ($i = 0; $i < $this->config()->dot_noise_level; $i++) {
 			imagefilledellipse(
 				$img,
