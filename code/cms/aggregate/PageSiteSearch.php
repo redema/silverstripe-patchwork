@@ -58,7 +58,7 @@ class PageSiteSearch extends Controller {
 		
 		$aggregate->Title = _t('PageSiteSearch.Search', 'Search');
 		$aggregate->URLSegment = get_class($this);
-		$aggregate->SearchResultSort = PageAggregate::SEARCH_RESULT_SORT_ALPHABETICAL;
+		$aggregate->SearchResultSort = PageAggregate::SEARCH_RESULT_SORT_RELEVANCE;
 		$aggregate->SearchResultPageLength = $this->config()->result_page_length;
 		
 		$controller = PageAggregate_Controller::create($aggregate);

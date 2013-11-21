@@ -54,5 +54,7 @@ en:
     SearchFormTagsField: 'Tags'
     SearchFormSearchAction: 'Search'
     SearchFormResetAction: 'Reset'
+  PageAggregate_ss:
+    Results: 'Found {num} pages ({time} seconds)'
   CaptchaField:
     ValidationError: 'Please try again'

@@ -12,13 +12,18 @@
 			$SearchForm
 			<div class="visible-sm visible-xs separator"></div>
 		</div>
-		<% if $PaginatedAggregatePages.Count %>
 		<div class="col-md-8 col-md-pull-4 pageaggregate-pages">
+			<p class="text-muted">
+				<small>
+					<%t PageAggregate_ss.Results "Found {num} pages ({time} sec)" num=$PaginatedAggregatePages.getTotalItems time=$SearchTime %>
+				</small>
+			</p>
+			<% if $PaginatedAggregatePages.Count %>
 			<% loop $PaginatedAggregatePages %>
 			$Summary
 			<% end_loop %>
 			<% include Pagination PaginatedItems=$PaginatedAggregatePages %>
+			<% end_if %>
 		</div>
-		<% end_if %>
 	</div>
 </div>

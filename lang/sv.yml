@@ -54,5 +54,7 @@ sv:
     SearchFormTagsField: 'Taggar'
     SearchFormSearchAction: 'Sök'
     SearchFormResetAction: 'Återställ'
+  PageAggregate_ss:
+    Results: 'Hittade {num} sidor ({time} sekunder)'
   CaptchaField:
     ValidationError: 'Vänligen försök igen'

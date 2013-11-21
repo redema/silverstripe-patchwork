@@ -89,6 +89,8 @@ class PageAggregate extends Page {
 		)
 	);
 	
+	protected $searchTime = 0;
+	
 	public function setSearchParam($name, $value) {
 		if (!isset($this->searchParams[$name])) {
 			throw new \InvalidArgumentException("search param \"$name\" does not exist");
@@ -143,6 +145,11 @@ class PageAggregate extends Page {
 		});
 	}
 	
+	public function getSearchTime($format = true) {
+		return $format? number_format($this->searchTime, 4, '.', ' '):
+			$this->searchTime;
+	}
+	
 	protected $findPageIDsCache = array();
 	
 	/**
@@ -183,7 +190,7 @@ class PageAggregate extends Page {
 			foreach ($haystackFields as $haystackField) {
 				$haystackAlias = "{$haystackField}Weight";
 				$haystackWeight = <<<INLINE_SQL
-(LENGTH("$haystackField") - LENGTH(REPLACE("$haystackField", '$safeNeedle', '')))
+(LENGTH("SiteTree"."$haystackField") - LENGTH(REPLACE("SiteTree"."$haystackField", '$safeNeedle', '')))
 	/ LENGTH('$safeNeedle')
 INLINE_SQL;
 				$pageQuery->selectField($haystackWeight, $haystackAlias);
@@ -293,10 +300,11 @@ INLINE_SQL;
 	 * @return DataList
 	 */
 	public function findPages($needle, array $categories, array $tags, $cache = true) {
+		$searchStart = microtime(true);
 		$pageIDs = $this->findPageIDs($needle, $categories, $tags, $cache);
 		
 		// Fall back to relevance sorting if SearchResultSort has a
-		// weird values.
+		// weird value.
 		if (empty($this->SearchResultSort) || !in_array($this->SearchResultSort,
 				$this->dbObject('SearchResultSort')->enumValues()))
 			$this->SearchResultSort = self::SEARCH_RESULT_SORT_RELEVANCE;
@@ -331,15 +339,18 @@ INLINE_SQL;
 			$resultSort = array(
 				self::SEARCH_RESULT_SORT_RELEVANCE => $relevanceSort[$databaseClass],
 				self::SEARCH_RESULT_SORT_RANDOM => 'RAND()',
-				self::SEARCH_RESULT_SORT_CREATED => '"Created" DESC',
-				self::SEARCH_RESULT_SORT_LASTEDITED => '"LastEdited" DESC',
-				self::SEARCH_RESULT_SORT_ALPHABETICAL => '"Title" ASC, "MenuTitle" ASC',
-				self::SEARCH_RESULT_SORT_SITETREE => '"Sort" ASC'
+				self::SEARCH_RESULT_SORT_CREATED => '"SiteTree"."Created" DESC',
+				self::SEARCH_RESULT_SORT_LASTEDITED => '"SiteTree"."LastEdited" DESC',
+				self::SEARCH_RESULT_SORT_ALPHABETICAL => '"SiteTree"."Title" ASC, "SiteTree"."MenuTitle" ASC',
+				self::SEARCH_RESULT_SORT_SITETREE => '"SiteTree"."Sort" ASC'
 			);
 			$pages = $pages->sort($resultSort[$this->SearchResultSort]);
 			$this->extend('findPagesResult', $pages);
 			$this->findPagesCache[$cacheID] = $pages;
 		}
+		$searchStop = microtime(true);
+		$searchTotal = $searchStop - $searchStart;
+		$this->searchTime += $searchTotal;
 		
 		return clone $this->findPagesCache[$cacheID];
 	}
