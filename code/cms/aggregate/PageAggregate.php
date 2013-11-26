@@ -182,15 +182,17 @@ class PageAggregate extends Page {
 		if (trim($needle)) {
 			$haystackFilters = array();
 			$haystackFields = array(
-				'Content',
-				'Title',
-				'MenuTitle'
+				'"SiteTree"."Content"',
+				'"SiteTree"."Title"',
+				'"SiteTree"."MenuTitle"',
+				'"SiteTree"."MetaDescription"',
+				'"SiteTree"."MetaKeywords"'
 			);
 			$this->extend('updateFindPageIDsHaystackFields', $haystackFields);
 			foreach ($haystackFields as $haystackField) {
-				$haystackAlias = "{$haystackField}Weight";
+				$haystackAlias = preg_replace('/[^_a-z0-9]/i', '', $haystackField) . 'Weight';
 				$haystackWeight = <<<INLINE_SQL
-(LENGTH("SiteTree"."$haystackField") - LENGTH(REPLACE("SiteTree"."$haystackField", '$safeNeedle', '')))
+(LENGTH($haystackField) - LENGTH(REPLACE($haystackField, '$safeNeedle', '')))
 	/ LENGTH('$safeNeedle')
 INLINE_SQL;
 				$pageQuery->selectField($haystackWeight, $haystackAlias);
@@ -211,7 +213,7 @@ INLINE_SQL;
 			if ($this->$option) {
 				$classes = array_values(ClassInfo::subclassesFor($superclass));
 				$classes = implode("', '", $classes);
-				$pageQuery->addWhere("\"ClassName\" NOT IN ('$classes')");
+				$pageQuery->addWhere("\"SiteTree\".\"ClassName\" NOT IN ('$classes')");
 			}
 		}
 		
