@@ -74,9 +74,12 @@ class PageSummary extends SiteTreeExtension {
 			= _t('PageSummary.SummaryThumbnail', 'Thumbnail');
 	}
 	
-	public function Summary() {
+	public function Summary($showThumbnail = true, $showLabels = true) {
 		$templateFields = $this->owner->config()->summary_template_fields;
-		$templateValues = array();
+		$templateValues = array(
+			'ShowThumbnail' => (bool)$showThumbnail,
+			'ShowPageLabels' => (bool)$showLabels
+		);
 		
 		foreach ($templateFields as $key => $fields) {
 			foreach ($fields as $name) {
