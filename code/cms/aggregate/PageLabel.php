@@ -92,8 +92,9 @@ INLINE_SQL;
 		
 		if (($pages = $this->Pages())) {
 			$pages = $pages->map('ID', 'Title')->values();
-			$pages = implode('", "', Convert::raw2xml($pages));
-			$pagesReadonlyField = new LiteralField('Pages', "\"$pages\"");
+			$pages = implode('</li><li>', Convert::raw2xml($pages));
+			$pages = "<ul><li>$pages</li></ul>";
+			$pagesReadonlyField = new LiteralField('Pages', $pages);
 			$fields->replaceField('Pages', $pagesReadonlyField);
 		} else {
 			$fields->removeByName('Pages');
