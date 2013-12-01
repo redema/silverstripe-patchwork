@@ -190,7 +190,8 @@ class PageAggregate extends Page {
 				'"SiteTree"."MetaDescription"',
 				'"SiteTree"."MetaKeywords"',
 				'"Page"."SummaryTitle"',
-				'"Page"."SummaryContent"'
+				'"Page"."SummaryContent"',
+				'"Page"."MetaLabels"'
 			);
 			$this->extend('updateFindPageIDsHaystackFields', $pageQuery, $haystackFields);
 			foreach ($haystackFields as $haystackField) {

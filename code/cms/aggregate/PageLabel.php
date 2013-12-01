@@ -90,8 +90,8 @@ INLINE_SQL;
 		$this->autoScaffoldFormFields($fields, null, get_class($this),
 			$this, $fieldTransformation, $replaceField);
 		
-		if (($pages = $this->Pages())) {
-			$pages = $pages->map('ID', 'Title')->values();
+		if ($this->hasMethod('Pages')) {
+			$pages = $this->Pages()->map('ID', 'Title')->values();
 			$pages = implode('</li><li>', Convert::raw2xml($pages));
 			$pages = "<ul><li>$pages</li></ul>";
 			$pagesReadonlyField = new LiteralField('Pages', $pages);
