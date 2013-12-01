@@ -82,9 +82,6 @@ INLINE_SQL;
 			'TemplateName' => 'TextField',
 			'URLName' => function (FormField $field) {
 				return $field->performDisabledTransformation();
-			},
-			'Pages' => function (FormField $field) {
-				return $field->performReadonlyTransformation();
 			}
 		));
 		$replaceField = function (FieldList $fields, $tab, FormField $field) {
@@ -92,6 +89,15 @@ INLINE_SQL;
 		};
 		$this->autoScaffoldFormFields($fields, null, get_class($this),
 			$this, $fieldTransformation, $replaceField);
+		
+		if (($pages = $this->Pages())) {
+			$pages = $pages->map('ID', 'Title')->values();
+			$pages = implode('", "', Convert::raw2xml($pages));
+			$pagesReadonlyField = new LiteralField('Pages', "\"$pages\"");
+			$fields->replaceField('Pages', $pagesReadonlyField);
+		} else {
+			$fields->removeByName('Pages');
+		}
 		
 		return $fields;
 	}
