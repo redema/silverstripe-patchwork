@@ -262,6 +262,8 @@ INLINE_SQL;
 		
 		$pageQuery->setOrderBy('"SiteTree"."ID"');
 		
+		$this->extend('updateFindPageIDsPageQuery', $pageQuery);
+		
 		// Save all page IDs and the sum of the field weights. Regarding
 		// the cache, the assumption is that the query execution will 
 		// be the bottle neck.
