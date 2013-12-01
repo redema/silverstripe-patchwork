@@ -165,6 +165,7 @@ class PageAggregate extends Page {
 	 * @return array
 	 */
 	public function findPageIDs($needle, array $categories, array $tags, $cache = true) {
+		$needle = mb_strtolower($needle);
 		$safeNeedle = Convert::raw2sql($needle);
 		
 		$pageQuery = new SQLQuery();
@@ -180,19 +181,22 @@ class PageAggregate extends Page {
 		// will also determine sort order, it is assumed that they are
 		// ordered as "most important" to "least important".
 		if (trim($needle)) {
+			$pageQuery->addLeftJoin('Page', '"SiteTree"."ID" = "Page"."ID"');
 			$haystackFilters = array();
 			$haystackFields = array(
 				'"SiteTree"."Content"',
 				'"SiteTree"."Title"',
 				'"SiteTree"."MenuTitle"',
 				'"SiteTree"."MetaDescription"',
-				'"SiteTree"."MetaKeywords"'
+				'"SiteTree"."MetaKeywords"',
+				'"Page"."SummaryTitle"',
+				'"Page"."SummaryContent"'
 			);
-			$this->extend('updateFindPageIDsHaystackFields', $haystackFields);
+			$this->extend('updateFindPageIDsHaystackFields', $pageQuery, $haystackFields);
 			foreach ($haystackFields as $haystackField) {
 				$haystackAlias = preg_replace('/[^_a-z0-9]/i', '', $haystackField) . 'Weight';
 				$haystackWeight = <<<INLINE_SQL
-(LENGTH($haystackField) - LENGTH(REPLACE($haystackField, '$safeNeedle', '')))
+(LENGTH($haystackField) - LENGTH(REPLACE(LOWER($haystackField), '$safeNeedle', '')))
 	/ LENGTH('$safeNeedle')
 INLINE_SQL;
 				$pageQuery->selectField($haystackWeight, $haystackAlias);
@@ -255,6 +259,8 @@ INLINE_SQL;
 				$pageQuery->selectField("\"$table\".\"ID\"", 'ManyManyID');
 			}
 		}
+		
+		$pageQuery->setOrderBy('"SiteTree"."ID"');
 		
 		// Save all page IDs and the sum of the field weights. Regarding
 		// the cache, the assumption is that the query execution will 
