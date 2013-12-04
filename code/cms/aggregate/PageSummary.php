@@ -74,11 +74,17 @@ class PageSummary extends SiteTreeExtension {
 			= _t('PageSummary.SummaryThumbnail', 'Thumbnail');
 	}
 	
-	public function Summary($showThumbnail = true, $showLabels = true) {
+	public function Summary($showThumbnail = true, $showLabels = true,
+			$titleTag = 'h3') {
+		if (!preg_match('/^h[1-6]$/i', $titleTag)) {
+			throw new \InvalidArgumentException("invalid title tag \"$titleTag\""
+				. " - only h1..h6 are supported");
+		}
 		$templateFields = $this->owner->config()->summary_template_fields;
 		$templateValues = array(
 			'ShowThumbnail' => (bool)$showThumbnail,
-			'ShowPageLabels' => (bool)$showLabels
+			'ShowPageLabels' => (bool)$showLabels,
+			'TitleTag' => $titleTag
 		);
 		
 		foreach ($templateFields as $key => $fields) {

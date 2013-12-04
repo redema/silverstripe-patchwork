@@ -12,7 +12,7 @@
 	</a>
 	<% end_if %>
 	<div class="media-body">
-		<h4 class="media-heading">$PageSummaryTitle</h4>
+		<{$TitleTag} class="media-heading">$PageSummaryTitle</{$TitleTag}>
 		<div class="media-content">
 			$PageSummaryContent
 		</div>
