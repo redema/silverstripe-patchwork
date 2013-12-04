@@ -29,6 +29,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+if (class_exists('SiteTree')) {
+
 class PageLabeled extends SiteTreeExtension {
 	
 	private static $db = array(
@@ -43,10 +45,11 @@ class PageLabeled extends SiteTreeExtension {
 	
 	public function updateCMSFields(FieldList $fields) {
 		// Page->MetaLabels is automatically updated and should not
-		// be edited manually.
+		// be edited manually. Therefore it is not added as a CMS
+		// field.
 	}
 	
-	public function onAfterWrite() {
+	public function updateMetaLabels() {
 		$metaLabels = implode(', ', array_merge(
 			$this->owner->Categories()->map('ID', 'Title')->values(),
 			$this->owner->Tags()->map('ID', 'Title')->values()
@@ -71,4 +74,10 @@ INLINE_SQL;
 		}
 	}
 	
+	public function onAfterWrite() {
+		$this->updateMetaLabels();
+	}
+	
+}
+
 }
