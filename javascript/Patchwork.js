@@ -5,22 +5,24 @@
 
 jQuery.noConflict();
 
-function PatchworkDocumentReady($) {
-	$.walkExternalAnchors(function (i, el) {
-		if (!$(el).hasClass('colorbox')) {
-			$(el).click(function (event) {
-				event.preventDefault();
-				event.stopPropagation();
-				window.open($(this).attr('href'), '_blank');
-			});
-		}
+(function ($) {
+	$(document).ready(function () {
+		$.triggerPageTypeCallback(window.__patchwork, 'ready');
+		$.walkExternalAnchors(function (i, el) {
+			if (!$(el).hasClass('colorbox')) {
+				$(el).click(function (event) {
+					event.preventDefault();
+					event.stopPropagation();
+					window.open($(this).attr('href'), '_blank');
+				});
+			}
+		});
+		
+		$('form').bootstrapFrontEndForm();
+		$('.colorbox').colorboxify();
 	});
 	
-	$('form').bootstrapFrontEndForm();
-	$('.colorbox').colorboxify();
-}
-jQuery(document).ready(PatchworkDocumentReady);
-
-function PatchworkWindowLoad($) {
-}
-jQuery(window).load(PatchworkWindowLoad);
+	$(window).load(function () {
+		$.triggerPageTypeCallback(window.__patchwork, 'load');
+	});
+})(jQuery);

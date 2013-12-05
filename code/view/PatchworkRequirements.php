@@ -70,6 +70,7 @@ class PatchworkRequirements extends Extension {
 				'patchwork/javascript/thirdparty/bootstrap-3.0.2.js',
 				'patchwork/javascript/FrontEndForm.js',
 				'patchwork/javascript/FrontEndQuirks.js',
+				'patchwork/javascript/PageAggregate.js',
 				'patchwork/javascript/Patchwork.js',
 				'mysite/javascript/mysite.js'
 			),

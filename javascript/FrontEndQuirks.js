@@ -5,6 +5,11 @@
 
 (function ($) {
 	$.extend({
+		triggerPageTypeCallback: function (patchwork, type) {
+			var callback = patchwork.PageType + '_' + type;
+			if (typeof window[callback] === 'function')
+				window[callback]($);
+		},
 		walkExternalAnchors: function (callback) {
 			$([
 				'a[href^=http]:not(.not-external)',

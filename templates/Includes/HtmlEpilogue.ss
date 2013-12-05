@@ -1,5 +1,14 @@
 
-<script>/*<![CDATA[*/ var __patchwork_requirements_fix = 1; /*]]>*/</script>
+<script>
+/*<![CDATA[*/
+	var __patchwork = {
+		RequirementsFix: 1,
+		PageID: '$ID',
+		PageType: '$ClassName',
+		PageLink: '$Link'
+	};
+/*]]>*/
+</script>
 
 <% include Analytics %>
 

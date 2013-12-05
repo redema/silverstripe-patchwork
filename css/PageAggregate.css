@@ -27,3 +27,30 @@
 	padding-top: 15px;
 	border-bottom: 1px solid #e0e0e0;
 }
+
+.pageaggregate-searchform ul#Form_SearchForm_Categories li label {
+	font-weight: normal;
+}
+
+.pageaggregate-searchform ul#Form_SearchForm_Tags {
+	padding-left: 0;
+}
+.pageaggregate-searchform ul#Form_SearchForm_Tags li {
+	display: inline-block;
+	width: auto;
+}
+.pageaggregate-searchform ul#Form_SearchForm_Tags li .checkbox {
+	display: none;
+}
+.pageaggregate-searchform ul#Form_SearchForm_Tags li label {
+	margin: 2px;
+	padding: 2px;
+	font-weight: normal;
+	cursor: pointer;
+	border-radius: 4px;
+}
+.pageaggregate-searchform ul#Form_SearchForm_Tags li label:hover,
+.pageaggregate-searchform ul#Form_SearchForm_Tags li label.checked {
+	color: #fff;
+	background: #42bbca;
+}
