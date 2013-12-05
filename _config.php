@@ -49,6 +49,7 @@ call_user_func(function () {
 		Page::add_extension('PageLabeled');
 		Page::add_extension('PageCategorized');
 		Page::add_extension('PageTagged');
+		Page::add_extension('PageScheduledStaging');
 		ContentController::add_extension('ContentControllerTemplateHelpers');
 		
 		HtmlEditorConfig::get('cms')->enablePlugins('template');
