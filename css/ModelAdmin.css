@@ -1,0 +1,7 @@
+
+.cms-content-tools .field input.text,
+.cms-content-tools .field textarea,
+.cms-content-tools .field select,
+.cms-content-tools .field .TreeDropdownField {
+    width: 78%;
+}
