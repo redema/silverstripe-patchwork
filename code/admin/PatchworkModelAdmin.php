@@ -31,7 +31,7 @@
 
 class PatchworkModelAdmin extends ModelAdmin {
 	
-	public static $page_length = 20;
+	private static $page_length = 20;
 	
 	public function init() {
 		parent::init();

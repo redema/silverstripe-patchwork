@@ -56,6 +56,28 @@ class ScheduledJob extends DataObject {
 		'Reschedule' => '0'
 	);
 	
+	public static $searchable_fields = array(
+		'ID' => array('filter' => 'ExactMatchFilter'),
+		'Task',
+		'GetParams',
+		'PostParams',
+		'Scheduled',
+		'Completed',
+		'Failed',
+		'Owner.ID'
+	);
+	
+	public static $summary_fields = array(
+		'ID',
+		'Task',
+		'Scheduled',
+		'Completed',
+		'Failed',
+		'Repeats',
+		'Reschedule',
+		'Owner.Email'
+	);
+	
 	/**
 	 * Register a new scheduled job.
 	 * 
@@ -103,27 +125,14 @@ class ScheduledJob extends DataObject {
 		return call_user_func_array(array($deferrable, 'schedule'), $params);
 	}
 	
-	protected function setTaskParams($name, array $params) {
+	public function setTaskParams($name, array $params) {
 		$this->setField($name, http_build_query($params));
 	}
 	
-	protected function getTaskParams($name) {
+	public function getTaskParams($name) {
 		$params = array();
 		parse_str($this->getField($name), $params);
 		return $params;
-	}
-	
-	public function setGetParams(array $params) {
-		$this->setTaskParams('GetParams', $params);
-	}
-	protected function getGetParams() {
-		return $this->getTaskParams('GetParams');
-	}
-	public function setPostParams(array $params) {
-		$this->setTaskParams('PostParams', $params);
-	}
-	protected function getPostParams() {
-		return $this->getTaskParams('PostParams');
 	}
 	
 	public function setUniqid() {
@@ -180,9 +189,9 @@ class ScheduledJob extends DataObject {
 			return $this->fail(null);
 		}
 		
-		$post = $this->getPostParams();
+		$post = $this->getTaskParams('PostParams');
 		$get = sprintf('%s/%s/%s?%s', BASE_URL, 'dev/tasks', $this->Task,
-			http_build_query($this->getGetParams()));
+			http_build_query($this->getTaskParams('GetParams')));
 		
 		if ($this->Owner()->ID)
 			$this->Owner()->logIn();
@@ -200,6 +209,44 @@ class ScheduledJob extends DataObject {
 		
 		return $response->isError()?
 			$this->fail($response): $this->complete($response);
+	}
+	
+	public function getCMSFields() {
+		$fields = parent::getCMSFields();
+		
+		$fieldTransformation = new FormTransformation_SpecificFields(array(
+			'Task' => 'TextField',
+			'GetParams' => 'TextField',
+			'PostParams' => 'TextField',
+			'Uniqid' => 'TextField'
+		));
+		$replaceField = function (FieldList $fields, $tab, FormField $field) {
+			$fields->replaceField($field->getName(), $field);
+		};
+		$this->autoScaffoldFormFields($fields, null, get_class($this),
+			$this, $fieldTransformation, $replaceField);
+		return $fields;
+	}
+	
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		
+		$labels['Task'] = _t('ScheduledJob.Task', 'Task');
+		$labels['GetParams'] = _t('ScheduledJob.GetParams', 'Get params');
+		$labels['PostParams'] = _t('ScheduledJob.PostParams', 'Post params');
+		$labels['Uniqid'] = _t('ScheduledJob.Uniqid', 'Uniqid');
+		$labels['Scheduled'] = _t('ScheduledJob.Scheduled', 'Scheduled');
+		$labels['Completed'] = _t('ScheduledJob.Completed', 'Completed');
+		$labels['Failed'] = _t('ScheduledJob.Failed', 'Failed');
+		$labels['Repeats'] = _t('ScheduledJob.Repeats', 'Repeats');
+		$labels['Reschedule'] = _t('ScheduledJob.Reschedule', 'Reschedule');
+		
+		if ($includerelations) {
+			$labels['Owner'] = $labels['OwnerID']
+				= _t('ScheduledJob.Owner', 'Owner');
+		}
+		
+		return $labels;
 	}
 	
 }

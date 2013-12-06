@@ -57,10 +57,10 @@ class StagePageTask extends DeferrableBuildTask {
 		$methodField = $methodFields[$method];
 		if ($page->$methodField > date('Y-m-d H:i:s')) {
 			$scheduledJob->Scheduled = $page->$methodField;
-			$scheduledJob->GetParams = array(
+			$scheduledJob->setTaskParams('GetParams', array(
 				'PageID' => $page->ID,
 				'Method' => $method
-			);
+			));
 			$scheduledJob->write();
 		}
 		
