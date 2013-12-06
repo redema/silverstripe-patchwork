@@ -1,5 +1,7 @@
 en:
   PageContentItem:
+    SINGULARNAME: 'Page content item'
+    PLURALNAME: 'Page content items'
     Thumbnail: 'Thumbnail'
     Title: 'Title'
     Link: 'Link'
@@ -58,3 +60,32 @@ en:
     Results: 'Found {num} pages ({time} seconds)'
   CaptchaField:
     ValidationError: 'Please try again'
+  AggregateAdmin:
+    MENUTITLE: 'Aggregate data'
+  TaskAdmin:
+    MENUTITLE: 'Scheduled jobs'
+  ScheduledJob:
+    SINGULARNAME: 'Scheduled job'
+    PLURALNAME: 'Scheduled jobs'
+    Task: 'Task'
+    GetParams: 'HTTP GET params'
+    PostParams: 'HTTP POST params'
+    Uniqid: 'Unique task ID'
+    Scheduled: 'Scheduled'
+    Completed: 'Completed'
+    Failed: 'Failed'
+    Repeats: 'Repeats'
+    Reschedule: 'Reschedule'
+    Owner: 'Owner'
+  PageLabel:
+    SINGULARNAME: 'Page label'
+    PLURALNAME: 'Page labels'
+    Title: 'Title'
+    TemplateName: 'Template name'
+    URLName: 'URL name'
+  PageCategory:
+    SINGULARNAME: 'Category'
+    PLURALNAME: 'Categories'
+  PageTag:
+    SINGULARNAME: 'Tag'
+    PLURALNAME: 'Tags'

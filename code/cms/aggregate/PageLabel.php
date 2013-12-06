@@ -103,6 +103,19 @@ INLINE_SQL;
 		return $fields;
 	}
 	
+	public function fieldLabels($includerelations = true) {
+		$labels = parent::fieldLabels($includerelations);
+		
+		$labels['Title'] = _t('PageLabel.Title', 'Title');
+		$labels['TemplateName'] = _t('PageLabel.TemplateName', 'Template name');
+		$labels['URLName'] = _t('PageLabel.URLName', 'URL name');
+		
+		if ($includerelations) {
+		}
+		
+		return $labels;
+	}
+	
 	public function onBeforeWrite() {
 		parent::onBeforeWrite();
 		

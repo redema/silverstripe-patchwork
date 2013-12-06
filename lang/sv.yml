@@ -1,5 +1,7 @@
 sv:
   PageContentItem:
+    SINGULARNAME: 'Sidinnehållspost'
+    PLURALNAME: 'Sidinnehållsposter'
     Thumbnail: 'Tumnagel'
     Title: 'Titel'
     Link: 'Länk'
@@ -58,3 +60,32 @@ sv:
     Results: 'Hittade {num} sidor ({time} sekunder)'
   CaptchaField:
     ValidationError: 'Vänligen försök igen'
+  AggregateAdmin:
+    MENUTITLE: 'Aggregatdata'
+  TaskAdmin:
+    MENUTITLE: 'Schemalagda jobb'
+  ScheduledJob:
+    SINGULARNAME: 'Schemalagt jobb'
+    PLURALNAME: 'Schemalagda jobb'
+    Task: 'Uppgift'
+    GetParams: 'HTTP GET parametrar'
+    PostParams: 'HTTP POST parametrar'
+    Uniqid: 'Unikt uppgifts-ID'
+    Scheduled: 'Schemalagt'
+    Completed: 'Avslutat'
+    Failed: 'Misslyckat'
+    Repeats: 'Upprepas'
+    Reschedule: 'Schemaläggningsintervall'
+    Owner: 'Ägare'
+  PageLabel:
+    SINGULARNAME: 'Etikett'
+    PLURALNAME: 'Etiketter'
+    Title: 'Titel'
+    TemplateName: 'Mallnamn'
+    URLName: 'URL-namn'
+  PageCategory:
+    SINGULARNAME: 'Kategori'
+    PLURALNAME: 'Kategorier'
+  PageTag:
+    SINGULARNAME: 'Tagg'
+    PLURALNAME: 'Taggar'
