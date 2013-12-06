@@ -33,16 +33,18 @@ if (class_exists('SiteTree')) {
 
 class AggregateAdmin extends PatchworkModelAdmin {
 	
-	public static $managed_models = array(
+	private static $managed_models = array(
 		'PageCategory',
 		'PageTag'
 	);
 	
-	public static $model_importers = array(
+	private static $model_importers = array(
 	);
 	
-	public static $url_segment = 'aggregate';
-	public static $menu_title  = 'Aggregate';
+	private static $url_segment = 'aggregate';
+	private static $menu_title  = 'Aggregate';
+	
+	private static $menu_icon = 'patchwork/images/icons/AggregateAdmin.png';
 	
 }
 
