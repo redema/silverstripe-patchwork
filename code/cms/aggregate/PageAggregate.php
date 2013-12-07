@@ -39,9 +39,9 @@ if (class_exists('SiteTree')) {
 class PageAggregate extends Page {
 	
 	const SEARCH_RESULT_SORT_RELEVANCE = 'Relevance';
-	const SEARCH_RESULT_SORT_RANDOM = 'Random';
 	const SEARCH_RESULT_SORT_CREATED = 'Created';
 	const SEARCH_RESULT_SORT_LASTEDITED = 'LastEdited';
+	const SEARCH_RESULT_SORT_PUBLICTIMESTAMP = 'PublicTimestamp';
 	const SEARCH_RESULT_SORT_ALPHABETICAL = 'Alphabetical';
 	const SEARCH_RESULT_SORT_SITETREE = 'SiteTree';
 	
@@ -50,9 +50,9 @@ class PageAggregate extends Page {
 		'SearchResultPageLength' => 'Int',
 		'SearchResultSort' => "Enum(Array(
 			'Relevance',
-			'Random',
 			'Created',
 			'LastEdited',
+			'PublicTimestamp',
 			'Alphabetical',
 			'SiteTree'
 		), 'Relevance')",
@@ -69,11 +69,22 @@ class PageAggregate extends Page {
 		'SearchExcludeErrorPages' => '1'
 	);
 	
+	private static $search_result_sort_date_fields = array(
+		'Created',
+		'LastEdited',
+		'PublicTimestamp'
+	);
+	
 	private static $weight_per_label = 10.0;
 	
 	protected $searchParams = array(
 		'Needle' => array(
 			'field' => 'SearchNeedle',
+			'value' => null,
+			'changed' => false
+		),
+		'Sort' => array(
+			'field' => 'SearchResultSort',
 			'value' => null,
 			'changed' => false
 		),
@@ -304,29 +315,30 @@ INLINE_SQL;
 	 * Find all pages matching the given search params.
 	 * 
 	 * @param string $needle
+	 * @param string $sort
 	 * @param array $categories
 	 * @param array $tags
 	 * @param boolean $cache
 	 * 
 	 * @return DataList
 	 */
-	public function findPages($needle, array $categories, array $tags, $cache = true) {
+	public function findPages($needle, $sort, array $categories, array $tags,
+			$cache = true) {
 		$searchStart = microtime(true);
 		$pageIDs = $this->findPageIDs($needle, $categories, $tags, $cache);
 		
 		// Fall back to relevance sorting if SearchResultSort has a
 		// weird value.
-		if (empty($this->SearchResultSort) || !in_array($this->SearchResultSort,
-				$this->dbObject('SearchResultSort')->enumValues()))
-			$this->SearchResultSort = self::SEARCH_RESULT_SORT_RELEVANCE;
+		if (empty($sort) || !in_array($sort, $this->dbObject('SearchResultSort')->enumValues()))
+			$sort = self::SEARCH_RESULT_SORT_RELEVANCE;
 		
 		// If the pages are to be sorted by relevance, then it is
 		// necessary to sort the page IDs on their weight.
-		if ($this->SearchResultSort == self::SEARCH_RESULT_SORT_RELEVANCE)
+		if ($sort == self::SEARCH_RESULT_SORT_RELEVANCE)
 			asort($pageIDs, SORT_NUMERIC);
 		
 		$pageIDs = implode(', ', array_keys($pageIDs));
-		$cacheID = sha1($pageIDs);
+		$cacheID = sha1("$sort($pageIDs)");
 		if (empty($pageIDs)) {
 			$this->findPagesCache[$cacheID] = Page::get()->where('"SiteTree"."ID" < 1');
 		} else if (!isset($this->findPagesCache[$cacheID])) {
@@ -349,13 +361,13 @@ INLINE_SQL;
 			
 			$resultSort = array(
 				self::SEARCH_RESULT_SORT_RELEVANCE => $relevanceSort[$databaseClass],
-				self::SEARCH_RESULT_SORT_RANDOM => 'RAND()',
 				self::SEARCH_RESULT_SORT_CREATED => '"SiteTree"."Created" DESC',
 				self::SEARCH_RESULT_SORT_LASTEDITED => '"SiteTree"."LastEdited" DESC',
+				self::SEARCH_RESULT_SORT_PUBLICTIMESTAMP => '"Page"."PublicTimestamp" DESC',
 				self::SEARCH_RESULT_SORT_ALPHABETICAL => '"SiteTree"."Title" ASC, "SiteTree"."MenuTitle" ASC',
 				self::SEARCH_RESULT_SORT_SITETREE => '"SiteTree"."Sort" ASC'
 			);
-			$pages = $pages->sort($resultSort[$this->SearchResultSort]);
+			$pages = $pages->sort($resultSort[$sort]);
 			$this->extend('findPagesResult', $pages);
 			$this->findPagesCache[$cacheID] = $pages;
 		}
@@ -377,10 +389,25 @@ INLINE_SQL;
 	public function AggregatePages($cache = true, $originalSearchParams = false) {
 		return $this->findPages(
 			$this->getSearchParam('Needle', $originalSearchParams),
+			$this->getSearchParam('Sort', $originalSearchParams),
 			$this->getSearchParam('Categories', $originalSearchParams),
 			$this->getSearchParam('Tags', $originalSearchParams),
 			$cache
 		);
+	}
+	
+	public function AggregateDates($months = true) {
+		$pages = $this->AggregatePages(true, true);
+		$query = $pages->dataQuery();
+		
+		$groupables = $this->config()->search_result_sort_date_fields;
+		$format = $months? '%Y-%m': '%Y';
+		$field = in_array($this->SearchResultSort, $groupables)?
+			$this->SearchResultSort: 'Created';
+		
+		// FIXME: MySQL specific GROUP BY.
+		$query->groupby("DATE_FORMAT(\"$field\", '$format')");
+		return $query->column($field);
 	}
 	
 	public function flushCache($persistent = true) {
@@ -402,6 +429,9 @@ INLINE_SQL;
 			$this->fieldLabel('SearchResultPageLength')));
 		$fields->addFieldToTab('Root.Search', $this->dbObject('SearchResultSort')
 			->scaffoldFormField($this->fieldLabel('SearchResultSort')));
+		
+		$this->autoTranslateDropdown('PageAggregate.SearchResultSort',
+			$fields->dataFieldByName('SearchResultSort'));
 		
 		$fields->addFieldToTab('Root.Search', new CheckboxField('SearchExcludePageAggregates',
 			$this->fieldLabel('SearchExcludePageAggregates')));
@@ -467,6 +497,13 @@ class PageAggregate_Controller extends Page_Controller {
 			$needleField = new TextField('Needle', _t(
 				'PageAggregate_Controller.SearchFormNeedleField', 'Needle'))
 		);
+		
+		$sortField = $this->data()->dbObject('SearchResultSort')
+			->scaffoldFormField(_t('PageAggregate_Controller.SearchFormSortField', 'Sort'));
+		$sortField->setName('Sort');
+		$sortField->setValue($this->data()->getSearchParam('Sort'));
+		$this->data()->autoTranslateDropdown('PageAggregate.SearchResultSort', $sortField);
+		$fields->push($sortField);
 		
 		$addLabelsField = function ($fields, $aggregate, $name) {
 			$method = "Aggregate{$name}";

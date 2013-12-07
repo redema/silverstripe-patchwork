@@ -135,8 +135,8 @@ INLINE_SQL;
 		if (isset($args[$this->ClassName])) {
 			$args[$this->ClassName][$this->ID] = $this->ID;
 		}
-		return PageSiteSearch::build_link('', $args['PageCategory'], $args['PageTag'],
-			$forTemplate);
+		return PageSiteSearch::build_link('', '',
+			$args['PageCategory'], $args['PageTag'], $forTemplate);
 	}
 	
 }
