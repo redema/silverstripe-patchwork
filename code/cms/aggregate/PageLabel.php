@@ -122,6 +122,18 @@ INLINE_SQL;
 		$this->URLName = Convert::raw2url($this->Title);
 	}
 	
+	public function onAfterWrite() {
+		parent::onAfterWrite();
+		if ($this->hasMethod('Pages') && count($this->Pages())) {
+			ScheduledJob::register('UpdateMetaLabelsTask', null, null);
+		}
+	}
+	
+	public function onAfterDelete() {
+		parent::onAfterDelete();
+		ScheduledJob::register('UpdateMetaLabelsTask', null, null);
+	}
+	
 	/**
 	 * @param int $ID
 	 * 
