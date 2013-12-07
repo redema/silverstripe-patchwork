@@ -53,6 +53,11 @@ class PageScheduledStaging extends SiteTreeExtension {
 		$labels['PublicTimestamp'] = _t('PageScheduledStaging.PublicTimestamp', 'Public timestamp');
 	}
 	
+	public function onBeforeWrite() {
+		if (!$this->owner->PublicTimestamp)
+			$this->owner->PublicTimestamp = $this->owner->Created;
+	}
+	
 	public function onAfterWrite() {
 		$page = $this->owner;
 		$publisher = Member::currentUserID()?
