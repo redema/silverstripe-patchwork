@@ -54,8 +54,9 @@ class PageScheduledStaging extends SiteTreeExtension {
 	}
 	
 	public function onAfterWrite() {
-		$publisher = Member::currentUser();
 		$page = $this->owner;
+		$publisher = Member::currentUserID()?
+			Member::currentUser(): Security::findAnAdministrator();
 		
 		ScheduledJob::register('StagePageTask', null, $publisher, $page, 'doPublish');
 		ScheduledJob::register('StagePageTask', null, $publisher, $page, 'doUnpublish');
