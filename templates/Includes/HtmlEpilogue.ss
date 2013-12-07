@@ -1,11 +1,14 @@
 
 <script>
 /*<![CDATA[*/
-	var __patchwork = {
+	var patchwork = {
 		RequirementsFix: 1,
 		PageID: '$ID',
 		PageType: '$ClassName',
-		PageLink: '$Link'
+		PageLink: '$Link',
+		RegExps: {
+			ImgURL: /\\.(png|jpe?g|gif)(\\?.*)?$/i
+		}
 	};
 /*]]>*/
 </script>

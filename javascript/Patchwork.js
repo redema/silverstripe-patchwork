@@ -7,8 +7,9 @@ jQuery.noConflict();
 
 (function ($) {
 	$(document).ready(function () {
-		$.triggerPageTypeCallback(window.__patchwork, 'ready');
+		$.triggerPageTypeCallback(window.patchwork, 'ready');
 		$.walkExternalAnchors(function (i, el) {
+			$(el).removeAttr('target');
 			if (!$(el).hasClass('colorbox')) {
 				$(el).click(function (event) {
 					event.preventDefault();
@@ -18,11 +19,19 @@ jQuery.noConflict();
 			}
 		});
 		
+		$('a[target="_blank"]').each(function () {
+			var $this = $(this);
+			if ($this.attr('href').match(window.patchwork.RegExps.ImgURL)) {
+				$this.removeAttr('target');
+				$this.addClass('colorbox');
+			}
+		});
+		
 		$('form').bootstrapFrontEndForm();
 		$('.colorbox').colorboxify();
 	});
 	
 	$(window).load(function () {
-		$.triggerPageTypeCallback(window.__patchwork, 'load');
+		$.triggerPageTypeCallback(window.patchwork, 'load');
 	});
 })(jQuery);

@@ -12,10 +12,10 @@
 		},
 		walkExternalAnchors: function (callback) {
 			$([
-				'a[href^=http]:not(.not-external)',
-				'a[rel=external]',
-				'area[href^=http]:not(.not-external)',
-				'area[rel=external]'
+				'a[href^="http://"]:not(.not-external)',
+				'a[rel="external"]',
+				'area[href^="http://"]:not(.not-external)',
+				'area[rel="external"]'
 			].join(', ')).each(callback);
 		}
 	});
@@ -25,7 +25,7 @@
 			var $this = $(this);
 			var opts = $.extend({}, $.fn.colorboxify.defaults, options);
 			
-			if ($this.attr('href').match(/\.(png|jpe?g|gif)$/i)) {
+			if ($this.attr('href').match(window.patchwork.RegExps.ImgURL)) {
 				$this.colorbox(opts['colorbox']);
 			} else {
 				for (var type in opts) {
