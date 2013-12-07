@@ -50,7 +50,7 @@ class ScheduledJobTask extends BuildTask {
 		}
 		
 		$now = date('Y-m-d H:i:s');
-		$jobs = ScheduledJob::get()->where("\"Scheduled\" < '$now'")
+		$jobs = ScheduledJob::get()->where("\"Scheduled\" <= '$now'")
 			->where('"Completed" IS NULL')
 			->where('"Failed" IS NULL');
 		
