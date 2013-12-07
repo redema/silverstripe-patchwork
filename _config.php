@@ -22,7 +22,7 @@ if (!defined('GROUP_ADMINISTRATORS'))
 	define('GROUP_ADMINISTRATORS', 'administrators');
 
 call_user_func(function () {
-	if (Director::isLive()) {
+	if (Director::isLive() && substr_count($_SERVER['SERVER_NAME'], '.') == 1) {
 		Director::forceWWW();
 	}
 	if (PATCHWORK_SSL) {
