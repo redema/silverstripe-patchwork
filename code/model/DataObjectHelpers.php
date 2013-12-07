@@ -91,6 +91,18 @@ class DataObjectHelpers extends DataExtension {
 		$this->autoScaffoldFormFields($fields, $tab, $class, $object,
 			$formTransformation, $addFieldToTab);
 	}
+	
+	/**
+	 * Automatically translate the options in a DropdownField.
+	 */
+	public function autoTranslateDropdown($baseEntity, DropdownField $dropdownField) {
+		$options = $dropdownField->getSource();
+		$i18nOptions = array();
+		foreach ($options as $option => $ignored) {
+			$i18nOptions[$option] = _t("{$baseEntity}_{$option}", $option);
+		}
+		$dropdownField->setSource($i18nOptions);
+	}
 }
 
 
