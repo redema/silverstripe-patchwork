@@ -571,11 +571,19 @@ class PageAggregate_Controller extends Page_Controller {
 	}
 	
 	public function rss() {
-		$rss = new RSSFeed(
+		$rss = new PatchworkRSSFeed(
 			$this->PaginatedAggregatePages(),
 			$this->Link(),
 			$this->SiteConfig()->Title,
-			$this->data()->MetaDescription
+			$this->data()->MetaDescription,
+			array(
+				'SummaryTitle' => 'trim',
+				'Title' => 'trim'
+			),
+			array(
+				'SummaryContent' => 'strip_tags',
+				'Content' => 'strip_tags'
+			)
 		);
 		return $rss->outputToBrowser();
 	}
