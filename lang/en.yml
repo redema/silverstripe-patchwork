@@ -58,7 +58,7 @@ en:
     SearchResultSort_Relevance: 'Relevance'
     SearchResultSort_Created: 'Created'
     SearchResultSort_LastEdited: 'LastEdited'
-    SearchResultSort_PublicTimestamp: 'Display date'
+    SearchResultSort_PublicTimestamp: 'Date'
     SearchResultSort_Alphabetical: 'Alphabetical'
     SearchResultSort_SiteTree: 'Menu ordering'
     SearchExcludePageAggregates: 'Exclude page aggregates'

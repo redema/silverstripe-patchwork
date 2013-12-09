@@ -542,6 +542,10 @@ class PageAggregate_Controller extends Page_Controller {
 		
 		$sortField = $this->data()->dbObject('SearchResultSort')
 			->scaffoldFormField(_t('PageAggregate_Controller.SearchFormSortField', 'Sort'));
+		$sortFieldOptions = $sortField->getSource();
+		unset($sortFieldOptions['Created']);
+		unset($sortFieldOptions['SiteTree']);
+		$sortField->setSource($sortFieldOptions);
 		$sortField->setName('Sort');
 		$sortField->setValue($this->data()->getSearchParam('Sort'));
 		$this->data()->autoTranslateDropdown('PageAggregate.SearchResultSort', $sortField);

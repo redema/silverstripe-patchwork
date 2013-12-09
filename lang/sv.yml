@@ -58,7 +58,7 @@ sv:
     SearchResultSort_Relevance: 'Relevans'
     SearchResultSort_Created: 'Skapad'
     SearchResultSort_LastEdited: 'Senast ändrad'
-    SearchResultSort_PublicTimestamp: 'Visningsdatum'
+    SearchResultSort_PublicTimestamp: 'Datum'
     SearchResultSort_Alphabetical: 'Alfabetisk'
     SearchResultSort_SiteTree: 'Menysortering'
     SearchExcludePageAggregates: 'Exkludera sidaggregat'
