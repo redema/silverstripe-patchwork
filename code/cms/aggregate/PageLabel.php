@@ -90,7 +90,7 @@ INLINE_SQL;
 		$this->autoScaffoldFormFields($fields, null, get_class($this),
 			$this, $fieldTransformation, $replaceField);
 		
-		if ($this->hasMethod('Pages')) {
+		if ($this->ID && $this->hasMethod('Pages')) {
 			$pages = $this->Pages()->map('ID', 'Title')->values();
 			$pages = implode('</li><li>', Convert::raw2xml($pages));
 			$pages = "<ul><li>$pages</li></ul>";
