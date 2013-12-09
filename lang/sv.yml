@@ -20,6 +20,11 @@ sv:
     DesktopMainImage: 'Desktopbild'
     TabletMainImage: 'Läsplattebild'
     MobileMainImage: 'Mobilbild'
+  PageScheduledStaging:
+    Root_PageScheduledStaging: 'Tidsstyrning'
+    ScheduledPublish: 'Schemalagd publicering'
+    ScheduledUnpublish: 'Schemalagd avpublicering'
+    PublicTimestamp: 'Publikt visningsdatum'
   PageSummary:
     Root_PageSummary: 'Sammanfattning'
     SummaryTitle: 'Titel'

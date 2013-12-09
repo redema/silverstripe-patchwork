@@ -20,6 +20,11 @@ en:
     DesktopMainImage: 'Desktop image'
     TabletMainImage: 'Tablet image'
     MobileMainImage: 'Mobile image'
+  PageScheduledStaging:
+    Root_PageScheduledStaging: 'Scheduled staging'
+    ScheduledPublish: 'Scheduled publish'
+    ScheduledUnpublish: 'Scheduled unpublish'
+    PublicTimestamp: 'Public timestamp'
   PageSummary:
     Root_PageSummary: 'Summary'
     SummaryTitle: 'Title'
