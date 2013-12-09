@@ -488,10 +488,8 @@ INLINE_SQL;
 		$labels['Root_Search'] = _t('PageAggregate.Root_Search', 'Search');
 		
 		$labels['SearchNeedle'] = _t('PageAggregate.SearchNeedle', 'Needle');
-		$labels['SearchResultLimit'] = _t('PageAggregate.SearchResultLimit',
-			'Search result limit');
-		$labels['SearchResultPerPage'] = _t('PageAggregate.SearchResultPerPage',
-			'Search result per page');
+		$labels['SearchResultPageLength'] = _t('PageAggregate.SearchResultPageLength',
+			'Search result page length');
 		$labels['SearchResultSort'] = _t('PageAggregate.SearchResultSort',
 			'Search result sort');
 		$labels['SearchExcludePageAggregates'] = _t('PageAggregate.SearchExcludePageAggregates',
