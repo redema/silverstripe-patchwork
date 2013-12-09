@@ -50,6 +50,10 @@ class PageCategorized extends SiteTreeExtension {
 		}
 	}
 	
+	public function updateFieldLabels(&$labels) {
+		$labels['Categories'] = _t('PageCategorized.Categories', 'Categories');
+	}
+	
 }
 
 }

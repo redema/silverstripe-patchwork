@@ -73,6 +73,10 @@ sv:
     SearchFormResetAction: 'Återställ'
   PageAggregate_ss:
     Results: 'Hittade {num} sidor ({time} sekunder)'
+  PageCategorized:
+    Categories: 'Kategorier'
+  PageTagged:
+    Tags: 'Taggar'
   CaptchaField:
     ValidationError: 'Vänligen försök igen'
   AggregateAdmin:

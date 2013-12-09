@@ -73,6 +73,10 @@ en:
     SearchFormResetAction: 'Reset'
   PageAggregate_ss:
     Results: 'Found {num} pages ({time} seconds)'
+  PageCategorized:
+    Categories: 'Categories'
+  PageTagged:
+    Tags: 'Tags'
   CaptchaField:
     ValidationError: 'Please try again'
   AggregateAdmin:

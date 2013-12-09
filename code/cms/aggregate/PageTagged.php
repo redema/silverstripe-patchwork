@@ -51,6 +51,10 @@ class PageTagged extends SiteTreeExtension {
 		}
 	}
 	
+	public function updateFieldLabels(&$labels) {
+		$labels['Tags'] = _t('PageTagged.Tags', 'Tags');
+	}
+	
 }
 
 }
