@@ -39,12 +39,14 @@ class PageSiteSearch extends Controller {
 	
 	private static $result_page_length = 10;
 	
-	public static function build_link($needle, $sort,
+	public static function build_link($needle, $sort, $fromDate, $toDate,
 			array $categories, array $tags, $forTemplate) {
 		$separator = $forTemplate? '&amp;': '&';
 		$params = array(
 			'Needle' => $needle,
 			'Sort' => $sort,
+			'FromDate' => $fromDate,
+			'ToDate' => $toDate,
 			'Categories' => $categories,
 			'Tags' => $tags
 		);
@@ -82,6 +84,8 @@ class PageSiteSearch extends Controller {
 		return $this->redirect(self::build_link(
 			$this->request->getVar('Needle'),
 			$this->request->getVar('Sort'),
+			$this->request->getVar('DateFrom'),
+			$this->request->getVar('DateTo'),
 			(array)$this->request->getVar('Categories'),
 			(array)$this->request->getVar('Tags'),
 			false

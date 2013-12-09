@@ -59,7 +59,7 @@ class PageLabel extends DataObject {
 	 * @see PageCategory::categories_from()
 	 * @see PageTag::tags_from()
 	 */
-	public static function labels_from(string $class, string $manyManyTable, DataList $pages) {
+	public static function labels_from($class, $manyManyTable, DataList $pages) {
 		$pageIDs = $pages->column('ID');
 		if (count($pageIDs)) {
 			$pageIDs = implode(', ', $pageIDs);
@@ -147,7 +147,7 @@ INLINE_SQL;
 		if (isset($args[$this->ClassName])) {
 			$args[$this->ClassName][$this->ID] = $this->ID;
 		}
-		return PageSiteSearch::build_link('', '',
+		return PageSiteSearch::build_link('', '', '', '',
 			$args['PageCategory'], $args['PageTag'], $forTemplate);
 	}
 	

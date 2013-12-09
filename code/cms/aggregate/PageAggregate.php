@@ -57,7 +57,9 @@ class PageAggregate extends Page {
 			'SiteTree'
 		), 'Relevance')",
 		'SearchExcludePageAggregates' => 'Boolean',
-		'SearchExcludeErrorPages' => 'Boolean'
+		'SearchExcludeErrorPages' => 'Boolean',
+		'SearchFromDate' => 'Date',
+		'SearchToDate' => 'Date'
 	);
 	
 	private static $has_one = array(
@@ -85,6 +87,16 @@ class PageAggregate extends Page {
 		),
 		'Sort' => array(
 			'field' => 'SearchResultSort',
+			'value' => null,
+			'changed' => false
+		),
+		'FromDate' => array(
+			'field' => 'SearchFromDate',
+			'value' => null,
+			'changed' => false
+		),
+		'ToDate' => array(
+			'field' => 'SearchToDate',
 			'value' => null,
 			'changed' => false
 		),
@@ -169,20 +181,30 @@ class PageAggregate extends Page {
 	 * the values are "relevance" values.
 	 * 
 	 * @param string $needle
+	 * @param string $fromDate
+	 * @param string $toDate
 	 * @param array $categories
 	 * @param array $tags
 	 * @param boolean $cache
 	 * 
 	 * @return array
 	 */
-	public function findPageIDs($needle, array $categories, array $tags, $cache = true) {
+	public function findPageIDs($needle, $fromDate, $toDate,
+			array $categories, array $tags, $cache = true) {
 		$needle = mb_strtolower($needle);
 		$safeNeedle = Convert::raw2sql($needle);
+		$safeFromDate = Convert::raw2sql($fromDate);
+		$safeToDate = Convert::raw2sql($toDate);
 		
 		$pageQuery = new SQLQuery();
 		
 		$pageQuery->setFrom('SiteTree');
 		$pageQuery->setSelect('SiteTree.ID');
+		
+		$pageQuery->addLeftJoin('Page', '"SiteTree"."ID" = "Page"."ID"');
+		
+		$pageQuery->addWhere("\"SiteTree\".\"ID\" != {$this->ID}");
+		$pageQuery->addWhere("\"SiteTree\".\"ShowInSearch\" != 0");
 		
 		// Search for $needle in the $haystackFields for Pages. Each field
 		// get a primitive weight value, where a higher weight should
@@ -192,7 +214,6 @@ class PageAggregate extends Page {
 		// will also determine sort order, it is assumed that they are
 		// ordered as "most important" to "least important".
 		if (trim($needle)) {
-			$pageQuery->addLeftJoin('Page', '"SiteTree"."ID" = "Page"."ID"');
 			$haystackFilters = array();
 			$haystackFields = array(
 				'"SiteTree"."Content"',
@@ -216,6 +237,16 @@ INLINE_SQL;
 				$haystackFilters[] = "\"$haystackAlias\" > 0";
 			}
 			$pageQuery->addHaving(implode(' OR ', $haystackFilters));
+		}
+		
+		// Check if the search should be limited to certain dates.
+		if (($safeFromDate && $safeToDate) && !($safeFromDate < $safeToDate)) {
+			// Eat this problem for now. Om-nom-nom.
+		} else {
+			if ($safeFromDate)
+				$pageQuery->addWhere("\"Page\".\"PublicTimestamp\" >= '$safeFromDate'");
+			if ($safeToDate)
+				$pageQuery->addWhere("\"Page\".\"PublicTimestamp\" <= '$safeToDate'");
 		}
 		
 		// Check if any page types should be excluded from the search.
@@ -316,19 +347,21 @@ INLINE_SQL;
 	 * 
 	 * @param string $needle
 	 * @param string $sort
+	 * @param string $fromDate
+	 * @param string $toDate
 	 * @param array $categories
 	 * @param array $tags
 	 * @param boolean $cache
 	 * 
 	 * @return DataList
 	 */
-	public function findPages($needle, $sort, array $categories, array $tags,
-			$cache = true) {
+	public function findPages($needle, $sort, $fromDate, $toDate,
+			array $categories, array $tags, $cache = true) {
 		$searchStart = microtime(true);
-		$pageIDs = $this->findPageIDs($needle, $categories, $tags, $cache);
+		$pageIDs = $this->findPageIDs($needle, $fromDate, $toDate,
+			$categories, $tags, $cache);
 		
-		// Fall back to relevance sorting if SearchResultSort has a
-		// weird value.
+		// Fall back to relevance sorting if $sort has a weird value.
 		if (empty($sort) || !in_array($sort, $this->dbObject('SearchResultSort')->enumValues()))
 			$sort = self::SEARCH_RESULT_SORT_RELEVANCE;
 		
@@ -378,18 +411,26 @@ INLINE_SQL;
 		return clone $this->findPagesCache[$cacheID];
 	}
 	
+	public function removeSort($dataQuery, $dataList) {
+		return $dataQuery->sort('ID', 'DESC', true);
+	}
+	
 	public function AggregateCategories() {
-		return PageCategory::categories_from($this->AggregatePages(true, true));
+		return PageCategory::categories_from($this->AggregatePages(true, true)
+			->alterDataQuery(array($this, 'removeSort')));
 	}
 	
 	public function AggregateTags() {
-		return PageTag::tags_from($this->AggregatePages(true, true));
+		return PageTag::tags_from($this->AggregatePages(true, true)
+			->alterDataQuery(array($this, 'removeSort')));
 	}
 	
 	public function AggregatePages($cache = true, $originalSearchParams = false) {
 		return $this->findPages(
 			$this->getSearchParam('Needle', $originalSearchParams),
 			$this->getSearchParam('Sort', $originalSearchParams),
+			$this->getSearchParam('FromDate', $originalSearchParams),
+			$this->getSearchParam('ToDate', $originalSearchParams),
 			$this->getSearchParam('Categories', $originalSearchParams),
 			$this->getSearchParam('Tags', $originalSearchParams),
 			$cache
@@ -478,7 +519,7 @@ class PageAggregate_Controller extends Page_Controller {
 	public function init() {
 		parent::init();
 		if ($this->data()->ID > 0) {
-			RSSFeed::linkToFeed($this->data()->Link('rss'));
+			PatchworkRSSFeed::linkToFeed($this->data()->Link('rss'));
 		}
 	}
 	
@@ -495,7 +536,8 @@ class PageAggregate_Controller extends Page_Controller {
 	public function SearchForm() {
 		$fields = new FieldList(
 			$needleField = new TextField('Needle', _t(
-				'PageAggregate_Controller.SearchFormNeedleField', 'Needle'))
+				'PageAggregate_Controller.SearchFormNeedleField', 'Needle'),
+				$this->data()->getSearchParam('Needle'))
 		);
 		
 		$sortField = $this->data()->dbObject('SearchResultSort')
@@ -505,18 +547,31 @@ class PageAggregate_Controller extends Page_Controller {
 		$this->data()->autoTranslateDropdown('PageAggregate.SearchResultSort', $sortField);
 		$fields->push($sortField);
 		
-		$addLabelsField = function ($fields, $aggregate, $name) {
+		$addDateField = function ($fields, $aggregate, $name, $title) {
+			$dateField = new DateField($name, $title,
+				$aggregate->data()->getSearchParam($name));
+			$dateField->setConfig('showcalendar', true);
+			$dateField->setConfig('dateformat', 'yyyy-MM-dd');
+			$fields->push($dateField);
+		};
+		
+		$addDateField($fields, $this->data(), 'FromDate', _t(
+			'PageAggregate_Controller.SearchFormFromDate', 'From date'));
+		$addDateField($fields, $this->data(), 'ToDate', _t(
+			'PageAggregate_Controller.SearchFormToDate', 'To date'));
+		
+		$addLabelsField = function ($fields, $aggregate, $name, $title) {
 			$method = "Aggregate{$name}";
-			$field = new CheckboxsetField($name,
-				_t("PageAggregate_Controller.SearchForm{$name}Field", $name),
-				$aggregate->$method()->map('ID', 'Title')
-			);
+			$field = new CheckboxsetField($name, $title,
+				$aggregate->$method()->map('ID', 'Title'));
 			if (count($field->getSource()))
 				$fields->push($field);
 		};
 		
-		$addLabelsField($fields, $this->data(), 'Categories');
-		$addLabelsField($fields, $this->data(), 'Tags');
+		$addLabelsField($fields, $this->data(), 'Categories',
+			_t('PageAggregate_Controller.SearchFormCategoriesField', 'Categories'));
+		$addLabelsField($fields, $this->data(), 'Tags',
+			_t('PageAggregate_Controller.SearchFormTagsField', 'Tags'));
 		
 		$this->extend('updateSearchFormFields', $fields);
 		

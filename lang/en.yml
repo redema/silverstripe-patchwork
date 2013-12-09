@@ -43,6 +43,8 @@ en:
     Desktop4col_Mobile2col_Name: 'Desktop: 4 col, Mobile: 2 col'
     Desktop4col_Mobile2col_Desc: '4 columns on the desktop, 2 on mobile devices'
   PageAggregate:
+    SINGULARNAME: 'Page aggregate'
+    PLURALNAME: 'Page aggregates'
     Root_Search: 'Search'
     SearchNeedle: 'Needle'
     SearchResultLimit: 'Search result limit'
@@ -59,6 +61,8 @@ en:
   PageAggregate_Controller:
     SearchFormNeedleField: 'Search term'
     SearchFormSortField: 'Sorting'
+    SearchFormFromDate: 'From date'
+    SearchFormToDate: 'To date'
     SearchFormCategoriesField: 'Categories'
     SearchFormTagsField: 'Tags'
     SearchFormSearchAction: 'Search'

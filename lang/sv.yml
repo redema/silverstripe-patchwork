@@ -43,6 +43,8 @@ sv:
     Desktop4col_Mobile2col_Name: 'Desktop: 4 kol, Mobil: 2 kol'
     Desktop4col_Mobile2col_Desc: '4 kolumner på dekstop, 2 på mobila enheter'
   PageAggregate:
+    SINGULARNAME: 'Sidaggregat'
+    PLURALNAME: 'Sidaggregat'
     Root_Search: 'Sök'
     SearchNeedle: 'Nål'
     SearchResultLimit: 'Sökresultatsgräns'
@@ -59,6 +61,8 @@ sv:
   PageAggregate_Controller:
     SearchFormNeedleField: 'Sökord'
     SearchFormSortField: 'Sortering'
+    SearchFormFromDate: 'Från datum'
+    SearchFormToDate: 'Till datum'
     SearchFormCategoriesField: 'Kategorier'
     SearchFormTagsField: 'Taggar'
     SearchFormSearchAction: 'Sök'
