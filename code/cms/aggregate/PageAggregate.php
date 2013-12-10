@@ -45,6 +45,11 @@ class PageAggregate extends Page {
 	const SEARCH_RESULT_SORT_ALPHABETICAL = 'Alphabetical';
 	const SEARCH_RESULT_SORT_SITETREE = 'SiteTree';
 	
+	const SEARCH_SITE = 'Site';
+	const SEARCH_CHILDREN = 'Children';
+	const SEARCH_GRANDCHILDREN = 'Grandchildren';
+	const SEARCH_ALLDESCENDANTS = 'AllDescendants';
+	
 	private static $db = array(
 		'SearchNeedle' => 'Text',
 		'SearchResultPageLength' => 'Int',
@@ -59,7 +64,13 @@ class PageAggregate extends Page {
 		'SearchExcludePageAggregates' => 'Boolean',
 		'SearchExcludeErrorPages' => 'Boolean',
 		'SearchFromDate' => 'Date',
-		'SearchToDate' => 'Date'
+		'SearchToDate' => 'Date',
+		'SearchHierarchy' => "Enum(Array(
+			'Site',
+			'Children',
+			'Grandchildren',
+			'AllDescendants'
+		), 'Site')"
 	);
 	
 	private static $has_one = array(
@@ -173,6 +184,46 @@ class PageAggregate extends Page {
 			$this->searchTime;
 	}
 	
+	protected $collectHierarchyCache = array(
+		self::SEARCH_SITE => array(),
+		self::SEARCH_CHILDREN => array(),
+		self::SEARCH_GRANDCHILDREN => array(),
+		self::SEARCH_ALLDESCENDANTS => array()
+	);
+	
+	public function collectHierarchySite($cache) {
+		return $this->collectHierarchyCache[self::SEARCH_SITE];
+	}
+	
+	public function collectHierarchyChildren($cache) {
+		if (!$cache || empty($this->collectHierarchyCache[self::SEARCH_CHILDREN])) {
+			$this->collectHierarchyCache[self::SEARCH_CHILDREN] = $this->AllChildren()->column('ID');
+		}
+		return $this->collectHierarchyCache[self::SEARCH_CHILDREN];
+	}
+	
+	public function collectHierarchyGrandchildren($cache) {
+		if (!$cache || empty($this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN])) {
+			$this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN] = array();
+			foreach ($this->AllChildren() as $child)
+				$this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN] += $child->AllChildren()->column('ID');
+		}
+		return $this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN];
+	}
+	
+	public function collectHierarchyAllDescendants($cache) {
+		if (!$cache || empty($this->collectHierarchyCache[self::SEARCH_ALLDESCENDANTS])) {
+			$this->collectHierarchyCache[self::SEARCH_ALLDESCENDANTS] = $this->getDescendantIDList();
+		}
+		return $this->collectHierarchyCache[self::SEARCH_ALLDESCENDANTS];
+	}
+	
+	public function collectHierarchy($cache = true) {
+		if (!in_array($this->SearchHierarchy, $this->dbObject('SearchHierarchy')->enumValues()))
+			return array();
+		return $this->{"collectHierarchy{$this->SearchHierarchy}"}($cache);
+	}
+	
 	protected $findPageIDsCache = array();
 	
 	/**
@@ -205,6 +256,12 @@ class PageAggregate extends Page {
 		
 		$pageQuery->addWhere("\"SiteTree\".\"ID\" != {$this->ID}");
 		$pageQuery->addWhere("\"SiteTree\".\"ShowInSearch\" != 0");
+		
+		// Should the search be limited to a certain subset of pages
+		// determined by the SiteTree hierarchy?
+		if (($hierarchy = implode(', ', $this->collectHierarchy()))) {
+			$pageQuery->addWhere("\"SiteTree\".\"ID\" IN ($hierarchy)");
+		}
 		
 		// Search for $needle in the $haystackFields for Pages. Each field
 		// get a primitive weight value, where a higher weight should
@@ -362,7 +419,7 @@ INLINE_SQL;
 			$categories, $tags, $cache);
 		
 		// Fall back to relevance sorting if $sort has a weird value.
-		if (empty($sort) || !in_array($sort, $this->dbObject('SearchResultSort')->enumValues()))
+		if (!in_array($sort, $this->dbObject('SearchResultSort')->enumValues()))
 			$sort = self::SEARCH_RESULT_SORT_RELEVANCE;
 		
 		// If the pages are to be sorted by relevance, then it is
@@ -454,6 +511,10 @@ INLINE_SQL;
 	public function flushCache($persistent = true) {
 		parent::flushCache($persistent);
 		
+		array_walk($this->collectHierarchyCache, function (&$item) {
+			$item = array();
+		});
+		
 		$this->findPageIDsCache = array();
 		$this->findPagesCache = array();
 	}
@@ -478,6 +539,11 @@ INLINE_SQL;
 			$this->fieldLabel('SearchExcludePageAggregates')));
 		$fields->addFieldToTab('Root.Search', new CheckboxField('SearchExcludeErrorPages',
 			$this->fieldLabel('SearchExcludeErrorPages')));
+		$fields->addFieldToTab('Root.Search', $this->dbObject('SearchHierarchy')
+			->scaffoldFormField($this->fieldLabel('SearchHierarchy')));
+		
+		$this->autoTranslateDropdown('PageAggregate.SearchHierarchy',
+			$fields->dataFieldByName('SearchHierarchy'));
 		
 		return $fields;
 	}
