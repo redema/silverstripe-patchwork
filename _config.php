@@ -42,6 +42,9 @@ call_user_func(function () {
 	}
 	
 	if (class_exists('SiteTree')) {
+		if (!class_exists('Page')) {
+			throw new Exception('SiteTree is present, but Page is not');
+		}
 		SiteTree::enable_nested_urls();
 		SiteTree::add_extension('Autoversioned');
 		Page::add_extension('PageAutomagicalURLSegment');
