@@ -1,5 +1,5 @@
 
-<% if $Pages %>
+<% if $Pages && $Pages.Count > 1 %>
 <ol class="breadcrumb">
 	<% loop $Pages %>
 	<% if $Last %>
