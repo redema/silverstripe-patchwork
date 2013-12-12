@@ -1,11 +1,9 @@
 
 <div class="media">
-	<% if $ShowThumbnail %>
+	<% if $ShowBadge %>
 	<a class="pull-left" href="$Link">
-		<% if $PageSummaryThumbnail %>
-		<% with $PageSummaryThumbnail.CroppedImage(64, 64) %>
-		<img alt="$Title.ATTR" class="media-object img-thumbnail" src="$getURL" />
-		<% end_with %>
+		<% if $Badge.ImgSrc %>
+		<img alt="" class="media-object img-thumbnail" src="$Badge.ImgSrc" />
 		<% else %>
 		<img alt="" class="media-object img-thumbnail" src="/patchwork/images/image-placeholder.png" />
 		<% end_if %>

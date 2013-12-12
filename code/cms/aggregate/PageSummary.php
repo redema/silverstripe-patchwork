@@ -74,18 +74,26 @@ class PageSummary extends SiteTreeExtension {
 			= _t('PageSummary.SummaryThumbnail', 'Thumbnail');
 	}
 	
-	public function Summary($showThumbnail = true, $showLabels = true,
-			$titleTag = 'h3') {
-		if (!preg_match('/^h[1-6]$/i', $titleTag)) {
+	public function Summary($showBadge = true, $showLabels = true,
+			$titleTag = 'h3', $badgeType = 'Thumbnail') {
+		$templateFields = $this->owner->config()->summary_template_fields;
+		$templateValues = array(
+			'ShowBadge' => (bool)$showBadge,
+			'ShowPageLabels' => (bool)$showLabels,
+			'TitleTag' => $titleTag,
+			'Badge' => null,
+			'BadgeType' => preg_match('/^PageSummary_[_a-zA-Z0-9]+Badge$/', $badgeType)?
+				"{$badgeType}": "PageSummary_{$badgeType}Badge"
+		);
+		
+		if (!preg_match('/^h[1-6]$/i', $templateValues['TitleTag'])) {
 			throw new \InvalidArgumentException("invalid title tag \"$titleTag\""
 				. " - only h1..h6 are supported");
 		}
-		$templateFields = $this->owner->config()->summary_template_fields;
-		$templateValues = array(
-			'ShowThumbnail' => (bool)$showThumbnail,
-			'ShowPageLabels' => (bool)$showLabels,
-			'TitleTag' => $titleTag
-		);
+		if (!in_array($templateValues['BadgeType'], PageSummary_Badge::get_implementations())) {
+			throw new \InvalidArgumentException("invalid badge type \"$badgeType\""
+				. " - use one of " . implode(', ', PageSummary_Badge::get_implementations()));
+		}
 		
 		foreach ($templateFields as $key => $fields) {
 			foreach ($fields as $name) {
@@ -110,7 +118,167 @@ class PageSummary extends SiteTreeExtension {
 			}
 		}
 		
+		$templateValues['Badge'] = new $templateValues['BadgeType'](
+			$this->owner,
+			$templateValues
+		);
+		
 		return $this->owner->renderWith('PageSummary', $templateValues);
+	}
+	
+}
+
+abstract class PageSummary_Badge extends ViewableData {
+	
+	private static $width = 64;
+	private static $height = 64;
+	
+	public static function get_implementations() {
+		$classes = ClassInfo::subclassesFor('PageSummary_Badge');
+		array_shift($classes);
+		return $classes;
+	}
+	
+	/**
+	 * @var Page
+	 */
+	protected $page = null;
+	
+	/**
+	 * @var array
+	 */
+	protected $values = array();
+	
+	public function __construct(Page $page, array $values) {
+		$this->page = $page;
+		$this->values = $values;
+	}
+	
+	abstract public function ImgSrc($forTemplate = true);
+	
+	public function ImgTag($forTemplate = true) {
+		return sprintf('<img src="%s" alt="" />', $this->ImgSrc($forTemplate));
+	}
+	
+	public function forTemplate() {
+		return $this->ImgTag();
+	}
+	
+}
+
+class PageSummary_ThumbnailBadge extends PageSummary_Badge {
+	
+	/**
+	 * @var Image
+	 */
+	protected $image = null;
+	
+	public function __construct(Page $page, array $values) {
+		parent::__construct($page, $values);
+		if (isset($values['PageSummaryThumbnail'])) {
+			if ($values['PageSummaryThumbnail'] instanceof Image)
+				$this->image = $values['PageSummaryThumbnail'];
+		}
+	}
+	
+	public function ImgSrc($forTemplate = true) {
+		return $this->image? $this->image->CroppedImage(
+			$this->config()->width,
+			$this->config()->height
+		)->getURL(): '';
+	}
+	
+}
+
+class PageSummary_DateBadge extends PageSummary_Badge {
+	
+	private static $image_dir = 'assets/_datebadge/';
+	
+	private static $day_y = 32;
+	private static $day_font_size = 28;
+	
+	private static $month_y = 48;
+	private static $month_font_size = 10;
+	
+	private static $year_y = 60;
+	private static $year_font_size = 10;
+	
+	private static $font_file = 'patchwork/fonts/ubuntu/Ubuntu-C.ttf';
+	
+	protected function generateImage($path, $timestamp) {
+		$w = $this->config()->width;
+		$h = $this->config()->height;
+		
+		$zdate = new Zend_Date($timestamp, null, i18n::get_locale());
+		
+		$dateDay = $zdate->toString(Zend_Date::DAY);
+		$dateMonth = mb_strtoupper($zdate->toString(Zend_Date::MONTH_NAME));
+		$dateYear = $zdate->toString(Zend_Date::YEAR);
+		
+		$img = imagecreatetruecolor($w, $h);
+		
+		$fontPath = Controller::join_links(BASE_PATH, "/{$this->config()->font_file}");
+		
+		if (!is_file($fontPath))
+			throw new \Exception("invalid font \"$fontPath\"");
+		
+		$textColor = imagecolorallocate($img, 0, 0, 0);
+		$bgColor = imagecolorallocate($img, 255, 255, 255);
+		
+		imagefilledrectangle($img, 0, 0, $w - 1, $h - 1, $bgColor);
+		
+		$drawDatePart = function ($fontSize, $yPos, $datePart)
+				use ($w, $h, $img, $fontPath, $textColor) {
+			$textbox = imageftbbox($fontSize, 0, $fontPath, $datePart);
+			$x = ($w - ($textbox[2] - $textbox[0])) / 2;
+			$y = $yPos;
+			imagefttext($img, $fontSize, 0, $x, $y, $textColor, $fontPath, $datePart);
+		};
+		
+		$drawDatePart($this->config()->day_font_size, $this->config()->day_y, $dateDay);
+		$drawDatePart($this->config()->month_font_size, $this->config()->month_y, $dateMonth);
+		$drawDatePart($this->config()->year_font_size, $this->config()->year_y, $dateYear);
+		
+		imagepng($img, $path);
+		imagedestroy($img);
+	}
+	
+	public function ImgSrc($forTemplate = true) {
+		$imgDir = $this->config()->image_dir;
+		
+		$timestamp = strtotime($this->page->PublicTimestamp);
+		$name = sprintf('%s-%s.png', i18n::get_locale(), date('Y-m-d', $timestamp));
+		
+		$url = Controller::join_links(BASE_URL . "/$imgDir", "/$name");
+		$path = Controller::join_links(BASE_PATH . "/$imgDir", "/$name");
+		
+		if (!file_exists(dirname($path)))
+			Filesystem::makeFolder(dirname($path));
+		
+		if (!file_exists($path) || isset($_GET['flush']))
+			$this->generateImage($path, $timestamp);
+		
+		return $url;
+	}
+	
+}
+
+class PageSummary_GravatarBadge extends PageSummary_Badge {
+	
+	private static $imageset = 'identicon';
+	
+	public function ImgSrc($forTemplate = true) {
+		$versions = $this->page->Versions();
+		$version = $versions? $versions->Last(): null;
+		$author = $version? $version->Author(): null;
+		$email = trim($author? $author->Email: 'patchwork@example.com');
+		$gravatar = md5(mb_strtolower($email));
+		
+		return "//www.gravatar.com/avatar/$gravatar?" . http_build_query(array(
+			's' => $this->config()->width,
+			'd' => $this->config()->imageset,
+			'r' => 'g'
+		), '', $forTemplate? '&amp;': '&');
 	}
 	
 }
