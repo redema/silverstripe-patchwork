@@ -70,7 +70,15 @@ class PageAggregate extends Page {
 			'Children',
 			'Grandchildren',
 			'AllDescendants'
-		), 'Site')"
+		), 'Site')",
+		'SummaryBadge' => 'Text',
+		'SummaryShowBadge' => 'Boolean',
+		'SummaryShowLabels' => 'Boolean',
+		'SearchFormShowNeedleField' => 'Boolean',
+		'SearchFormShowSortField' => 'Boolean',
+		'SearchFormShowDateFields' => 'Boolean',
+		'SearchFormShowCategoriesFields' => 'Boolean',
+		'SearchFormShowTagsFields' => 'Boolean'
 	);
 	
 	private static $has_one = array(
@@ -79,7 +87,14 @@ class PageAggregate extends Page {
 	private static $defaults = array(
 		'SearchResultPageLength' => '10',
 		'SearchExcludePageAggregates' => '1',
-		'SearchExcludeErrorPages' => '1'
+		'SearchExcludeErrorPages' => '1',
+		'SummaryShowBadge' => '1',
+		'SummaryShowLabels' => '1',
+		'SearchFormShowNeedleField' => '1',
+		'SearchFormShowSortField' => '1',
+		'SearchFormShowDateFields' => '1',
+		'SearchFormShowCategoriesFields' => '1',
+		'SearchFormShowTagsFields' => '1'
 	);
 	
 	private static $search_result_sort_date_fields = array(
@@ -545,6 +560,28 @@ INLINE_SQL;
 		$this->autoTranslateDropdown('PageAggregate.SearchHierarchy',
 			$fields->dataFieldByName('SearchHierarchy'));
 		
+		$summaryBadgeField = new DropdownField('SummaryBadge', $this->fieldLabel('SummaryBadge'),
+			PageSummary_Badge::get_implementations(), $this->SummaryBadge);
+		
+		$fields->addFieldToTab('Root.Search', $summaryBadgeField);
+		
+		$fields->addFieldToTab('Root.Search', new CheckboxField('SummaryShowBadge',
+			$this->fieldLabel('SummaryShowBadge')));
+		$fields->addFieldToTab('Root.Search', new CheckboxField('SummaryShowLabels',
+			$this->fieldLabel('SummaryShowLabels')));
+		
+		$searchFormShowFields = array(
+			'SearchFormShowNeedleField',
+			'SearchFormShowSortField',
+			'SearchFormShowDateFields',
+			'SearchFormShowCategoriesFields',
+			'SearchFormShowTagsFields'
+		);
+		foreach ($searchFormShowFields as $searchFormShowField) {
+			$fields->addFieldToTab('Root.Search', new CheckboxField($searchFormShowField,
+				$this->fieldLabel($searchFormShowField)));
+		}
+		
 		return $fields;
 	}
 	
@@ -599,34 +636,39 @@ class PageAggregate_Controller extends Page_Controller {
 	
 	public function SearchForm() {
 		$fields = new FieldList(
-			$needleField = new TextField('Needle', _t(
-				'PageAggregate_Controller.SearchFormNeedleField', 'Needle'),
-				$this->data()->getSearchParam('Needle'))
 		);
 		
-		$sortField = $this->data()->dbObject('SearchResultSort')
-			->scaffoldFormField(_t('PageAggregate_Controller.SearchFormSortField', 'Sort'));
-		$sortFieldOptions = $sortField->getSource();
-		unset($sortFieldOptions['Created']);
-		unset($sortFieldOptions['SiteTree']);
-		$sortField->setSource($sortFieldOptions);
-		$sortField->setName('Sort');
-		$sortField->setValue($this->data()->getSearchParam('Sort'));
-		$this->data()->autoTranslateDropdown('PageAggregate.SearchResultSort', $sortField);
-		$fields->push($sortField);
+		if ($this->data()->SearchFormShowNeedleField) {
+			$needleField = new TextField('Needle', _t(
+				'PageAggregate_Controller.SearchFormNeedleField', 'Needle'));
+			$fields->push($needleField);
+		}
+		
+		if ($this->data()->SearchFormShowSortField) {
+			$sortField = $this->data()->dbObject('SearchResultSort')
+				->scaffoldFormField(_t('PageAggregate_Controller.SearchFormSortField', 'Sort'));
+			$sortFieldOptions = $sortField->getSource();
+			unset($sortFieldOptions['Created']);
+			unset($sortFieldOptions['SiteTree']);
+			$sortField->setSource($sortFieldOptions);
+			$sortField->setName('Sort');
+			$this->data()->autoTranslateDropdown('PageAggregate.SearchResultSort', $sortField);
+			$fields->push($sortField);
+		}
 		
 		$addDateField = function ($fields, $aggregate, $name, $title) {
-			$dateField = new DateField($name, $title,
-				$aggregate->data()->getSearchParam($name));
+			$dateField = new DateField($name, $title);
 			$dateField->setConfig('showcalendar', true);
 			$dateField->setConfig('dateformat', 'yyyy-MM-dd');
 			$fields->push($dateField);
 		};
 		
-		$addDateField($fields, $this->data(), 'FromDate', _t(
-			'PageAggregate_Controller.SearchFormFromDate', 'From date'));
-		$addDateField($fields, $this->data(), 'ToDate', _t(
-			'PageAggregate_Controller.SearchFormToDate', 'To date'));
+		if ($this->data()->SearchFormShowDateFields) {
+			$addDateField($fields, $this->data(), 'FromDate', _t(
+				'PageAggregate_Controller.SearchFormFromDate', 'From date'));
+			$addDateField($fields, $this->data(), 'ToDate', _t(
+				'PageAggregate_Controller.SearchFormToDate', 'To date'));
+		}
 		
 		$addLabelsField = function ($fields, $aggregate, $name, $title) {
 			$method = "Aggregate{$name}";
@@ -636,20 +678,23 @@ class PageAggregate_Controller extends Page_Controller {
 				$fields->push($field);
 		};
 		
-		$addLabelsField($fields, $this->data(), 'Categories',
-			_t('PageAggregate_Controller.SearchFormCategoriesField', 'Categories'));
-		$addLabelsField($fields, $this->data(), 'Tags',
-			_t('PageAggregate_Controller.SearchFormTagsField', 'Tags'));
+		if ($this->data()->SearchFormShowCategoriesFields) {
+			$addLabelsField($fields, $this->data(), 'Categories',
+				_t('PageAggregate_Controller.SearchFormCategoriesField', 'Categories'));
+		}
+		
+		if ($this->data()->SearchFormShowTagsFields) {
+			$addLabelsField($fields, $this->data(), 'Tags',
+				_t('PageAggregate_Controller.SearchFormTagsField', 'Tags'));
+		}
 		
 		$this->extend('updateSearchFormFields', $fields);
 		
 		// Fill the form with any user defined values, i.e. a
 		// previously posted search form.
 		foreach ($this->data()->getSearchParamNames() as $name) {
-			if ($this->data()->getSearchParamMetadata($name, 'changed')) {
-				if (($field = $fields->dataFieldByName($name)))
-					$field->setValue($this->data()->getSearchParam($name));
-			}
+			if (($field = $fields->dataFieldByName($name)))
+				$field->setValue($this->data()->getSearchParam($name));
 		}
 		
 		$actions = new FieldList(
@@ -669,7 +714,8 @@ class PageAggregate_Controller extends Page_Controller {
 		$form->setFormMethod('GET');
 		$this->extend('updateSearchForm', $form);
 		
-		return $form;
+		return $form->getData()? $form: new Form($this, 'NullSearchForm',
+			new FieldList(), new FieldList());
 	}
 	
 	/**

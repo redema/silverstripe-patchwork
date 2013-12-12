@@ -20,7 +20,7 @@
 			</p>
 			<% if $PaginatedAggregatePages.Count %>
 			<% loop $PaginatedAggregatePages %>
-			$Summary(1, 1, 'h3', 'Date')
+			$Summary($Top.SummaryShowBadge, $Top.SummaryShowLabels, 'h3', $Top.SummaryBadge, 1)
 			<% end_loop %>
 			<% include Pagination PaginatedItems=$PaginatedAggregatePages %>
 			<% end_if %>

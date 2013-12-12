@@ -75,7 +75,7 @@ class PageSummary extends SiteTreeExtension {
 	}
 	
 	public function Summary($showBadge = true, $showLabels = true,
-			$titleTag = 'h3', $badgeType = 'Thumbnail') {
+			$titleTag = 'h3', $badgeType = 'Thumbnail', $badgeTypeFallback = false) {
 		$templateFields = $this->owner->config()->summary_template_fields;
 		$templateValues = array(
 			'ShowBadge' => (bool)$showBadge,
@@ -91,8 +91,13 @@ class PageSummary extends SiteTreeExtension {
 				. " - only h1..h6 are supported");
 		}
 		if (!in_array($templateValues['BadgeType'], PageSummary_Badge::get_implementations())) {
-			throw new \InvalidArgumentException("invalid badge type \"$badgeType\""
-				. " - use one of " . implode(', ', PageSummary_Badge::get_implementations()));
+			if ($badgeTypeFallback) {
+				$implementations = PageSummary_Badge::get_implementations();
+				$templateValues['BadgeType'] = array_shift($implementations);
+			} else {
+				throw new \InvalidArgumentException("invalid badge type \"$badgeType\""
+					. " - use one of " . implode(', ', PageSummary_Badge::get_implementations()));
+			}
 		}
 		
 		foreach ($templateFields as $key => $fields) {
@@ -166,30 +171,6 @@ abstract class PageSummary_Badge extends ViewableData {
 	
 }
 
-class PageSummary_ThumbnailBadge extends PageSummary_Badge {
-	
-	/**
-	 * @var Image
-	 */
-	protected $image = null;
-	
-	public function __construct(Page $page, array $values) {
-		parent::__construct($page, $values);
-		if (isset($values['PageSummaryThumbnail'])) {
-			if ($values['PageSummaryThumbnail'] instanceof Image)
-				$this->image = $values['PageSummaryThumbnail'];
-		}
-	}
-	
-	public function ImgSrc($forTemplate = true) {
-		return $this->image? $this->image->CroppedImage(
-			$this->config()->width,
-			$this->config()->height
-		)->getURL(): '';
-	}
-	
-}
-
 class PageSummary_DateBadge extends PageSummary_Badge {
 	
 	private static $image_dir = 'assets/_datebadge/';
@@ -259,6 +240,30 @@ class PageSummary_DateBadge extends PageSummary_Badge {
 			$this->generateImage($path, $timestamp);
 		
 		return $url;
+	}
+	
+}
+
+class PageSummary_ThumbnailBadge extends PageSummary_Badge {
+	
+	/**
+	 * @var Image
+	 */
+	protected $image = null;
+	
+	public function __construct(Page $page, array $values) {
+		parent::__construct($page, $values);
+		if (isset($values['PageSummaryThumbnail'])) {
+			if ($values['PageSummaryThumbnail'] instanceof Image)
+				$this->image = $values['PageSummaryThumbnail'];
+		}
+	}
+	
+	public function ImgSrc($forTemplate = true) {
+		return $this->image? $this->image->CroppedImage(
+			$this->config()->width,
+			$this->config()->height
+		)->getURL(): '';
 	}
 	
 }
