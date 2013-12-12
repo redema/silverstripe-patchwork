@@ -55,8 +55,6 @@ class CaptchaImage extends CaptchaWord {
 	
 	private static $image_dir = 'assets/_captcha/';
 	
-	private static $image_url = '/assets/_captcha/';
-	
 	private static $image_base = '';
 	
 	private static $image_alt = '';
@@ -93,25 +91,23 @@ class CaptchaImage extends CaptchaWord {
 	}
 	
 	public function getImageDir() {
-		return Controller::join_links(BASE_PATH, $this->config()->image_dir);
+		return Controller::join_links(BASE_PATH, "/{$this->config()->image_dir}");
 	}
 	
 	public function getImageUrl() {
-		return Controller::join_links(BASE_URL, $this->config()->image_url);
+		return Controller::join_links(BASE_URL, "/{$this->config()->image_dir}");
 	}
 	
 	public function getFilePath(string $id) {
 		return Controller::join_links(
-			BASE_PATH,
-			"/{$this->config()->image_dir}",
+			$this->getImageDir(),
 			"/{$id}.{$this->getExtension()}"
 		);
 	}
 	
 	public function getFileUrl(string $id) {
 		return Controller::join_links(
-			BASE_URL,
-			$this->config()->image_url,
+			$this->getImageUrl(),
 			"/{$id}.{$this->getExtension()}"
 		);
 	}
