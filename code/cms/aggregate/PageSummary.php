@@ -227,7 +227,8 @@ class PageSummary_DateBadge extends PageSummary_Badge {
 	public function ImgSrc($forTemplate = true) {
 		$imgDir = $this->config()->image_dir;
 		
-		$timestamp = strtotime($this->page->PublicTimestamp);
+		$timestamp = strtotime(!empty($this->page->PublicTimestamp)?
+			$this->page->PublicTimestamp: $this->page->Created);
 		$name = sprintf('%s-%s.png', i18n::get_locale(), date('Y-m-d', $timestamp));
 		
 		$url = Controller::join_links(BASE_URL . "/$imgDir", "/$name");
