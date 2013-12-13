@@ -1,12 +1,11 @@
-
--- SilverStripe 3.1.1 basic database.
-
--- Admin email: admin
--- Admin password: admin
-
 -- phpMyAdmin SQL Dump
--- version 4.0.8
+-- version 4.0.10
 -- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Dec 13, 2013 at 11:17 AM
+-- Server version: 5.5.34-0ubuntu0.12.04.1
+-- PHP Version: 5.3.10-1ubuntu3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -97,14 +96,6 @@ CREATE TABLE IF NOT EXISTS `ErrorPage_versions` (
   KEY `RecordID` (`RecordID`),
   KEY `Version` (`Version`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `ErrorPage_versions`
---
-
-INSERT INTO `ErrorPage_versions` (`ID`, `RecordID`, `Version`, `ErrorCode`) VALUES
-(1, 4, 1, 404),
-(2, 5, 1, 500);
 
 -- --------------------------------------------------------
 
@@ -210,6 +201,50 @@ CREATE TABLE IF NOT EXISTS `Group_Roles` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `LiteralRedirectorPage`
+--
+
+CREATE TABLE IF NOT EXISTS `LiteralRedirectorPage` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Redirect` mediumtext,
+  `RedirectCode` enum('301','302','303','304','305','307') DEFAULT '301',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `LiteralRedirectorPage_Live`
+--
+
+CREATE TABLE IF NOT EXISTS `LiteralRedirectorPage_Live` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Redirect` mediumtext,
+  `RedirectCode` enum('301','302','303','304','305','307') DEFAULT '301',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `LiteralRedirectorPage_versions`
+--
+
+CREATE TABLE IF NOT EXISTS `LiteralRedirectorPage_versions` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `RecordID` int(11) NOT NULL DEFAULT '0',
+  `Version` int(11) NOT NULL DEFAULT '0',
+  `Redirect` mediumtext,
+  `RedirectCode` enum('301','302','303','304','305','307') DEFAULT '301',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `RecordID_Version` (`RecordID`,`Version`),
+  KEY `RecordID` (`RecordID`),
+  KEY `Version` (`Version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `LoginAttempt`
 --
 
@@ -294,6 +329,111 @@ CREATE TABLE IF NOT EXISTS `MemberPassword` (
 
 INSERT INTO `MemberPassword` (`ID`, `ClassName`, `Created`, `LastEdited`, `Password`, `Salt`, `PasswordEncryption`, `MemberID`) VALUES
 (1, 'MemberPassword', '2013-01-17 15:08:39', '2013-01-17 15:08:39', '$2y$10$bd115ef24ce5d5b5c5912eMpfemHUbjxk7quRFv3DdLkfKjch4ZDS', '10$bd115ef24ce5d5b5c5912e', 'blowfish', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Page`
+--
+
+CREATE TABLE IF NOT EXISTS `Page` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ScheduledPublish` datetime DEFAULT NULL,
+  `ScheduledUnpublish` datetime DEFAULT NULL,
+  `PublicTimestamp` datetime DEFAULT NULL,
+  `MetaLabels` mediumtext,
+  `SummaryTitle` mediumtext,
+  `SummaryContent` mediumtext,
+  `SummaryThumbnailID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `SummaryThumbnailID` (`SummaryThumbnailID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PageAggregate`
+--
+
+CREATE TABLE IF NOT EXISTS `PageAggregate` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `SearchNeedle` mediumtext,
+  `SearchResultPageLength` int(11) NOT NULL DEFAULT '0',
+  `SearchResultSort` enum('Relevance','Created','LastEdited','PublicTimestamp','Alphabetical','SiteTree') DEFAULT 'Relevance',
+  `SearchExcludePageAggregates` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchExcludeErrorPages` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFromDate` date DEFAULT NULL,
+  `SearchToDate` date DEFAULT NULL,
+  `SearchHierarchy` enum('Site','Children','Grandchildren','AllDescendants') DEFAULT 'Site',
+  `SummaryBadge` mediumtext,
+  `SummaryShowBadge` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SummaryShowLabels` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowNeedleField` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowSortField` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowDateFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowCategoriesFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowTagsFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PageAggregate_Live`
+--
+
+CREATE TABLE IF NOT EXISTS `PageAggregate_Live` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `SearchNeedle` mediumtext,
+  `SearchResultPageLength` int(11) NOT NULL DEFAULT '0',
+  `SearchResultSort` enum('Relevance','Created','LastEdited','PublicTimestamp','Alphabetical','SiteTree') DEFAULT 'Relevance',
+  `SearchExcludePageAggregates` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchExcludeErrorPages` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFromDate` date DEFAULT NULL,
+  `SearchToDate` date DEFAULT NULL,
+  `SearchHierarchy` enum('Site','Children','Grandchildren','AllDescendants') DEFAULT 'Site',
+  `SummaryBadge` mediumtext,
+  `SummaryShowBadge` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SummaryShowLabels` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowNeedleField` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowSortField` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowDateFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowCategoriesFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowTagsFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PageAggregate_versions`
+--
+
+CREATE TABLE IF NOT EXISTS `PageAggregate_versions` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `RecordID` int(11) NOT NULL DEFAULT '0',
+  `Version` int(11) NOT NULL DEFAULT '0',
+  `SearchNeedle` mediumtext,
+  `SearchResultPageLength` int(11) NOT NULL DEFAULT '0',
+  `SearchResultSort` enum('Relevance','Created','LastEdited','PublicTimestamp','Alphabetical','SiteTree') DEFAULT 'Relevance',
+  `SearchExcludePageAggregates` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchExcludeErrorPages` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFromDate` date DEFAULT NULL,
+  `SearchToDate` date DEFAULT NULL,
+  `SearchHierarchy` enum('Site','Children','Grandchildren','AllDescendants') DEFAULT 'Site',
+  `SummaryBadge` mediumtext,
+  `SummaryShowBadge` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SummaryShowLabels` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowNeedleField` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowSortField` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowDateFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowCategoriesFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `SearchFormShowTagsFields` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `RecordID_Version` (`RecordID`,`Version`),
+  KEY `RecordID` (`RecordID`),
+  KEY `Version` (`Version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -392,6 +532,97 @@ CREATE TABLE IF NOT EXISTS `PageContentItem_versions` (
   KEY `TabletImageID` (`TabletImageID`),
   KEY `MobileImageID` (`MobileImageID`),
   KEY `ClassName` (`ClassName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PageLabel`
+--
+
+CREATE TABLE IF NOT EXISTS `PageLabel` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ClassName` enum('PageLabel','PageCategory','PageTag') DEFAULT 'PageLabel',
+  `Created` datetime DEFAULT NULL,
+  `LastEdited` datetime DEFAULT NULL,
+  `Title` mediumtext,
+  `TemplateName` mediumtext,
+  `URLName` mediumtext,
+  PRIMARY KEY (`ID`),
+  KEY `ClassName` (`ClassName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Page_Categories`
+--
+
+CREATE TABLE IF NOT EXISTS `Page_Categories` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PageID` int(11) NOT NULL DEFAULT '0',
+  `PageCategoryID` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `PageID` (`PageID`),
+  KEY `PageCategoryID` (`PageCategoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Page_Live`
+--
+
+CREATE TABLE IF NOT EXISTS `Page_Live` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ScheduledPublish` datetime DEFAULT NULL,
+  `ScheduledUnpublish` datetime DEFAULT NULL,
+  `PublicTimestamp` datetime DEFAULT NULL,
+  `MetaLabels` mediumtext,
+  `SummaryTitle` mediumtext,
+  `SummaryContent` mediumtext,
+  `SummaryThumbnailID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `SummaryThumbnailID` (`SummaryThumbnailID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Page_Tags`
+--
+
+CREATE TABLE IF NOT EXISTS `Page_Tags` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PageID` int(11) NOT NULL DEFAULT '0',
+  `PageTagID` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `PageID` (`PageID`),
+  KEY `PageTagID` (`PageTagID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Page_versions`
+--
+
+CREATE TABLE IF NOT EXISTS `Page_versions` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `RecordID` int(11) NOT NULL DEFAULT '0',
+  `Version` int(11) NOT NULL DEFAULT '0',
+  `ScheduledPublish` datetime DEFAULT NULL,
+  `ScheduledUnpublish` datetime DEFAULT NULL,
+  `PublicTimestamp` datetime DEFAULT NULL,
+  `MetaLabels` mediumtext,
+  `SummaryTitle` mediumtext,
+  `SummaryContent` mediumtext,
+  `SummaryThumbnailID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `RecordID_Version` (`RecordID`,`Version`),
+  KEY `RecordID` (`RecordID`),
+  KEY `Version` (`Version`),
+  KEY `SummaryThumbnailID` (`SummaryThumbnailID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -514,6 +745,32 @@ CREATE TABLE IF NOT EXISTS `RedirectorPage_versions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ScheduledJob`
+--
+
+CREATE TABLE IF NOT EXISTS `ScheduledJob` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ClassName` enum('ScheduledJob') DEFAULT 'ScheduledJob',
+  `Created` datetime DEFAULT NULL,
+  `LastEdited` datetime DEFAULT NULL,
+  `Task` mediumtext,
+  `GetParams` mediumtext,
+  `PostParams` mediumtext,
+  `Uniqid` mediumtext,
+  `Scheduled` datetime DEFAULT NULL,
+  `Completed` datetime DEFAULT NULL,
+  `Failed` datetime DEFAULT NULL,
+  `Repeats` int(11) NOT NULL DEFAULT '0',
+  `Reschedule` int(11) NOT NULL DEFAULT '0',
+  `OwnerID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `OwnerID` (`OwnerID`),
+  KEY `ClassName` (`ClassName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `SiteConfig`
 --
 
@@ -592,7 +849,7 @@ CREATE TABLE IF NOT EXISTS `SiteConfig_ViewerGroups` (
 
 CREATE TABLE IF NOT EXISTS `SiteTree` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `ClassName` enum('Page','ErrorPage','SiteTree','RedirectorPage','VirtualPage') DEFAULT 'Page',
+  `ClassName` enum('Page','ErrorPage','SiteTree','RedirectorPage','VirtualPage','PageAggregate','LiteralRedirectorPage') DEFAULT 'Page',
   `Created` datetime DEFAULT NULL,
   `LastEdited` datetime DEFAULT NULL,
   `URLSegment` varchar(255) DEFAULT NULL,
@@ -685,7 +942,7 @@ CREATE TABLE IF NOT EXISTS `SiteTree_LinkTracking` (
 
 CREATE TABLE IF NOT EXISTS `SiteTree_Live` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `ClassName` enum('Page','ErrorPage','SiteTree','RedirectorPage','VirtualPage') DEFAULT 'Page',
+  `ClassName` enum('Page','ErrorPage','SiteTree','RedirectorPage','VirtualPage','PageAggregate','LiteralRedirectorPage') DEFAULT 'Page',
   `Created` datetime DEFAULT NULL,
   `LastEdited` datetime DEFAULT NULL,
   `URLSegment` varchar(255) DEFAULT NULL,
@@ -736,7 +993,7 @@ CREATE TABLE IF NOT EXISTS `SiteTree_versions` (
   `WasPublished` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `AuthorID` int(11) NOT NULL DEFAULT '0',
   `PublisherID` int(11) NOT NULL DEFAULT '0',
-  `ClassName` enum('Page','ErrorPage','SiteTree','RedirectorPage','VirtualPage') DEFAULT 'Page',
+  `ClassName` enum('Page','ErrorPage','SiteTree','RedirectorPage','VirtualPage','PageAggregate','LiteralRedirectorPage') DEFAULT 'Page',
   `Created` datetime DEFAULT NULL,
   `LastEdited` datetime DEFAULT NULL,
   `URLSegment` varchar(255) DEFAULT NULL,
@@ -857,6 +1114,36 @@ ALTER TABLE `ErrorPage_Live`
   ADD CONSTRAINT `791067439b76df4edf3290a46af8fb63` FOREIGN KEY (`ID`) REFERENCES `SiteTree_Live` (`ID`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `LiteralRedirectorPage`
+--
+ALTER TABLE `LiteralRedirectorPage`
+  ADD CONSTRAINT `5fbca8249035655c37634581f7f32ae8` FOREIGN KEY (`ID`) REFERENCES `SiteTree` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `LiteralRedirectorPage_Live`
+--
+ALTER TABLE `LiteralRedirectorPage_Live`
+  ADD CONSTRAINT `2d6ddaf8567f3ddf7e6a52386ddc7962` FOREIGN KEY (`ID`) REFERENCES `SiteTree_Live` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Page`
+--
+ALTER TABLE `Page`
+  ADD CONSTRAINT `b804587d9baeb05ea3994d9b3a40014c` FOREIGN KEY (`ID`) REFERENCES `SiteTree` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `PageAggregate`
+--
+ALTER TABLE `PageAggregate`
+  ADD CONSTRAINT `3183a9de98add0570f4531af2639145c` FOREIGN KEY (`ID`) REFERENCES `SiteTree` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `PageAggregate_Live`
+--
+ALTER TABLE `PageAggregate_Live`
+  ADD CONSTRAINT `3097229a436bbdaafe3eecad230ae93a` FOREIGN KEY (`ID`) REFERENCES `SiteTree_Live` (`ID`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `PageContentItem`
 --
 ALTER TABLE `PageContentItem`
@@ -867,6 +1154,12 @@ ALTER TABLE `PageContentItem`
 --
 ALTER TABLE `PageContentItem_Live`
   ADD CONSTRAINT `c1c73efd03aa8afbef7441cd2a45e024` FOREIGN KEY (`PageID`) REFERENCES `SiteTree_Live` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Page_Live`
+--
+ALTER TABLE `Page_Live`
+  ADD CONSTRAINT `001ae0d836a8473fe5cf0f75393213aa` FOREIGN KEY (`ID`) REFERENCES `SiteTree_Live` (`ID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `RedirectorPage`
