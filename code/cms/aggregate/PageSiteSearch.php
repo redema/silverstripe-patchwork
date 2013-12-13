@@ -37,7 +37,11 @@ class PageSiteSearch extends Controller {
 		'SearchForm'
 	);
 	
+	private static $result_sort = PageAggregate::SEARCH_RESULT_SORT_RELEVANCE;
+	
 	private static $result_page_length = 10;
+	
+	private static $summary_badge = 'PageSummary_DateBadge';
 	
 	public static function build_link($needle, $sort, $fromDate, $toDate,
 			array $categories, array $tags, $forTemplate) {
@@ -61,8 +65,9 @@ class PageSiteSearch extends Controller {
 		
 		$aggregate->Title = _t('PageSiteSearch.Search', 'Search');
 		$aggregate->URLSegment = get_class($this);
-		$aggregate->SearchResultSort = PageAggregate::SEARCH_RESULT_SORT_RELEVANCE;
+		$aggregate->SearchResultSort = $this->config()->result_sort;
 		$aggregate->SearchResultPageLength = $this->config()->result_page_length;
+		$aggregate->SummaryBadge = $this->config()->summary_badge;
 		
 		$controller = PageAggregate_Controller::create($aggregate);
 		$controller->setDataModel($this->model);
