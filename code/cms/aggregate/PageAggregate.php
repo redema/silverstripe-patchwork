@@ -714,7 +714,7 @@ class PageAggregate_Controller extends Page_Controller {
 		$form->setFormMethod('GET');
 		$this->extend('updateSearchForm', $form);
 		
-		return $form->getData()? $form: new Form($this, 'NullSearchForm',
+		return $form->getData()? $form: new Form($this, 'SearchForm',
 			new FieldList(), new FieldList());
 	}
 	
