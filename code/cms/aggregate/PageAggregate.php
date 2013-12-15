@@ -483,18 +483,18 @@ INLINE_SQL;
 		return clone $this->findPagesCache[$cacheID];
 	}
 	
-	public function removeSort($dataQuery, $dataList) {
+	public function fixSort($dataQuery, $dataList) {
 		return $dataQuery->sort('ID', 'DESC', true);
 	}
 	
 	public function AggregateCategories() {
 		return PageCategory::categories_from($this->AggregatePages(true, true)
-			->alterDataQuery(array($this, 'removeSort')));
+			->alterDataQuery(array($this, 'fixSort')));
 	}
 	
 	public function AggregateTags() {
 		return PageTag::tags_from($this->AggregatePages(true, true)
-			->alterDataQuery(array($this, 'removeSort')));
+			->alterDataQuery(array($this, 'fixSort')));
 	}
 	
 	public function AggregatePages($cache = true, $originalSearchParams = false) {
