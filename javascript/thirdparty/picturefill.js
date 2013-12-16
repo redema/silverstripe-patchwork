@@ -1,5 +1,5 @@
 /*!
- * Commit: 6250f7f6f604c5e016f59ceb121929f87e3ad4d5
+ * Commit: 799347d3731c8d7ee50b5aaf23323dc1d060207b
  */
 /*! Picturefill - Responsive Images that work today. (and mimic the proposed Picture element with span elements). Author: Scott Jehl, Filament Group, 2012 | License: MIT/GPLv2 */
 
@@ -36,9 +36,15 @@
 					picImg = w.document.createElement( "img" );
 					picImg.alt = ps[ i ].getAttribute( "data-alt" );
 				}
+				else if( matchedEl === picImg.parentNode ){
+					// Skip further actions if the correct image is already in place
+					continue;
+				}
 
 				picImg.src =  matchedEl.getAttribute( "data-src" );
 				matchedEl.appendChild( picImg );
+				picImg.removeAttribute("width");
+				picImg.removeAttribute("height");
 			}
 			else if( picImg ){
 				picImg.parentNode.removeChild( picImg );
@@ -62,3 +68,4 @@
 	}
 
 }( this ));
+
