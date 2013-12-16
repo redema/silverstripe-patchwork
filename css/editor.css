@@ -2,8 +2,8 @@
 /* Copy to "mysite/css/editor.css".
  */
 
-@import "/patchwork/css/thirdparty/bootstrap-3.0.2.css";
-@import "/patchwork/css/thirdparty/bootstrap-theme-3.0.2.css";
+@import "/patchwork/css/thirdparty/bootstrap.css";
+@import "/patchwork/css/thirdparty/bootstrap-theme.css";
 
 @import "/mysite/css/typography.css";
 @import "/mysite/css/form.css";

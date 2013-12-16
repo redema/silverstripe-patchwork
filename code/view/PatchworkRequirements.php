@@ -47,8 +47,8 @@ class PatchworkRequirements extends Extension {
 		
 		$requirements = array(
 			'mysite-default.css' => array(
-				'patchwork/css/thirdparty/bootstrap-3.0.2.css',
-				'patchwork/css/thirdparty/bootstrap-theme-3.0.2.css',
+				'patchwork/css/thirdparty/bootstrap.css',
+				'patchwork/css/thirdparty/bootstrap-theme.css',
 				'patchwork/css/thirdparty/colorbox.css',
 				'patchwork/fonts/font-awesome/font-awesome.css',
 				'patchwork/css/FrontEndForm.css',
@@ -59,15 +59,15 @@ class PatchworkRequirements extends Extension {
 				'mysite/css/form.css'
 			),
 			'mysite-default.js' => array(
-				'patchwork/javascript/thirdparty/modernizr-2.6.2.js',
+				'patchwork/javascript/thirdparty/modernizr.js',
 				'patchwork/javascript/thirdparty/respond.js',
 				'patchwork/javascript/thirdparty/picturefill.js',
-				'patchwork/javascript/thirdparty/jquery-1.10.2.js',
-				'patchwork/javascript/thirdparty/jquery-migrate-1.1.1.js',
-				'patchwork/javascript/thirdparty/jquery-mobile-1.3.1.custom.js',
-				'patchwork/javascript/thirdparty/jquery-refineslide-0.4.1.js',
+				'patchwork/javascript/thirdparty/jquery.js',
+				'patchwork/javascript/thirdparty/jquery-migrate.js',
+				'patchwork/javascript/thirdparty/jquery-mobile.custom.js',
+				'patchwork/javascript/thirdparty/jquery-refineslide.js',
 				'patchwork/javascript/thirdparty/jquery-colorbox.js',
-				'patchwork/javascript/thirdparty/bootstrap-3.0.2.js',
+				'patchwork/javascript/thirdparty/bootstrap.js',
 				'patchwork/javascript/FrontEndForm.js',
 				'patchwork/javascript/FrontEndQuirks.js',
 				'patchwork/javascript/PageAggregate.js',
