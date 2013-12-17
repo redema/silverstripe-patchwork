@@ -78,6 +78,24 @@ INLINE_SQL;
 		$this->updateMetaLabels();
 	}
 	
+	/**
+	 * Get a set of related pages, sorted by relevance.
+	 */
+	public function RelatedPages() {
+		$tags = $this->owner->Tags()->map('ID', 'ID')->values();
+		$categories = $this->owner->Categories()->map('ID', 'ID')->values();
+		
+		$aggregate = PageAggregate::create();
+		
+		$aggregate->Title = $this->owner->class;
+		$aggregate->URLSegment = $this->owner->class;
+		$aggregate->SearchResultSort = PageAggregate::SEARCH_RESULT_SORT_RELEVANCE;
+		$aggregate->setSearchParam('Tags', $tags);
+		$aggregate->setSearchParam('Categories', $categories);
+		
+		return $aggregate->AggregatePages()->exclude('ID', $this->owner->ID);
+	}
+	
 }
 
 }
