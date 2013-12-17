@@ -33,16 +33,140 @@ class PageAggregateTest extends FunctionalTest {
 	
 	public static $fixture_file = 'PageAggregateTest.yml';
 	
-	public function testSearch() {
-		
+	protected function resetAggregate(PageAggregate $aggregate) {
+		$aggregate->resetSearchParams();
+		$aggregate->flushCache();
 	}
 	
-	protected function checkHierarchy($aggregate, $type, array $expectedLinks) {
+	protected function getLinksFrom(PageAggregate $aggregate) {
 		$foundLinks = array();
-		$aggregate->SearchHierarchy = $type;
-		foreach ($aggregate->AggregatePages() as $page) {
+		foreach ($aggregate->AggregatePages() as $page)
 			$foundLinks[] = $page->Link();
-		}
+		return $foundLinks;
+	}
+	
+	protected function checkLabelSearch(PageAggregate $aggregate, $name,
+			PageLabel $label, array $expectedLinks) {
+		$this->resetAggregate($aggregate);
+		
+		$aggregate->$name()->add($label);
+		
+		$foundLinks = $this->getLinksFrom($aggregate);
+		$this->assertEquals($expectedLinks, $foundLinks);
+		
+		$aggregate->$name()->remove($label);
+	}
+	
+	protected function checkNeedleSearch(PageAggregate $aggregate, $needle,
+			array $expectedLinks) {
+		$this->resetAggregate($aggregate);
+		
+		$aggregate->SearchNeedle = $needle;
+		
+		$foundLinks = $this->getLinksFrom($aggregate);
+		$this->assertEquals($expectedLinks, $foundLinks);
+		
+		$aggregate->SearchNeedle = '';
+	}
+	
+	protected function checkDateSearch(PageAggregate $aggregate,
+			$fromDate, $toDate, array $expectedLinks) {
+		$this->resetAggregate($aggregate);
+		
+		$aggregate->SearchFromDate = $fromDate;
+		$aggregate->SearchToDate = $toDate;
+		
+		$foundLinks = $this->getLinksFrom($aggregate);
+		$this->assertEquals($expectedLinks, $foundLinks);
+	}
+	
+	public function testSearch() {
+		$newsCategory = $this->objFromFixture('PageCategory', 'news');
+		$casesCategory = $this->objFromFixture('PageCategory', 'cases');
+		$productsCategory = $this->objFromFixture('PageCategory', 'products');
+		
+		$aggregate = $this->objFromFixture('PageAggregate', 'blog');
+		$aggregate->SearchResultSort = PageAggregate::SEARCH_RESULT_SORT_PUBLICTIMESTAMP;
+		
+		$this->checkLabelSearch(
+			$aggregate,
+			'Categories',
+			$newsCategory,
+			array(
+				'/blog/2014/were-not-banging-rocks-together-here/',
+				'/blog/2013/introducing-the-new-turret/',
+				'/blog/2012/do-panic/',
+				'/blog/2012/dont-panic/'
+			)
+		);
+		$this->checkLabelSearch(
+			$aggregate,
+			'Categories',
+			$casesCategory,
+			array(
+				'/blog/2014/were-not-banging-rocks-together-here/',
+				'/blog/2012/do-panic/'
+			)
+		);
+		$this->checkLabelSearch(
+			$aggregate,
+			'Categories',
+			$productsCategory,
+			array(
+				'/blog/2013/introducing-the-new-turret/'
+			)
+		);
+		
+		$this->checkNeedleSearch(
+			$aggregate,
+			'rocks',
+			array(
+				'/blog/2014/were-not-banging-rocks-together-here/'
+			)
+		);
+		$this->checkNeedleSearch(
+			$aggregate,
+			'do',
+			array(
+				'/blog/2012/do-panic/',
+				'/blog/2012/dont-panic/'
+			)
+		);
+		
+		// Special case: Needle matching against PageLabels.
+		$this->checkNeedleSearch(
+			$aggregate,
+			'cake',
+			array(
+				'/blog/2014/were-not-banging-rocks-together-here/',
+				'/blog/2012/do-panic/'
+			)
+		);
+		
+		$this->checkDateSearch(
+			$aggregate,
+			'2012-01-01',
+			'2012-12-31',
+			array(
+				'/blog/2012/do-panic/',
+				'/blog/2012/dont-panic/',
+				'/blog/2012/'
+			)
+		);
+		
+		$this->checkDateSearch(
+			$aggregate,
+			'2014-01-27',
+			'2014-01-28',
+			array(
+				'/blog/2014/were-not-banging-rocks-together-here/'
+			)
+		);
+	}
+	
+	protected function checkHierarchy(PageAggregate $aggregate, $type, array $expectedLinks) {
+		$aggregate->SearchHierarchy = $type;
+		$foundLinks = $this->getLinksFrom($aggregate);
 		$this->assertEquals($expectedLinks, $foundLinks);
 	}
 	
