@@ -19,3 +19,6 @@ Controller:
 LeftAndMain:
   extensions:
     - 'ResponsiveLeftAndMain'
+Injector:
+  ForeignKey:
+    class: PatchworkForeignKey
