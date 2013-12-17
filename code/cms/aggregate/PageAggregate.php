@@ -220,8 +220,12 @@ class PageAggregate extends Page {
 	public function collectHierarchyGrandchildren($cache) {
 		if (!$cache || empty($this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN])) {
 			$this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN] = array();
-			foreach ($this->AllChildren() as $child)
-				$this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN] += $child->AllChildren()->column('ID');
+			foreach ($this->AllChildren() as $child) {
+				$this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN] = array_merge(
+					$this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN],
+					$child->AllChildren()->column('ID')
+				);
+			}
 		}
 		return $this->collectHierarchyCache[self::SEARCH_GRANDCHILDREN];
 	}
