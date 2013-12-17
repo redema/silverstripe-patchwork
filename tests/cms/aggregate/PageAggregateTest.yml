@@ -1,0 +1,60 @@
+PageCategory:
+  news:
+    Title: 'News'
+  cases:
+    Title: 'Cases'
+  products:
+    Title: 'Products'
+PageTag:
+  cake:
+    Title: 'cake'
+  testing:
+    Title: 'testing'
+  trivia:
+    Title: 'trivia'
+  divinity:
+    Title: 'divinity'
+  safety:
+    Title: 'safety'
+  quality:
+    Title: 'quality'
+PageAggregate:
+  blog:
+    Title: 'Blog'
+Page:
+  2012Parent:
+    Title: '2012'
+    PublicTimestamp: '2012-01-01'
+    Parent: =>PageAggregate.blog
+  2013Parent:
+    Title: '2013'
+    PublicTimestamp: '2013-01-01'
+    Parent: =>PageAggregate.blog
+  2014Parent:
+    Title: '2014'
+    PublicTimestamp: '2014-01-01'
+    Parent: =>PageAggregate.blog
+  blogpost1:
+    Title: 'Don''t panic'
+    PublicTimestamp: '2012-01-02'
+    Categories: =>PageCategory.news
+    Tags: =>PageTag.testing
+    Parent: =>Page.2012Parent
+  blogpost2:
+    Title: 'Do panic'
+    PublicTimestamp: '2012-07-04'
+    Categories: =>PageCategory.news, =>PageCategory.cases
+    Tags: =>PageTag.cake, =>PageTag.trivia
+    Parent: =>Page.2012Parent
+  blogpost3:
+    Title: 'Introducing the new turret'
+    PublicTimestamp: '2013-08-22'
+    Categories: =>PageCategory.news, =>PageCategory.products
+    Tags: =>PageTag.safety, =>PageTag.quality
+    Parent: =>Page.2013Parent
+  blogpost4:
+    Title: 'We''re not banging rocks together here'
+    PublicTimestamp: '2014-01-27'
+    Categories: =>PageCategory.news, =>PageCategory.cases
+    Tags: =>PageTag.quality, =>PageTag.cake, =>PageTag.testing, =>PageTag.safety
+    Parent: =>Page.2014Parent
