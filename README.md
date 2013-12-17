@@ -22,12 +22,13 @@ Redema AB, http://redema.se/
 
  * PHP: 5.3.1+ minimum.
  * Database: MySQL 5.5+ minimum.
- * SilverStripe: 3.1+ minimum (previous versions has never been tested).
+ * SilverStripe framework: 3.1+ minimum (previous versions has never been tested).
 
 ## Recommendations
 
  * PHPUnit - https://github.com/sebastianbergmann/phpunit/
  * Additional SilverStripe modules:
+   * CMS - https://github.com/silverstripe/silverstripe-cms
    * SortableGridField - https://github.com/UndefinedOffset/SortableGridField
    * GoogleSiteMaps - https://github.com/silverstripe-labs/silverstripe-googlesitemaps
 
