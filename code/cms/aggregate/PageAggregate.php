@@ -296,7 +296,6 @@ class PageAggregate extends Page {
 				'"SiteTree"."Title"',
 				'"SiteTree"."MenuTitle"',
 				'"SiteTree"."MetaDescription"',
-				'"SiteTree"."MetaKeywords"',
 				'"Page"."SummaryTitle"',
 				'"Page"."SummaryContent"',
 				'"Page"."MetaLabels"'
