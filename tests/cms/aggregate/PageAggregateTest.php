@@ -78,6 +78,9 @@ class PageAggregateTest extends FunctionalTest {
 		
 		$foundLinks = $this->getLinksFrom($aggregate);
 		$this->assertEquals($expectedLinks, $foundLinks);
+		
+		$aggregate->SearchFromDate = '';
+		$aggregate->SearchToDate = '';
 	}
 	
 	public function testSearch() {
@@ -153,7 +156,6 @@ class PageAggregateTest extends FunctionalTest {
 				'/blog/2012/'
 			)
 		);
-		
 		$this->checkDateSearch(
 			$aggregate,
 			'2014-01-27',
@@ -204,6 +206,20 @@ class PageAggregateTest extends FunctionalTest {
 				'/blog/2012/do-panic/',
 				'/blog/2012/dont-panic/',
 				'/blog/2012/'
+			)
+		);
+		$this->checkHierarchy(
+			$aggregate,
+			PageAggregate::SEARCH_SITE,
+			array(
+				'/blog/2014/were-not-banging-rocks-together-here/',
+				'/blog/2014/',
+				'/blog/2013/introducing-the-new-turret/',
+				'/blog/2013/',
+				'/blog/2012/do-panic/',
+				'/blog/2012/dont-panic/',
+				'/blog/2012/',
+				'/'
 			)
 		);
 	}

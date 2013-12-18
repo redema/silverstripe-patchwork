@@ -22,6 +22,9 @@ PageAggregate:
   blog:
     Title: 'Blog'
 Page:
+  home:
+    Title: 'Home'
+    PublicTimestamp: '2010-01-01'
   2012Parent:
     Title: '2012'
     PublicTimestamp: '2012-01-01'
@@ -57,4 +60,11 @@ Page:
     PublicTimestamp: '2014-01-27'
     Categories: =>PageCategory.news, =>PageCategory.cases
     Tags: =>PageTag.quality, =>PageTag.cake, =>PageTag.testing, =>PageTag.safety
+    Parent: =>Page.2014Parent
+  blogpost5:
+    Title: 'Top secret stuff in here'
+    ShowInSearch: 0
+    PublicTimestamp: '2014-01-28'
+    Categories: =>PageCategory.news, =>PageCategory.products
+    Tags: =>PageTag.cake, =>PageTag.testing, =>PageTag.safety
     Parent: =>Page.2014Parent
