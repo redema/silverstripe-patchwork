@@ -34,10 +34,23 @@
 					}
 				}
 			}
+			
+			if (opts.typographyRel && $this.hasClass('cboxElement') && !$this.hasClass('alone')) {
+				var $typography = $(this).closest('.typography');
+				if ($typography.length) {
+					if (!$typography.data(opts.typographyRelName)) {
+						$typography.data(opts.typographyRelName, opts.typographyRelName
+							+ '-' + Math.random().toString().replace(/[^0-9]/, ''));
+					}
+					$this.attr('rel', $typography.data(opts.typographyRelName));
+				}
+			}
 		});
 	};
 	
 	$.fn.colorboxify.defaults = {
+		typographyRel: true,
+		typographyRelName: 'colorboxify-rel',
 		'colorbox': {
 			maxWidth: '95%',
 			maxHeight: '95%'
